@@ -11,7 +11,7 @@ export class PageNotFoundComponent {
     private router: Router
   ) { }
 
-  navigateHome() {
+  navigateHome(): void {
     this.router.navigate(['/home']);
   }
 }

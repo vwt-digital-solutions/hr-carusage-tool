@@ -9,7 +9,7 @@ export class TokenInterceptor implements HttpInterceptor {
   constructor(public oauthService: OAuthService) {
   }
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(request: HttpRequest<Array<string>>, next: HttpHandler): Observable<HttpEvent<Array<string>>> {
 
     request = request.clone({
       setHeaders: {

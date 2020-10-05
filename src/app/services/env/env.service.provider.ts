@@ -1,10 +1,10 @@
 import { EnvService } from './env.service';
 
 interface WindowEnv {
-  __env?: any;
+  __env?: EnvService;
 }
 
-export const EnvServiceFactory = () => {
+export const EnvServiceFactory = (): EnvService => {
   // Create env
   const env = new EnvService();
 

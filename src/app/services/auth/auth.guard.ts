@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate, Router} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, Router} from '@angular/router';
 
 import {OAuthService} from 'angular-oauth2-oidc';
 
 interface ClaimRoles {
-  roles: any;
+  roles: Array<string>;
 }
 
 @Injectable({
@@ -17,7 +17,7 @@ export class AuthGuard implements CanActivate {
   ) {
   }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  canActivate(route: ActivatedRouteSnapshot): boolean {
     // console.log('Invoke auth guard');
     this.oauthService.tryLogin()
       .catch(err => {
