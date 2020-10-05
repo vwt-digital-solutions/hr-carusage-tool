@@ -1,10 +1,31 @@
 import { Component } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeNl from '@angular/common/locales/nl';
+
+import { OAuthService, AuthConfig } from 'angular-oauth2-oidc';
+import { EnvService } from './services/env/env.service';
+
+registerLocaleData(localeNl);
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'hr-carusage';
+  constructor(
+    private env: EnvService,
+    private oauthService: OAuthService
+  ) {
+    const config = new AuthConfig();
+    config.loginUrl = env.loginUrl;
+    config.redirectUri = window.location.origin + '/home';
+    config.logoutUrl = env.logoutUrl;
+    config.clientId = env.clientId;
+    config.scope = env.scope;
+    config.issuer = env.issuer;
+    config.silentRefreshRedirectUri = window.location.origin + '/silent-refresh.html';
+    this.oauthService.configure(config);
+    this.oauthService.setupAutomaticSilentRefresh();
+    this.oauthService.tryLogin({});
+  }
 }
