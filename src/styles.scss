@@ -1,1 +1,59 @@
-/* You can add global styles to this file, and also import other style files */
+@import url("https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i");
+
+@import "~bootstrap/dist/css/bootstrap.css";
+
+@import "~src/assets/scss/constants";
+@import "~src/assets/scss/mixins";
+
+$fa-font-path: "~src/assets/fonts/fontawesome";
+@import "~src/assets/scss/fontawesome/fontawesome.scss";
+@import "~src/assets/scss/fontawesome/regular.scss";
+@import "~src/assets/scss/fontawesome/solid.scss";
+@import "~src/assets/scss/fontawesome/brands.scss";
+
+
+body {
+  margin: 0;
+
+  font-family: 'Poppins', sans-serif !important;
+  background-color: $primary;
+
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+h1 {
+  font-size: 40px;
+  margin: 0;
+  font-weight: 800;
+  color: $primary;
+  text-transform: uppercase;
+}
+
+h2 {
+  font-size: 30px;
+  margin: 0;
+  font-weight: 700;
+  color: $primary;
+}
+
+h3 {
+  font-size: 25px;
+  margin: 0;
+  font-weight: 500;
+  color: $primary;
+}
+
+h4 {
+  font-size: 20px;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: $primary;
+}
+
+p {
+  margin: 0;
+}

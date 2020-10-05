@@ -1,0 +1,109 @@
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins/_buttons.scss";
+@import "~bootstrap/scss/mixins/_gradients.scss";
+@import "~bootstrap/scss/mixins/_box-shadow.scss";
+@import "~bootstrap/scss/mixins/_hover.scss";
+
+// Collapsing menu
+$breakpoint-menu: 992px;
+
+// Tablet
+$breakpoint-tablet: 768px;
+$breakpoint-tablet-portrait-up: 600px;
+$breakpoint-tablet-landscape-up: 900px;
+
+// Mobile Phones
+$breakpoint-phone-large-screen: 599px;
+$breakpoint-phone-medium-screen: 375px;
+$breakpoint-phone-small-screen: 320px;
+
+// Desktop
+$breakpoint-desktop: 1200px;
+$breakpoint-desktop-big: 1800px;
+
+
+@mixin md-phone-only {
+  @media (max-width: $breakpoint-phone-medium-screen) { @content; }
+}
+@mixin sm-phone-only {
+  @media (max-width: $breakpoint-phone-small-screen) { @content; }
+}
+@mixin lg-phone-only {
+  @media (max-width: $breakpoint-phone-large-screen) { @content; }
+}
+@mixin for-tablet {
+  @media (max-width: $breakpoint-tablet) { @content;  }
+}
+@mixin for-tablet-portrait-up {
+  @media (min-width: $breakpoint-tablet-portrait-up) { @content; }
+}
+@mixin for-tablet-landscape-up {
+  @media (min-width: $breakpoint-tablet-landscape-up) { @content; }
+}
+@mixin for-desktop-up {
+  @media (min-width: $breakpoint-desktop) { @content; }
+}
+@mixin for-big-desktop-up {
+  @media (min-width: $breakpoint-desktop-big) { @content; }
+}
+
+.btn:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.btn-primary {
+  @include button-variant($primary, $primary, $primary-hover, $primary-hover, $primary-hover, $primary-hover);
+  &:focus { background-color: $primary-hover; }
+}
+.btn-secondary {
+  @include button-variant($gray-dark, $gray-dark, $gray-dark-hover, $gray-dark-hover, $gray-dark-hover, $gray-dark-hover);
+  &:focus { background-color: $gray-dark-hover; }
+}
+.btn-success {
+  @include button-variant($green, $green, $green-hover, $green-hover, $green-hover, $green-hover);
+  &:focus { background-color: $green-hover; }
+}
+.btn-danger {
+  @include button-variant($red, $red, $red-hover, $red-hover, $red-hover, $red-hover);
+  &:focus { background-color: $red-hover; }
+}
+.btn-warning {
+  @include button-variant($orange, $orange, $orange-hover, $orange-hover, $orange-hover, $orange-hover);
+  &:focus { background-color: $orange-hover; }
+}
+.btn-light {
+  @include button-variant($gray, $gray, $gray-hover, $gray-hover, $gray-hover, $gray-hover);
+  &:focus { background-color: $gray-hover; }
+}
+
+.badge {
+  padding: 4px 5px;
+}
+.badge-primary {
+  background-color: $primary;
+}
+.badge-secondary {
+  background-color: $gray-dark;
+}
+.badge-success {
+  background-color: $green;
+}
+.badge-danger {
+  background-color: $red;
+}
+.badge-warning {
+  background-color: $orange;
+  color: $white;
+}
+.badge-light {
+  background-color: $gray;
+}
+
+.btn-xs {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1.0;
+  border-radius: 0.2rem;
+}
