@@ -20,11 +20,11 @@ export class HeaderComponent {
     private oauthService: OAuthService
   ) {}
 
-  logout() {
+  logout(): void {
     this.oauthService.logOut();
   }
 
-  sendFeedback() {
+  sendFeedback(): void {
     window.location.href = `mailto:${this.feedbackEmail}?subject=Feedback%20HR%Autogebruik`;
   }
 
