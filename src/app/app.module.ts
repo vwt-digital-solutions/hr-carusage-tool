@@ -11,10 +11,14 @@ import { OAuthModule, OAuthService } from 'angular-oauth2-oidc';
 import { AuthGuard } from './services/auth/auth.guard';
 import { TokenInterceptor } from './services/auth/token.interceptor';
 import { EnvServiceProvider } from './services/env/env.service.provider';
+import { HeaderComponent } from './components/header/header.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    HeaderComponent,
+    PageNotFoundComponent,
     DashboardComponent
   ],
   imports: [
@@ -23,6 +27,9 @@ import { EnvServiceProvider } from './services/env/env.service.provider';
     HttpClientModule,
     OAuthModule.forRoot(),
     AppRoutingModule
+  ],
+  exports: [
+    PageNotFoundComponent
   ],
   providers: [
     EnvServiceProvider,

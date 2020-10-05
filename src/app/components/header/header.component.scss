@@ -1,0 +1,210 @@
+@import "~src/assets/scss/constants";
+@import "~src/assets/scss/mixins";
+
+nav {
+  width: 100%;
+  background: $primary;
+  color: $white;
+  position: fixed;
+  z-index: 333;
+  top: 0;
+  padding: 0;
+
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1);
+
+  .brand {
+    float: left;
+    display: table;
+    overflow: hidden;
+
+    .logo {
+      float: left;
+      margin: 12.5px 0;
+      display: table;
+      background-image: url("/assets/images/volkerwesselstelecom_white.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      width: 100px;
+      height: 25px;
+    }
+
+    span {
+      font-size: 15px;
+      line-height: 15px;
+      font-weight: 600;
+      padding: 17.5px 10px;
+      float: left;
+      text-transform: uppercase;
+    }
+  }
+
+  .navbar-toggler {
+    background: $white;
+    color: $primary;
+    width: 50px;
+    height: 50px;
+    padding: 15px;
+    border-radius: 0;
+
+    i{
+      font-size: 20px;
+      line-height: 19px;
+    }
+
+    &[aria-expanded="false"] {
+      background: transparent;
+      color: $white;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .navbar-collapse {
+    padding: 0;
+
+    ul.nav {
+      li {
+        text-align: center;
+        padding: 0;
+
+        a {
+          color: $white;
+          text-decoration: none;
+          padding: 20px;
+          font-size: 10px;
+          font-weight: 500;
+          line-height: 10px;
+          text-transform: uppercase;
+          display: table;
+
+          i {
+            line-height: 9px;
+          }
+        }
+
+        span {
+          font-size: 8px;
+          line-height: 10px;
+          padding: 7.5px 10px;
+          color: $gray-dark;
+
+          &:hover {
+            background: transparent;
+            cursor: default;
+          }
+        }
+
+        &:hover {
+          cursor: pointer;
+
+          a {
+            color: $primary;
+            background-color: $gray-light;
+          }
+        }
+
+        &.active {
+          a {
+            background: $white;
+            cursor: pointer;
+            color: $primary;
+          }
+
+          &:hover a {
+            background: $gray-light;
+          }
+        }
+        &.dropdown {
+          .dropdown-menu {
+            position: absolute;
+            z-index: 1;
+            right: 0;
+            left: auto;
+
+            border-radius: 0 !important;
+            border: 0;
+            margin: 0;
+            padding: 0;
+            background-color: $gray-light;
+            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1);
+
+            a {
+              font-size: 10px;
+              line-height: 10px;
+              color: $black;
+              padding: 10px;
+              text-decoration: none;
+              text-transform: uppercase;
+              display: block;
+              text-align: right;
+              transition: background-color .5s ease;
+              -webkit-transition: background-color .5s ease;
+              background: transparent;
+              font-weight: 600;
+
+              &:hover {
+                background: $gray;
+              }
+
+              &.feedback {
+                font-size: 8px;
+                line-height: 10px;
+                padding: 7.5px 10px;
+                color: $black;
+              }
+            }
+          }
+
+          &:hover {
+            .dropdown-toggle {
+              background: $gray-light;
+              color: $primary;
+              cursor: pointer;
+            }
+
+            & > .dropdown-menu  {
+              display: table;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: $breakpoint-tablet - 1) {
+  nav {
+    .navbar-collapse {
+      ul.nav {
+        li {
+          text-align: left;
+          a {
+            padding: 15px;
+            width: 100%;
+          }
+
+          &.blocked {
+            background: $gray-light;
+            color: $gray;
+            padding: 0 5px;
+
+            span {
+              padding: 10px;
+              display: table;
+              float: left;
+
+              .link {
+                &:hover {
+                  color: $black;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
