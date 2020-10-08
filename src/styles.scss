@@ -14,6 +14,9 @@ $fa-font-path: "~src/assets/fonts/fontawesome";
 
 body {
   margin: 0;
+  height: 100vh;
+  min-height: 750px;
+  position: relative;
 
   font-family: 'Poppins', sans-serif !important;
 
@@ -25,7 +28,7 @@ body {
 }
 
 h1 {
-  font-size: 40px;
+  font-size: 35px;
   margin: 0;
   font-weight: 800;
   color: $primary;
@@ -57,7 +60,11 @@ p {
   margin: 0;
 }
 
-.app-container {
-  padding-top: 70px;
+.app-body {
+  margin-left: 75px;
+  position: relative;
+  height: 100%;
   box-sizing: border-box;
+
+  background-color: $gray-light;
 }
