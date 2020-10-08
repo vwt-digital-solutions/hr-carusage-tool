@@ -6,16 +6,20 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { AgGridModule } from 'ag-grid-angular';
 
 import { OAuthModule, OAuthService } from 'angular-oauth2-oidc';
 import { AuthGuard } from './services/auth/auth.guard';
 import { TokenInterceptor } from './services/auth/token.interceptor';
 import { EnvServiceProvider } from './services/env/env.service.provider';
+
+import { LicensePlatePipe } from './pipes/license-plate.pipe';
 import { HeaderComponent } from './components/header/header.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
+    LicensePlatePipe,
     AppComponent,
     HeaderComponent,
     PageNotFoundComponent,
@@ -26,9 +30,11 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
     CommonModule,
     HttpClientModule,
     OAuthModule.forRoot(),
+    AgGridModule.withComponents([]),
     AppRoutingModule
   ],
   exports: [
+    LicensePlatePipe,
     PageNotFoundComponent
   ],
   providers: [

@@ -10,7 +10,7 @@ nav.sidenav {
   left: 0;
   background-color: $white;
   overflow-x: hidden;
-  border-right: 1px solid $gray;
+  border-right: 1px solid transparent;
 
   -webkit-transition: width .2s ease-in-out;
   -moz-transition: width .2s ease-in-out;
@@ -86,6 +86,7 @@ nav.sidenav {
 
   &:hover {
     width: 200px;
+    border-right-color: $gray;
 
     .opacity {
       opacity: 100;

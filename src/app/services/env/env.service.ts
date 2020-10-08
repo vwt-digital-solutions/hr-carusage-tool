@@ -17,6 +17,9 @@ export class EnvService {
   // API url
   public apiUrl = '';
 
+  // ag-Grid enterprise key
+  public agGridKey = '';
+
   // Feedback email address
   public feedbackEmail = '';
 

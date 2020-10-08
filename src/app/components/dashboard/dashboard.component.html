@@ -1,7 +1,21 @@
-<div class="container app-container">
-  <div class="row">
-    <div class="col col-12">
-      <p>dashboard works!</p>
+<div class="container-fluid dashboard-content h-100">
+  <div class="row h-100">
+    <div class="col-12 col-md-4 dashboard-content-left h-100 p-0">
+      <ag-grid-angular
+        class="ag-grid ag-theme-balham w-100 h-100 p-0"
+        [gridOptions]="gridOptions"
+        [overlayNoRowsTemplate]="overlayNoRowsTemplate"
+        (gridReady)="onGridReady($event)" >
+      </ag-grid-angular>
+    </div>
+    <div class="col-12 col-md-8 dashboard-content-right h-100 p-4">
+      <p>Trip content</p>
     </div>
   </div>
 </div>
+
+<ng-template #nolocations>
+  <div class="alert alert-info" role="alert" >
+    <p><i class="fas fa-magic mr-2"></i> Geen trips gevonden</p>
+  </div>
+</ng-template>

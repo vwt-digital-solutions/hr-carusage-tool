@@ -5,11 +5,25 @@
 @import "~src/assets/scss/constants";
 @import "~src/assets/scss/mixins";
 
+@import "~ag-grid-community/dist/styles/ag-grid.css";
+@import "~ag-grid-community/dist/styles/ag-theme-balham.css";
+
 $fa-font-path: "~src/assets/fonts/fontawesome";
 @import "~src/assets/scss/fontawesome/fontawesome.scss";
 @import "~src/assets/scss/fontawesome/regular.scss";
 @import "~src/assets/scss/fontawesome/solid.scss";
 @import "~src/assets/scss/fontawesome/brands.scss";
+
+@font-face {
+  font-family: "license-plate";
+  src: url('assets/fonts/license-plate/license-plate.eot');
+  src: url('assets/fonts/license-plate/license-plate.eot?#iefix') format("embedded-opentype"),
+    url('assets/fonts/license-plate/license-plate.woff2') format("woff2"),
+    url('assets/fonts/license-plate/license-plate.woff') format("woff"),
+    url('assets/fonts/license-plate/license-plate.ttf') format("ttf");
+  font-style: normal;
+  font-weight: 300;
+}
 
 
 body {
@@ -67,4 +81,47 @@ p {
   box-sizing: border-box;
 
   background-color: $gray-light;
+}
+
+.license-plate {
+  display: flex;
+  align-items: center;
+  border: 1px solid #000;
+  border-radius: 3px;
+  box-sizing: border-box;
+  height: 24px;
+  font-family: 'License Plate', Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: normal;
+  width: max-content;
+  padding: 2px 5px 2px 12.5px;
+  text-transform: uppercase;
+  -webkit-transition: background-color .3s ease, text-shadow .3s ease;
+  transition: background-color .3s ease, text-shadow .3s ease;
+
+  &:focus{
+    outline: 0;
+  }
+
+  &.license-nl{
+    background: #f2ba00 url('assets/images/license-plate-nl.svg') no-repeat top left;
+
+    span {
+      color: #222 !important;
+      text-shadow: 1px 1px #ffe153 !important;
+      display: inline !important;
+      background-color: rgba(0, 0, 0, 0) !important;
+      padding: 0 !important;
+      margin: 5px !important;
+
+      &:focus {
+        text-shadow: 0 0 #ffe153 !important;
+      }
+    }
+
+    &:focus {
+      background-color: #ffc70d;
+    }
+  }
 }
