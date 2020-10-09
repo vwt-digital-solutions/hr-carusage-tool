@@ -27,7 +27,8 @@
           <div
             leaflet
             [leafletOptions]="mapOptions"
-            [leafletLayers]="layers">
+            [leafletLayers]="layers"
+            (leafletMapReady)="onMapReady($event)">
           </div>
         </div>
       </div>

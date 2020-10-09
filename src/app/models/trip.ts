@@ -4,10 +4,10 @@ export interface Trip {
     license: string;
     started_at: string;
     ended_at: string;
-    locations: TripLocations;
+    locations: TripLocation[];
 }
 
-export interface TripLocations {
+export interface TripLocation {
     geometry: Geometry;
     token: string;
     what: string;
