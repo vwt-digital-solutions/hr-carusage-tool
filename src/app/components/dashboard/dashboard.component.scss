@@ -4,3 +4,12 @@
 .dashboard-content {
   position: relative;
 }
+
+@media (max-width: $breakpoint-desktop) {
+  .dashboard-content {
+    overflow-y: scroll;
+  }
+  .dashboard-content-left.h-100, .dashboard-content-right.h-100 {
+    height: 50% !important;
+  }
+}

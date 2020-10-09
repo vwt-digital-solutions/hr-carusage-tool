@@ -34,3 +34,14 @@
     }
   }
 }
+
+@media (max-width: $breakpoint-desktop) {
+  .trip-info {
+    .trip-info-map .leaflet-container {
+      height: 212px;
+    }
+    .card {
+      margin: 0 0 10px !important;
+    }
+  }
+}

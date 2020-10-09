@@ -1,6 +1,6 @@
 <div class="container-fluid dashboard-content h-100">
   <div class="row h-100">
-    <div class="col-12 col-md-6 col-lg-5 dashboard-content-left h-100 p-0">
+    <div class="col-12 col-lg-12 col-xl-5 dashboard-content-left h-100 p-0">
       <ag-grid-angular
         class="ag-grid ag-theme-balham w-100 h-100 p-0"
         [gridOptions]="gridOptions"
@@ -10,7 +10,7 @@
         (gridSizeChanged)="onGridSizeChanged($event)" >
       </ag-grid-angular>
     </div>
-    <div class="col-12 col-md-6 col-lg-7 dashboard-content-right h-100">
+    <div class="col-12 col-lg-12 col-xl-7 dashboard-content-right h-100">
       <app-trip-information
         [tripInfo]="activeTrip"
         [indexInfo]="activeIndexInfo"
@@ -21,7 +21,7 @@
 </div>
 
 <ng-template #nolocations>
-  <div class="alert alert-info" role="alert" >
+  <div class="alert alert-info" role="alert">
     <p><i class="fas fa-magic mr-2"></i> Geen trips gevonden</p>
   </div>
 </ng-template>
