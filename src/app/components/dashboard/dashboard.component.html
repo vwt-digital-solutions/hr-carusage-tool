@@ -5,12 +5,15 @@
         class="ag-grid ag-theme-balham w-100 h-100 p-0"
         [gridOptions]="gridOptions"
         [overlayNoRowsTemplate]="overlayNoRowsTemplate"
-        (rowClicked)="onRowClicked($event)"
+        (selectionChanged)="onSelectionChanged($event)"
         (gridReady)="onGridReady($event)" >
       </ag-grid-angular>
     </div>
-    <div class="col-12 col-md-8 dashboard-content-right h-100 p-4">
-      <app-trip-information [tripInfo]="activeTrip">
+    <div class="col-12 col-md-8 dashboard-content-right h-100">
+      <app-trip-information
+        [tripInfo]="activeTrip"
+        [indexInfo]="activeIndexInfo"
+        (indexChange)="onIndexChange($event)">
       </app-trip-information>
     </div>
   </div>

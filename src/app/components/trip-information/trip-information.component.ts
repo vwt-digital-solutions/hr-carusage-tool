@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Trip } from 'src/app/models/trip';
 import { LicensePlatePipe } from 'src/app/pipes/license-plate.pipe';
@@ -14,6 +14,9 @@ import { tileLayer, latLng, marker, icon } from 'leaflet';
 
 export class TripInformationComponent {
   @Input() tripInfo: Trip;
+  @Input() indexInfo: {current: number, min: number, max: number};
+
+  @Output() indexChange = new EventEmitter<number>();
 
   private markerIcon = icon({
     iconSize: [ 25, 41 ],
@@ -24,7 +27,7 @@ export class TripInformationComponent {
 
   public mapOptions = {
     layers: [
-      tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       { maxZoom: 18, attribution: '...' })
     ],
     zoom: 12,
@@ -35,4 +38,8 @@ export class TripInformationComponent {
     marker([52.1, 5.1], { icon: this.markerIcon }),
     marker([52.1, 5.01], { icon: this.markerIcon })
   ];
+
+  navigatePage(index: number): void {
+    this.indexChange.emit(index);
+  }
 }

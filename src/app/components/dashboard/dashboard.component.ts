@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Trip } from 'src/app/models/trip';
 import { EnvService } from 'src/app/services/env/env.service';
 
-import { GridOptions, AgGridEvent, ValueFormatterParams, RowEvent } from 'ag-grid-community';
+import { GridOptions, AgGridEvent, ValueFormatterParams, RowNode } from 'ag-grid-community';
 import { DatePipe } from '@angular/common';
 import { LicensePlatePipe } from 'src/app/pipes/license-plate.pipe';
 
@@ -24,6 +24,7 @@ export class DashboardComponent {
   public locations: Array<Trip> = [];
 
   public activeTrip: Trip = null;
+  public activeIndexInfo = {current: null, min: 0, max: null};
 
   constructor(
     private env: EnvService,
@@ -83,11 +84,23 @@ export class DashboardComponent {
     this.overlayNoRowsTemplate = '<span class="alert alert-info" role="alert">Geen trips gevonden</span>';
   }
 
-  onRowClicked(event: RowEvent): void | boolean {
+  onSelectionChanged(event: AgGridEvent): void | boolean {
     if (event === null || event === undefined) {
       return false;
     }
-    this.activeTrip = event.data;
+    const currentIndex = event.api.getSelectedNodes()[0];
+    this.activeIndexInfo.current = currentIndex.rowIndex;
+    this.activeTrip = currentIndex.data;
+  }
+
+  onIndexChange(event: Event): void {
+    const newIndex = this.gridApi.getSelectedNodes()[0].rowIndex + event;
+
+    this.gridApi.forEachNodeAfterFilterAndSort((rowNode: RowNode, index: number) => {
+      if (index === newIndex) {
+        rowNode.setSelected(true, true);
+      }
+    });
   }
 
   rowDataChangedHandler(event: AgGridEvent): void {
@@ -104,11 +117,18 @@ export class DashboardComponent {
     this.retrieveTripData();
   }
 
+  get getTotalNodeCount(): number {
+    const rowData = [];
+    this.gridApi.forEachNode(node => rowData.push(node.data));
+    return rowData.length - 1;
+  }
+
   async retrieveTripData(): Promise<void> {
     this.gridApi.showLoadingOverlay();
 
     const response = await this.httpClient.get<Array<Trip>>(`${this.env.apiUrl}/trips`).toPromise();
     this.gridApi.setRowData(('results' in response) ? response['results'] : []);
+    this.activeIndexInfo.max = this.getTotalNodeCount;
 
     this.gridApi.sizeColumnsToFit();
     this.gridApi.hideOverlay();

@@ -1,12 +1,18 @@
 @import "~src/assets/scss/constants";
 @import "~src/assets/scss/mixins";
 
+.trip-info-navbar {
+  .btn {
+    min-width: 40px;
+  }
+}
+
 .trip-info {
   .trip-info-map .leaflet-container {
     height: 400px;
   }
 
-  .card {
+  .card:not(.trip-info-map) {
     margin: 10px 0;
   }
 
