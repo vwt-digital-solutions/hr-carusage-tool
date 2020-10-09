@@ -12,10 +12,10 @@ nav.sidenav {
   overflow-x: hidden;
   border-right: 1px solid transparent;
 
-  -webkit-transition: width .2s ease-in-out;
-  -moz-transition: width .2s ease-in-out;
-  -o-transition: width .2s ease-in-out;
-  transition: width .2s ease-in-out;
+  -webkit-transition: width .2s ease-in-out, box-shadow .2s ease-in;
+  -moz-transition: width .2s ease-in-out, box-shadow .2s ease-in;
+  -o-transition: width .2s ease-in-out, box-shadow .2s ease-in;
+  transition: width .2s ease-in-out, box-shadow .2s ease-in;
 
   .brand {
     padding: 20px 0;
@@ -47,13 +47,24 @@ nav.sidenav {
       box-sizing: border-box;
       border-right: 4px solid transparent;
       border-left: 4px solid transparent;
+      background-color: $white;
+
+      -webkit-transition: background-color .2s ease-in;
+      -moz-transition: background-color .2s ease-in;
+      -o-transition: background-color .2s ease-in;
+      transition: background-color .2s ease-in;
 
       a {
         color: $primary;
+
+        -webkit-transition: color .2s ease-in;
+        -moz-transition: color .2s ease-in;
+        -o-transition: color .2s ease-in;
+        transition: color .2s ease-in;
       }
 
       span {
-        margin-left: 10px;
+        margin-left: 15px;
       }
 
       &:hover {
@@ -87,6 +98,7 @@ nav.sidenav {
   &:hover {
     width: 200px;
     border-right-color: $gray;
+    box-shadow: 0 2px 4px 0 rgba(127,127,127, .2);
 
     .opacity {
       opacity: 100;

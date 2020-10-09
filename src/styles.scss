@@ -59,14 +59,23 @@ h2 {
 h3 {
   font-size: 25px;
   margin: 0;
-  font-weight: 500;
+  font-weight: 800;
   color: $primary;
 }
 
 h4 {
   font-size: 20px;
+  margin: 0;
   text-transform: uppercase;
-  font-weight: 800;
+  font-weight: 500;
+  color: $primary;
+}
+
+h5 {
+  font-size: 12.5px;
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 600;
   color: $primary;
 }
 
@@ -81,6 +90,14 @@ p {
   box-sizing: border-box;
 
   background-color: $gray-light;
+}
+
+.ag-theme-balham {
+  --ag-border-color: #e5e5e5;
+
+  .ag-row:hover {
+    cursor: pointer;
+  }
 }
 
 .license-plate {
@@ -99,6 +116,12 @@ p {
   text-transform: uppercase;
   -webkit-transition: background-color .3s ease, text-shadow .3s ease;
   transition: background-color .3s ease, text-shadow .3s ease;
+
+  &.big {
+    height: 35px;
+    font-size: 30px;
+    padding: 15px 15px 15px 25px;
+  }
 
   &:focus{
     outline: 0;

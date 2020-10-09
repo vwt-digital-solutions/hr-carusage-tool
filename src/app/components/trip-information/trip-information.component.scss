@@ -1,0 +1,29 @@
+@import "~src/assets/scss/constants";
+@import "~src/assets/scss/mixins";
+
+.trip-info {
+  .trip-info-map .leaflet-container {
+    height: 400px;
+  }
+
+  .card {
+    margin: 10px 0;
+  }
+
+  .trip-info-content {
+    .card-body {
+      padding: 15px;
+      min-height: 100px;
+    }
+
+    .license-plate {
+      margin: 9px 0;
+    }
+
+    small {
+      text-transform: uppercase;
+      margin: 0;
+      font-size: 70%;
+    }
+  }
+}

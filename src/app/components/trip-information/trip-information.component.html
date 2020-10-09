@@ -1,0 +1,52 @@
+<div class="row trip-info">
+  <ng-container *ngIf="tripInfo; else notrip">
+    <div class="col-12 col-sm-12">
+      <div class="card trip-info-map">
+        <div class="card-body p-0">
+          <div
+            leaflet
+            [leafletOptions]="mapOptions"
+            [leafletLayers]="layers">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="card trip-info-content">
+        <div class="card-body">
+          <small class="form-text text-muted">Starttijd</small>
+          <h3>{{tripInfo.started_at | date:"HH:mm" || ''}}</h3>
+          <h5>{{tripInfo.started_at | date:"EEEE d MMMM yyyy" || 'N/B'}}</h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="card trip-info-content">
+        <div class="card-body">
+          <small class="form-text text-muted">Eindtijd</small>
+          <h3>{{tripInfo.ended_at | date:"HH:mm" || ''}}</h3>
+          <h5>{{tripInfo.ended_at | date:"EEEE d MMMM yyyy" || 'N/B'}}</h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="card trip-info-content">
+        <div class="card-body">
+          <small class="form-text text-muted">Kenteken</small>
+          <span class="license-plate license-nl big">{{ tripInfo.license | licensePlate }}</span>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #notrip>
+  <div class="col-12">
+    <div class="alert alert-primary" role="alert">
+      Selecteer een trip om deze te bekijken
+    </div>
+  </div>
+</ng-template>

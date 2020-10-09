@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Trip } from 'src/app/models/trip';
 import { EnvService } from 'src/app/services/env/env.service';
 
-import { GridOptions, AgGridEvent, ValueFormatterParams } from 'ag-grid-community';
+import { GridOptions, AgGridEvent, ValueFormatterParams, RowEvent } from 'ag-grid-community';
 import { DatePipe } from '@angular/common';
 import { LicensePlatePipe } from 'src/app/pipes/license-plate.pipe';
 
@@ -22,6 +22,8 @@ export class DashboardComponent {
   public gridOptions: GridOptions;
   public overlayNoRowsTemplate: string;
   public locations: Array<Trip> = [];
+
+  public activeTrip: Trip = null;
 
   constructor(
     private env: EnvService,
@@ -79,6 +81,13 @@ export class DashboardComponent {
     };
 
     this.overlayNoRowsTemplate = '<span class="alert alert-info" role="alert">Geen trips gevonden</span>';
+  }
+
+  onRowClicked(event: RowEvent): void | boolean {
+    if (event === null || event === undefined) {
+      return false;
+    }
+    this.activeTrip = event.data;
   }
 
   rowDataChangedHandler(event: AgGridEvent): void {

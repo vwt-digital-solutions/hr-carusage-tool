@@ -4,18 +4,21 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { LicensePlatePipe } from './pipes/license-plate.pipe';
+
 import { AgGridModule } from 'ag-grid-angular';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 import { OAuthModule, OAuthService } from 'angular-oauth2-oidc';
 import { AuthGuard } from './services/auth/auth.guard';
 import { TokenInterceptor } from './services/auth/token.interceptor';
 import { EnvServiceProvider } from './services/env/env.service.provider';
 
-import { LicensePlatePipe } from './pipes/license-plate.pipe';
+import { AppComponent } from './app.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { HeaderComponent } from './components/header/header.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { TripInformationComponent } from './components/trip-information/trip-information.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +26,8 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
     AppComponent,
     HeaderComponent,
     PageNotFoundComponent,
-    DashboardComponent
+    DashboardComponent,
+    TripInformationComponent
   ],
   imports: [
     BrowserModule,
@@ -31,6 +35,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
     HttpClientModule,
     OAuthModule.forRoot(),
     AgGridModule.withComponents([]),
+    LeafletModule,
     AppRoutingModule
   ],
   exports: [
