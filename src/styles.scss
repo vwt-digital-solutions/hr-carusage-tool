@@ -93,10 +93,13 @@ p {
 }
 
 .ag-theme-balham {
-  --ag-border-color: #e5e5e5;
+  --ag-border-color: #e5e5e5;               // $gray
 
   .ag-row:hover {
     cursor: pointer;
+  }
+  span.ag-header-icon.ag-header-label-icon.ag-sort-order {
+    color: #a5a5a5;
   }
 }
 

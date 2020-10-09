@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Trip } from 'src/app/models/trip';
 import { EnvService } from 'src/app/services/env/env.service';
 
-import { GridOptions, AgGridEvent, ValueFormatterParams, RowNode } from 'ag-grid-community';
+import { GridOptions, AgGridEvent, ValueFormatterParams, RowNode, ValueGetterParams, GridApi, ColumnApi } from 'ag-grid-community';
 import { DatePipe } from '@angular/common';
 import { LicensePlatePipe } from 'src/app/pipes/license-plate.pipe';
 
@@ -16,8 +16,8 @@ import { LicensePlatePipe } from 'src/app/pipes/license-plate.pipe';
 })
 
 export class DashboardComponent {
-  private gridApi;
-  private gridColumnApi;
+  private gridApi: GridApi;
+  private gridColumnApi: ColumnApi;
 
   public gridOptions: GridOptions;
   public overlayNoRowsTemplate: string;
@@ -41,26 +41,63 @@ export class DashboardComponent {
       columnDefs: [
         {
           headerName: 'Starttijd',
-          field: 'started_at',
-          sort: 'asc',
-          valueFormatter: (params: ValueFormatterParams): string => {
-            if (!isNaN(Date.parse(params.value))) {
-              return this.datePipe.transform(params.value, 'dd-MM-yyyy HH:mm');
-            } else {
-              return 'N/B';
+          children: [
+            {
+              headerName: 'Datum',
+              field: 'started_at',
+              sort: 'asc',
+              filter: 'agDateColumnFilter',
+              valueGetter: (params: ValueGetterParams): string => {
+                if (!isNaN(Date.parse(params.data.started_at))) {
+                  return this.datePipe.transform(params.data.started_at, 'dd-MM-yyyy');
+                } else {
+                  return 'N/B';
+                }
+              }
+            },
+            {
+              headerName: 'Tijd',
+              field: 'started_at',
+              sort: 'asc',
+              valueGetter: (params: ValueGetterParams): string => {
+                if (!isNaN(Date.parse(params.data.started_at))) {
+                  return this.datePipe.transform(params.data.started_at, 'HH:mm');
+                } else {
+                  return 'N/B';
+                }
+              }
             }
-          }
+          ]
         },
         {
           headerName: 'Eindtijd',
-          field: 'ended_at',
-          valueFormatter: (params: ValueFormatterParams): string => {
-            if (!isNaN(Date.parse(params.value))) {
-              return this.datePipe.transform(params.value, 'dd-MM-yyyy HH:mm');
-            } else {
-              return 'N/B';
+          children: [
+            {
+              headerName: 'Datum',
+              field: 'ended_at',
+              sort: 'asc',
+              filter: 'agDateColumnFilter',
+              valueGetter: (params: ValueGetterParams): string => {
+                if (!isNaN(Date.parse(params.data.ended_at))) {
+                  return this.datePipe.transform(params.data.ended_at, 'dd-MM-yyyy');
+                } else {
+                  return 'N/B';
+                }
+              }
+            },
+            {
+              headerName: 'Tijd',
+              field: 'ended_at',
+              sort: 'asc',
+              valueGetter: (params: ValueGetterParams): string => {
+                if (!isNaN(Date.parse(params.data.ended_at))) {
+                  return this.datePipe.transform(params.data.ended_at, 'HH:mm');
+                } else {
+                  return 'N/B';
+                }
+              }
             }
-          }
+          ]
         },
         {
           headerName: 'Kenteken',
@@ -93,7 +130,11 @@ export class DashboardComponent {
     this.activeTrip = currentIndex.data;
   }
 
-  onIndexChange(event: Event): void {
+  onGridSizeChanged(event: AgGridEvent): void {
+    event.api.sizeColumnsToFit();
+  }
+
+  onIndexChange(event: number): void {
     const newIndex = this.gridApi.getSelectedNodes()[0].rowIndex + event;
 
     this.gridApi.forEachNodeAfterFilterAndSort((rowNode: RowNode, index: number) => {
