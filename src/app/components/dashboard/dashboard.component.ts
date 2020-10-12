@@ -8,6 +8,8 @@ import { GridOptions, AgGridEvent, ValueFormatterParams, RowNode, ValueGetterPar
 import { DatePipe } from '@angular/common';
 import { LicensePlatePipe } from 'src/app/pipes/license-plate.pipe';
 
+import { agGridLocaleNL } from 'src/assets/locale/locale.nl';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -110,6 +112,7 @@ export class DashboardComponent {
       ],
       domLayout: 'normal',
       rowSelection: 'single',
+      localeTextFunc: (key: string, defaultValue: string) =>  agGridLocaleNL[key] || defaultValue,
       statusBar: {
         statusPanels: [
           { statusPanel: 'agTotalRowCountComponent', align: 'left' },

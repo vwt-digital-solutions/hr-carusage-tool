@@ -13,8 +13,6 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    console.log(this.router.url);
-
     if (this.oauthService.hasValidAccessToken()) {
       const claims = this.oauthService.getIdentityClaims();
 

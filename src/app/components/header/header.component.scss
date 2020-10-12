@@ -98,7 +98,7 @@ nav.sidenav {
   &:hover:not(.no-login) {
     width: 200px;
     border-right-color: $gray;
-    box-shadow: 0 2px 4px 0 rgba(127,127,127, .2);
+    box-shadow: 0 2px 4px 0 rgba(127, 127, 127, .2);
 
     .opacity {
       opacity: 100;

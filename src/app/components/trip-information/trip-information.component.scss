@@ -4,6 +4,11 @@
 .trip-info-navbar {
   .btn {
     min-width: 40px;
+
+    &.disabled {
+      cursor: not-allowed;
+      color: $gray;
+    }
   }
 }
 
