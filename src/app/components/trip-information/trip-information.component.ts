@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
-import { Trip, TripLocation } from 'src/app/models/trip';
+import { Trip, TripLocation } from 'src/app/models/trip.model';
 import { LicensePlatePipe } from 'src/app/pipes/license-plate.pipe';
 
 import { tileLayer, latLng, marker, icon, Map, polyline, LatLng, point, latLngBounds } from 'leaflet';
@@ -43,7 +43,8 @@ export class TripInformationComponent implements OnChanges {
       { maxZoom: 18, attribution: '...' })
     ],
     zoom: 7,
-    center: latLng(52.1, 5.1)
+    center: latLng(52.1, 5.1),
+    attributionControl: false
   };
   public layers = [];
 
@@ -107,7 +108,7 @@ export class TripInformationComponent implements OnChanges {
     if (this.leafletMap) {
       if (this.geoLocations.length > 0) {
         const coordinates = [];
-        this.geoLocations.forEach((location, i) => {
+        this.geoLocations.forEach((location) => {
           coordinates.push(this.getLatLng(location));
         });
         this.leafletMap.fitBounds(latLngBounds(coordinates), {

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Trip } from 'src/app/models/trip';
+import { Trip } from 'src/app/models/trip.model';
 import { EnvService } from 'src/app/services/env/env.service';
 
 import { GridOptions, AgGridEvent, ValueFormatterParams, RowNode, ValueGetterParams, GridApi, ColumnApi } from 'ag-grid-community';

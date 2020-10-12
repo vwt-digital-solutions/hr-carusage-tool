@@ -17,8 +17,10 @@ import { EnvServiceProvider } from './services/env/env.service.provider';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { HeaderComponent } from './components/header/header.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { PageNotFoundComponent } from './components/not-found/not-found.component';
+import { PageNotAuthorizedComponent } from './components/not-authorized/not-authorized.component';
 import { TripInformationComponent } from './components/trip-information/trip-information.component';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
@@ -26,8 +28,10 @@ import { TripInformationComponent } from './components/trip-information/trip-inf
     AppComponent,
     HeaderComponent,
     PageNotFoundComponent,
+    PageNotAuthorizedComponent,
     DashboardComponent,
-    TripInformationComponent
+    TripInformationComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +44,8 @@ import { TripInformationComponent } from './components/trip-information/trip-inf
   ],
   exports: [
     LicensePlatePipe,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    PageNotAuthorizedComponent
   ],
   providers: [
     EnvServiceProvider,

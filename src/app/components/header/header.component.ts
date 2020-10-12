@@ -12,6 +12,7 @@ interface ClaimsEmail {
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
+
 export class HeaderComponent {
   title = 'HR Autogebruik';
 
@@ -38,5 +39,9 @@ export class HeaderComponent {
 
   get feedbackEmail(): string {
     return this.env.feedbackEmail;
+  }
+
+  get isLoggedIn(): boolean {
+    return this.oauthService.hasValidAccessToken();
   }
 }

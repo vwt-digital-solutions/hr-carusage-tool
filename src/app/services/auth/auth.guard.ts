@@ -1,11 +1,7 @@
-import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router} from '@angular/router';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
 
-import {OAuthService} from 'angular-oauth2-oidc';
-
-interface ClaimRoles {
-  roles: Array<string>;
-}
+import { OAuthService } from 'angular-oauth2-oidc';
 
 @Injectable({
   providedIn: 'root'
@@ -14,43 +10,37 @@ export class AuthGuard implements CanActivate {
   constructor(
     private oauthService: OAuthService,
     private router: Router
-  ) {
-  }
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    // console.log('Invoke auth guard');
-    this.oauthService.tryLogin()
-      .catch(err => {
-        console.error(err);
-      })
-      .then(() => {
-        // console.log('Check for valid access token');
-        if (!this.oauthService.hasValidAccessToken()) {
-          // console.log('No valid access token present, start implicit flow');
-          this.oauthService.initImplicitFlow();
-          // console.log('Implicit flow initialized');
-        }
-      });
+    console.log(this.router.url);
 
-    // console.log('Checking necessary roles');
-    const claims = this.oauthService.getIdentityClaims() as ClaimRoles;
-    if (route.data.roles && claims.roles) {
-      let isAuthorisedRoute = false;
-      for (const role of claims.roles) {
-        if (route.data.roles.indexOf(role) > -1) {
-          isAuthorisedRoute = true;
-          // console.log('Requested role present');
-          return true;
-        }
-      }
+    if (this.oauthService.hasValidAccessToken()) {
+      const claims = this.oauthService.getIdentityClaims();
 
-      if (!isAuthorisedRoute) {
-        // console.log('Requested role not granted');
-        this.router.navigate(['/home']);
+      if (route.data.roles) {
+        if (claims && 'roles' in claims) {
+          let isAuthorisedRoute = false;
+
+          for (const value of claims['roles']) {
+            if (route.data.roles.indexOf(value) > -1) {
+              isAuthorisedRoute = true;
+            }
+          }
+
+          if (isAuthorisedRoute) {
+            return true;
+          }
+        }
+
+        this.router.navigate(['not-authorized']);
         return false;
+      } else {
+        return true;
       }
+    } else {
+      this.router.navigate(['login']);
+      return false;
     }
-    // console.log('No role requested');
-    return true;
   }
 }

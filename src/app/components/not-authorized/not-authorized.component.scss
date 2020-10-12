@@ -1,11 +1,13 @@
 @import "~src/assets/scss/constants";
 @import "~src/assets/scss/mixins";
 
-.app-page-not-found {
+.app-not-authorized {
+  padding-top: 70px;
   .icon-box {
     text-align: center;
+
     i.fa-circle{
-      color: $primary;
+      color: $red;
     }
   }
 
@@ -14,6 +16,7 @@
 
     h1 {
       margin-bottom: 20px;
+      color: $red;
     }
     p {
       font-size: 15px;
@@ -21,8 +24,8 @@
   }
 }
 
-@media (max-width: $breakpoint-tablet - 1) {
-  .app-page-not-found {
+@media (max-width: $breakpoint-tablet) {
+  .app-not-authorized {
     .jumbotron {
       margin: 0;
     }
