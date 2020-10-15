@@ -121,7 +121,7 @@ export class DashboardComponent {
       }
     };
 
-    this.overlayNoRowsTemplate = '<span class="alert alert-info" role="alert">Geen trips gevonden</span>';
+    this.overlayNoRowsTemplate = '<span class="alert alert-primary" role="alert">Geen ritten gevonden</span>';
   }
 
   onSelectionChanged(event: AgGridEvent): void | boolean {

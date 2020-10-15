@@ -93,7 +93,11 @@ export class TripInformationComponent implements OnChanges {
         }
       });
 
-      mapMarkers.push(polyline([locCoordinates]));
+      mapMarkers.push(polyline([locCoordinates], {
+        weight: 4,
+        dashArray: '5, 10',
+        lineCap: 'square'
+      }));
       this.layers = mapMarkers;
     }
 
@@ -101,7 +105,7 @@ export class TripInformationComponent implements OnChanges {
   }
 
   getLatLng(location: TripLocation): LatLng {
-    return latLng(location.geometry.coordinates[0], location.geometry.coordinates[1]);
+    return latLng(location.geometry.coordinates[1], location.geometry.coordinates[0]);
   }
 
   boundMap(): void {

@@ -110,12 +110,13 @@ p {
   border-radius: 3px;
   box-sizing: border-box;
   height: 24px;
+  min-width: 90px;
   font-family: 'License Plate', Arial, sans-serif;
   font-size: 14px;
   font-weight: 700;
   line-height: normal;
   width: max-content;
-  padding: 2px 5px 2px 12.5px;
+  padding: 2px 5px 2px 15px;
   text-transform: uppercase;
   -webkit-transition: background-color .3s ease, text-shadow .3s ease;
   transition: background-color .3s ease, text-shadow .3s ease;

@@ -16,11 +16,12 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     if (this.oauthService.hasValidAccessToken()) {
       this.router.navigate(['home']);
+    } else {
+      this.login();
     }
   }
 
-  public login($event: Event): void {
-    $event.preventDefault();
+  public login(): void {
     this.oauthService.initLoginFlow();
   }
 }
