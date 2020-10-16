@@ -150,6 +150,8 @@ export class DashboardComponent {
   onGridSizeChanged(event: AgGridEvent): void {
     if (this.deviceService.isDesktop() || this.deviceService.isTablet()) {
       event.api.sizeColumnsToFit();
+    } else {
+      event.columnApi.autoSizeAllColumns();
     }
   }
 
@@ -198,6 +200,8 @@ export class DashboardComponent {
 
     if (this.deviceService.isDesktop() || this.deviceService.isTablet()) {
       this.gridApi.sizeColumnsToFit();
+    } else {
+      this.gridColumnApi.autoSizeAllColumns();
     }
 
     this.gridApi.hideOverlay();

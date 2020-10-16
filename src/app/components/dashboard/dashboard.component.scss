@@ -46,7 +46,7 @@
 @media (min-width: $breakpoint-desktop + 1) {
   .dashboard-content {
     .ag-grid {
-      height: calc(100% - 38px);
+      height: calc(100% - 39px);
     }
   }
 
@@ -60,7 +60,7 @@
     overflow-y: scroll;
 
     .ag-grid {
-      height: calc(100% - 38px);
+      height: calc(100% - 39px);
     }
   }
 
