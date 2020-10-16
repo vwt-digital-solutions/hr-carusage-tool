@@ -19,6 +19,7 @@ export class TripInformationComponent implements OnChanges {
 
   @Output() indexChange = new EventEmitter<number>();
 
+  private initialLoad = false;
   private leafletMap: Map;
   private geoLocations: TripLocation[] = [];
   private markerIcon = icon({
@@ -37,6 +38,7 @@ export class TripInformationComponent implements OnChanges {
     .setLatLng([52.1, 5.1])
     .setContent('<p>Geen route gevonden</p>');
 
+  public mapLayers = [];
   public mapOptions = {
     layers: [
       tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -46,26 +48,18 @@ export class TripInformationComponent implements OnChanges {
     center: latLng(52.1, 5.1),
     attributionControl: false
   };
-  public layers = [];
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.layers = [];
-    this.geoLocations = [];
+    if (changes.tripInfo['currentValue'] && this.initialLoad && this.leafletMap) {
+      this.resetMap();
 
-    if (this.leafletMap) {
-      this.leafletMap.closePopup();
-    }
-
-    if (changes.tripInfo['currentValue'] && changes.tripInfo.currentValue['locations']) {
-      for (const property of changes.tripInfo.currentValue['locations']) {
-        this.geoLocations.push(property);
+      if (changes.tripInfo['currentValue'] && changes.tripInfo.currentValue['locations']) {
+        this.initMapLocations(changes.tripInfo.currentValue);
       }
-
-      this.geoLocations = this.geoLocations.sort((a, b) => a.when > b.when ? -1 : (a.when < b.when ? 1 : 0));
-      this.createMapMarkers();
+    } else {
+      this.initialLoad = false;
+      this.resetMap();
     }
-
-    this.boundMap();
   }
 
   navigatePage(index: number): void {
@@ -74,38 +68,58 @@ export class TripInformationComponent implements OnChanges {
 
   onMapReady(map: Map): void {
     this.leafletMap = map;
-    this.boundMap();
+    this.initialLoad = true;
+
+    this.initMapLocations(this.tripInfo);
   }
 
-  createMapMarkers(): void {
-    if (this.geoLocations.length >= 2) {
-      const mapMarkers = [];
-      const locCoordinates = [];
-      const totalLoc = this.geoLocations.length - 1;
+  resetMap(): void {
+    this.geoLocations = [];
 
-      this.geoLocations.forEach((location, i) => {
-        const coordinates = this.getLatLng(location);
+    if (this.leafletMap) {
+      this.leafletMap.closePopup();
+
+      for (const layer of this.mapLayers) {
+        this.leafletMap.removeLayer(layer);
+      }
+    }
+  }
+
+  initMapLocations(tripInfo: Trip): void {
+    let mapLocations = [];
+
+    for (const property of tripInfo.locations) {
+      mapLocations.push(property);
+    }
+
+    if (mapLocations.length >= 2) {
+      mapLocations = mapLocations.sort((a, b) => a.when > b.when ? -1 : (a.when < b.when ? 1 : 0));
+      this.geoLocations = mapLocations;
+
+      const markerLayer = L.layerGroup();
+      const locCoordinates = [];
+      const totalLoc = mapLocations.length - 1;
+
+      for (let i = 0; i < mapLocations.length; i++) {
+        const coordinates = this.getLatLng(mapLocations[i]);
         locCoordinates.push(coordinates);
 
         if ([0, totalLoc].includes(i)) {
-          mapMarkers.push(marker(coordinates, { icon: this.markerIcon }).bindTooltip(
+          markerLayer.addLayer(marker(coordinates, { icon: this.markerIcon }).bindTooltip(
             (i === 0 ? 'Start' : 'Eind') , {permanent: true}));
         }
-      });
+      }
 
-      mapMarkers.push(polyline([locCoordinates], {
-        weight: 4,
-        dashArray: '5, 10',
-        lineCap: 'square'
-      }));
-      this.layers = mapMarkers;
+      markerLayer.addLayer(polyline(
+        [locCoordinates],
+        { weight: 4, dashArray: '5, 10', lineCap: 'square' }
+      ));
+
+      markerLayer.addTo(this.leafletMap);
+      this.mapLayers.push(markerLayer);
     }
 
     this.boundMap();
-  }
-
-  getLatLng(location: TripLocation): LatLng {
-    return latLng(location.geometry.coordinates[1], location.geometry.coordinates[0]);
   }
 
   boundMap(): void {
@@ -115,6 +129,7 @@ export class TripInformationComponent implements OnChanges {
         this.geoLocations.forEach((location) => {
           coordinates.push(this.getLatLng(location));
         });
+
         this.leafletMap.fitBounds(latLngBounds(coordinates), {
           padding: point(24, 24),
           animate: true,
@@ -126,5 +141,9 @@ export class TripInformationComponent implements OnChanges {
         this.leafletMap.setZoom(7);
       }
     }
+  }
+
+  getLatLng(location: TripLocation): LatLng {
+    return latLng(location.geometry.coordinates[1], location.geometry.coordinates[0]);
   }
 }

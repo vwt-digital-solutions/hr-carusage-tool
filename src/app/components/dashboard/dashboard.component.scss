@@ -3,13 +3,82 @@
 
 .dashboard-content {
   position: relative;
+
+  .info-box {
+    box-sizing: border-box;
+
+    color: $aggrid-header-title;
+    background-color: $aggrid-header-bg;
+    border: 1px solid $aggrid-header-border;
+    border-bottom: 0;
+
+    .date-info {
+      font-size: 12px;
+      line-height: 14px;
+      padding: 12px 10px;
+      font-weight: 800;
+    }
+
+    .pagination {
+      .page-item {
+        float: left;
+
+        font-size: 12px;
+        line-height: 14px;
+        padding: 12px 10px;
+        font-weight: 800;
+
+        &:hover:not(.page-current) {
+          cursor: pointer;
+          color: $black;
+        }
+
+        &.disabled, &.disabled:hover {
+          color: $gray;
+          cursor: not-allowed;
+        }
+      }
+
+    }
+  }
 }
 
-@media (max-width: $breakpoint-desktop) {
+@media (min-width: $breakpoint-desktop + 1) {
+  .dashboard-content {
+    .ag-grid {
+      height: calc(100% - 38px);
+    }
+  }
+
+  .dashboard-content-left, .dashboard-content-right {
+    height: 100%;
+  }
+}
+
+@media (min-width: $breakpoint-tablet-landscape-up) and (max-width: $breakpoint-desktop) {
   .dashboard-content {
     overflow-y: scroll;
+
+    .ag-grid {
+      height: calc(100% - 38px);
+    }
   }
-  .dashboard-content-left.h-100, .dashboard-content-right.h-100 {
-    height: 50% !important;
+
+  .dashboard-content-left, .dashboard-content-right {
+    height: 50%;
+  }
+}
+
+@media (max-width: $breakpoint-tablet-landscape-up) {
+  .dashboard-content {
+    overflow-y: scroll;
+
+    .ag-grid {
+      height: 400px;
+    }
+  }
+
+  .dashboard-content-left, .dashboard-content-right {
+    height: auto;
   }
 }

@@ -3,10 +3,13 @@ import { HttpClient } from '@angular/common/http';
 
 import { Trip } from 'src/app/models/trip.model';
 import { EnvService } from 'src/app/services/env/env.service';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 import { GridOptions, AgGridEvent, ValueFormatterParams, RowNode, ValueGetterParams, GridApi, ColumnApi } from 'ag-grid-community';
 import { DatePipe } from '@angular/common';
 import { LicensePlatePipe } from 'src/app/pipes/license-plate.pipe';
+
+import * as moment from 'moment';
 
 import { agGridLocaleNL } from 'src/assets/locale/locale.nl';
 
@@ -27,12 +30,18 @@ export class DashboardComponent {
 
   public activeTrip: Trip = null;
   public activeIndexInfo = {current: null, min: 0, max: null};
+  public isLoading = false;
+
+  public now = moment();
+  public weekHasNext = false;
+  public weekHasPrev = true;
 
   constructor(
     private env: EnvService,
     private httpClient: HttpClient,
     private datePipe: DatePipe,
-    private licensePlatePipe: LicensePlatePipe
+    private licensePlatePipe: LicensePlatePipe,
+    private deviceService: DeviceDetectorService
   ) {
     this.gridOptions = {
       defaultColDef: {
@@ -128,13 +137,20 @@ export class DashboardComponent {
     if (event === null || event === undefined) {
       return false;
     }
-    const currentIndex = event.api.getSelectedNodes()[0];
-    this.activeIndexInfo.current = currentIndex.rowIndex;
-    this.activeTrip = currentIndex.data;
+
+    const selectedNodes = event.api.getSelectedNodes();
+    if (selectedNodes.length > 0) {
+      this.activeIndexInfo.current = selectedNodes[0].rowIndex;
+      this.activeTrip = selectedNodes[0].data;
+    } else {
+      this.activeTrip = null;
+    }
   }
 
   onGridSizeChanged(event: AgGridEvent): void {
-    event.api.sizeColumnsToFit();
+    if (this.deviceService.isDesktop() || this.deviceService.isTablet()) {
+      event.api.sizeColumnsToFit();
+    }
   }
 
   onIndexChange(event: number): void {
@@ -168,13 +184,64 @@ export class DashboardComponent {
   }
 
   async retrieveTripData(): Promise<void> {
+    this.isLoading = true;
     this.gridApi.showLoadingOverlay();
 
-    const response = await this.httpClient.get<Array<Trip>>(`${this.env.apiUrl}/trips`).toPromise();
+    const response = await this.httpClient.get<Array<Trip>>(
+      `${this.env.apiUrl}/trips`,
+      { params: {
+        ended_after: this.currentWeekStartTimestamp,
+        ended_before: this.currentWeekEndTimestamp
+      }}).toPromise();
     this.gridApi.setRowData(('results' in response) ? response['results'] : []);
     this.activeIndexInfo.max = this.getTotalNodeCount;
 
-    this.gridApi.sizeColumnsToFit();
+    if (this.deviceService.isDesktop() || this.deviceService.isTablet()) {
+      this.gridApi.sizeColumnsToFit();
+    }
+
     this.gridApi.hideOverlay();
+    this.isLoading = false;
+  }
+
+  get currentWeekStartTimestamp(): string {
+    return `${this.now.startOf('week').format('YYYY-MM-DD')}T00:00:00Z`;
+  }
+
+  get currentWeekEndTimestamp(): string {
+    return `${this.now.endOf('week').format('YYYY-MM-DD')}T23:59:59Z`;
+  }
+
+  get currentWeekStartDate(): string {
+    return this.now.startOf('week').format('YYYY-MM-DD');
+  }
+
+  get currentWeekEndDate(): string {
+    return this.now.endOf('week').format('YYYY-MM-DD');
+  }
+
+  get currentWeekNumber(): string {
+    return this.now.format('w');
+  }
+
+  get isCurrentWeek(): boolean {
+    return moment().startOf('week').toISOString() === this.now.startOf('week').toISOString() ? true : false;
+  }
+
+  changeWeek(action: number): void {
+    this.gridApi.deselectAll();
+    this.activeTrip = null;
+
+    if (action < 0) {
+      this.now = this.now.subtract(1, 'weeks');
+    } else if (action > 0) {
+      this.now = this.now.add(1, 'weeks');
+    } else {
+      this.now = moment();
+    }
+
+    this.weekHasNext = this.isCurrentWeek ? false : true;
+
+    this.retrieveTripData();
   }
 }

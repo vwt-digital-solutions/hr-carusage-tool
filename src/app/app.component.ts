@@ -7,6 +7,8 @@ import { EnvService } from './services/env/env.service';
 
 import { LicenseManager } from 'ag-grid-enterprise';
 
+import * as moment from 'moment';
+
 registerLocaleData(localeNl);
 
 @Component({
@@ -30,6 +32,7 @@ export class AppComponent {
     this.oauthService.setupAutomaticSilentRefresh();
     this.oauthService.tryLogin({});
 
+    moment.locale('nl');
     LicenseManager.setLicenseKey(env.agGridKey);
   }
 }

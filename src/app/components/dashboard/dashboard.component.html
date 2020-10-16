@@ -1,8 +1,31 @@
 <div class="container-fluid dashboard-content h-100">
   <div class="row h-100">
-    <div class="col-12 col-lg-12 col-xl-5 dashboard-content-left h-100 p-0">
+    <div class="col-12 col-lg-12 col-xl-5 dashboard-content-left p-0">
+      <div class="info-box">
+        <nav class="d-flex justify-content-md-end justify-content-begin" aria-label="pagination">
+          <div class="date-info" title="Actieve week">
+            <i class="fas fa-calendar-week mr-2"></i> {{ currentWeekStartDate | date:"dd-MM-yyyy" }} tot {{ currentWeekEndDate | date:"dd-MM-yyyy" }}
+          </div>
+
+          <ul class="pagination ml-auto mb-0">
+            <li class="page-item page-today mr-4" [class.disabled]="isCurrentWeek || isLoading" (click)="changeWeek(0)">
+              <i class="fas fa-calendar mr-1"></i> Huidige week
+            </li>
+            <li class="page-item page-prev" [class.disabled]="isLoading" (click)="changeWeek(-1)" title="Vorige week">
+              <i class="fas fa-chevron-left"></i>
+            </li>
+            <li class="page-item page-current">
+              Week {{ currentWeekNumber }}
+            </li>
+            <li class="page-item page-next" [class.disabled]="!weekHasNext || isLoading" (click)="changeWeek(1)" title="Volgende week">
+              <i class="fas fa-chevron-right"></i>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
       <ag-grid-angular
-        class="ag-grid ag-theme-balham w-100 h-100 p-0"
+        class="ag-grid ag-theme-balham w-100 p-0"
         [gridOptions]="gridOptions"
         [overlayNoRowsTemplate]="overlayNoRowsTemplate"
         (selectionChanged)="onSelectionChanged($event)"
@@ -10,7 +33,7 @@
         (gridSizeChanged)="onGridSizeChanged($event)" >
       </ag-grid-angular>
     </div>
-    <div class="col-12 col-lg-12 col-xl-7 dashboard-content-right h-100">
+    <div class="col-12 col-lg-12 col-xl-7 dashboard-content-right">
       <app-trip-information
         [tripInfo]="activeTrip"
         [indexInfo]="activeIndexInfo"
