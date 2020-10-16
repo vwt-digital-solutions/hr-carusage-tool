@@ -121,6 +121,8 @@ export class DashboardComponent {
       ],
       domLayout: 'normal',
       rowSelection: 'single',
+      pagination: true,
+      paginationAutoPageSize: true,
       localeTextFunc: (key: string, defaultValue: string) =>  agGridLocaleNL[key] || defaultValue,
       statusBar: {
         statusPanels: [
@@ -140,6 +142,7 @@ export class DashboardComponent {
 
     const selectedNodes = event.api.getSelectedNodes();
     if (selectedNodes.length > 0) {
+      this.rowDataSetPage(selectedNodes[0].rowIndex);
       this.activeIndexInfo.current = selectedNodes[0].rowIndex;
       this.activeTrip = selectedNodes[0].data;
     } else {
@@ -163,6 +166,15 @@ export class DashboardComponent {
         rowNode.setSelected(true, true);
       }
     });
+  }
+
+  rowDataSetPage(index: number): void {
+    const pageSize = this.gridApi.paginationGetPageSize();
+    const pageNumber = Math.floor(index / pageSize);
+
+    if (this.gridApi.paginationGetCurrentPage() !== pageNumber) {
+      this.gridApi.paginationGoToPage(pageNumber);
+    }
   }
 
   rowDataChangedHandler(event: AgGridEvent): void {
