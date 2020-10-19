@@ -205,7 +205,8 @@ export class DashboardComponent {
       `${this.env.apiUrl}/trips`,
       { params: {
         ended_after: this.currentWeekStartTimestamp,
-        ended_before: this.currentWeekEndTimestamp
+        ended_before: this.currentWeekEndTimestamp,
+        outside_time_window: 'true'
       }}).toPromise();
     this.gridApi.setRowData(('results' in response) ? response['results'] : []);
     this.activeIndexInfo.max = this.getTotalNodeCount;
