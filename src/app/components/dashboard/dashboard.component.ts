@@ -33,7 +33,8 @@ export class DashboardComponent {
   public isLoading = false;
 
   public now = moment();
-  public weekHasNext = false;
+  public dynamicMoment = moment().subtract(1, 'weeks');
+  public weekHasNext = true;
   public weekHasPrev = true;
 
   constructor(
@@ -222,27 +223,27 @@ export class DashboardComponent {
   }
 
   get currentWeekStartTimestamp(): string {
-    return `${this.now.startOf('week').format('YYYY-MM-DD')}T00:00:00Z`;
+    return `${this.dynamicMoment.startOf('week').format('YYYY-MM-DD')}T00:00:00Z`;
   }
 
   get currentWeekEndTimestamp(): string {
-    return `${this.now.endOf('week').format('YYYY-MM-DD')}T23:59:59Z`;
+    return `${this.dynamicMoment.endOf('week').format('YYYY-MM-DD')}T23:59:59Z`;
   }
 
   get currentWeekStartDate(): string {
-    return this.now.startOf('week').format('YYYY-MM-DD');
+    return this.dynamicMoment.startOf('week').format('YYYY-MM-DD');
   }
 
   get currentWeekEndDate(): string {
-    return this.now.endOf('week').format('YYYY-MM-DD');
+    return this.dynamicMoment.endOf('week').format('YYYY-MM-DD');
   }
 
   get currentWeekNumber(): string {
-    return this.now.format('w');
+    return this.dynamicMoment.format('w');
   }
 
   get isCurrentWeek(): boolean {
-    return moment().startOf('week').toISOString() === this.now.startOf('week').toISOString() ? true : false;
+    return this.now.startOf('week').toISOString() === this.dynamicMoment.startOf('week').toISOString() ? true : false;
   }
 
   changeWeek(action: number): void {
@@ -250,11 +251,11 @@ export class DashboardComponent {
     this.activeTrip = null;
 
     if (action < 0) {
-      this.now = this.now.subtract(1, 'weeks');
+      this.dynamicMoment = this.dynamicMoment.subtract(1, 'weeks');
     } else if (action > 0) {
-      this.now = this.now.add(1, 'weeks');
+      this.dynamicMoment = this.dynamicMoment.add(1, 'weeks');
     } else {
-      this.now = moment();
+      this.dynamicMoment = moment();
     }
 
     this.weekHasNext = this.isCurrentWeek ? false : true;
