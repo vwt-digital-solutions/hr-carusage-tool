@@ -8,6 +8,7 @@ import { LicensePlatePipe } from './pipes/license-plate.pipe';
 
 import { AgGridModule } from 'ag-grid-angular';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { OAuthModule, OAuthService } from 'angular-oauth2-oidc';
 import { AuthGuard } from './services/auth/auth.guard';
@@ -37,6 +38,7 @@ import { LoginComponent } from './components/login/login.component';
     BrowserModule,
     CommonModule,
     HttpClientModule,
+    NgbModule,
     OAuthModule.forRoot(),
     AgGridModule.withComponents([]),
     LeafletModule,

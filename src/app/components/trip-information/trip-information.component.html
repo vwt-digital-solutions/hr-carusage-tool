@@ -37,7 +37,12 @@
     <div class="col-12 col-md-6 col-xl-4 float-left float-xl-none">
       <div class="card trip-info-content">
         <div class="card-body">
-          <small class="form-text text-muted">Starttijd</small>
+          <small class="form-text text-muted">
+            Starttijd
+            <button type="button" class="btn btn-tooltip text-muted" placement="right" ngbTooltip="De daadwerkelijke tijd kan tot 5 minuten afwijken">
+              <i class="fas fa-info-circle"></i>
+            </button>
+          </small>
           <h3>{{tripInfo.started_at | date:"HH:mm" || ''}}</h3>
           <h5>{{tripInfo.started_at | date:"EEEE d MMMM yyyy" || 'N/B'}}</h5>
         </div>
@@ -47,7 +52,12 @@
     <div class="col-12 col-md-6 col-xl-4 float-left float-xl-none">
       <div class="card trip-info-content">
         <div class="card-body">
-          <small class="form-text text-muted">Eindtijd</small>
+          <small class="form-text text-muted">
+            Eindtijd
+            <button type="button" class="btn btn-tooltip text-muted" placement="right" ngbTooltip="De daadwerkelijke tijd kan tot 5 minuten afwijken">
+              <i class="fas fa-info-circle"></i>
+            </button>
+          </small>
           <h3>{{tripInfo.ended_at | date:"HH:mm" || ''}}</h3>
           <h5>{{tripInfo.ended_at | date:"EEEE d MMMM yyyy" || 'N/B'}}</h5>
         </div>

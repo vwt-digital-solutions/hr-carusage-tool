@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 
 import { Trip } from 'src/app/models/trip.model';
 import { EnvService } from 'src/app/services/env/env.service';
-import { DeviceDetectorService } from 'ngx-device-detector';
 
 import { GridOptions, AgGridEvent, ValueFormatterParams, RowNode, ValueGetterParams, GridApi, ColumnApi } from 'ag-grid-community';
 import { DatePipe } from '@angular/common';
@@ -41,8 +40,7 @@ export class DashboardComponent {
     private env: EnvService,
     private httpClient: HttpClient,
     private datePipe: DatePipe,
-    private licensePlatePipe: LicensePlatePipe,
-    private deviceService: DeviceDetectorService
+    private licensePlatePipe: LicensePlatePipe
   ) {
     this.gridOptions = {
       defaultColDef: {
@@ -112,17 +110,17 @@ export class DashboardComponent {
           ]
         },
         {
-          headerName: 'Afdeling',
-          field: 'driver_info.department.name'
-        },
-        {
           headerName: 'Kenteken',
           field: 'license',
           cellRenderer: (params: ValueFormatterParams): string => {
             const licensePlate = this.licensePlatePipe.transform(params.value);
             return `<span class="license-plate license-nl">${licensePlate}</span>`;
           }
-        }
+        },
+        {
+          headerName: 'Afdeling',
+          field: 'driver_info.department.name'
+        },
       ],
       domLayout: 'normal',
       rowSelection: 'single',
@@ -156,11 +154,7 @@ export class DashboardComponent {
   }
 
   onGridSizeChanged(event: AgGridEvent): void {
-    if (this.deviceService.isDesktop() || this.deviceService.isTablet()) {
-      event.api.sizeColumnsToFit();
-    } else {
-      event.columnApi.autoSizeAllColumns();
-    }
+    event.columnApi.autoSizeAllColumns();
   }
 
   onIndexChange(event: number): void {
@@ -216,11 +210,7 @@ export class DashboardComponent {
     this.gridApi.setRowData(('results' in response) ? response['results'] : []);
     this.activeIndexInfo.max = this.getTotalNodeCount;
 
-    if (this.deviceService.isDesktop() || this.deviceService.isTablet()) {
-      this.gridApi.sizeColumnsToFit();
-    } else {
-      this.gridColumnApi.autoSizeAllColumns();
-    }
+    this.gridColumnApi.autoSizeAllColumns();
 
     this.gridApi.hideOverlay();
     this.isLoading = false;
