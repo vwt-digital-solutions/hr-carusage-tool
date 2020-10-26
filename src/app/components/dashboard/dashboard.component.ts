@@ -112,6 +112,10 @@ export class DashboardComponent {
           ]
         },
         {
+          headerName: 'Afdeling',
+          field: 'driver_info.department.name'
+        },
+        {
           headerName: 'Kenteken',
           field: 'license',
           cellRenderer: (params: ValueFormatterParams): string => {
