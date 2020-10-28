@@ -146,4 +146,15 @@ export class TripInformationComponent implements OnChanges {
   getLatLng(location: TripLocation): LatLng {
     return latLng(location.geometry.coordinates[1], location.geometry.coordinates[0]);
   }
+
+  get driverName(): string {
+    return this.tripInfo.driver_info ?
+      `${this.tripInfo.driver_info.initial } ${this.tripInfo.driver_info.prefix } ${this.tripInfo.driver_info.last_name}` :
+      'Onbekend';
+  }
+
+  get driverFunction(): string {
+    return this.tripInfo.driver_info && this.tripInfo.driver_info.function_name ?
+      this.tripInfo.driver_info.function_name : '-';
+  }
 }

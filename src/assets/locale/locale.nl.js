@@ -3,7 +3,7 @@ export const agGridLocaleNL = {
     selectAll: '(Selecteer alles)',
     selectAllSearchResults: '(Selecteer alle zoek resultaten)',
     searchOoo: 'Zoeken...',
-    blanks: '(Blanks)',
+    blanks: '(Leeg)',
     noMatches: 'Geen matches',
 
     // Number Filter & Text Filter
