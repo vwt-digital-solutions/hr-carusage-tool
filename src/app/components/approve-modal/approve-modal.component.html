@@ -1,0 +1,37 @@
+<div class="approve-modal">
+  <div class="modal-header">
+    <h4
+      class="modal-title"
+      [class.success]="isCorrect"
+      [class.danger]="!isCorrect">
+      <i class="fas fa-route mr-2"></i> Rit {{ isCorrect ? 'goedkeuren' : 'afkeuren' }}
+    </h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <i class="fas fa-times"></i>
+  </button>
+  </div>
+  <div class="modal-body">
+    <div class="input-group" [class.required]="!isCorrect">
+      <div class="input-group-prepend">
+        <label class="input-group-text" for="reasonInput">Reden</label>
+      </div>
+      <input
+        type="text" id="reasonInput"
+        class="form-control"
+        [(ngModel)]="reasonInputValue"
+        [required]="!isCorrect" [class.notValid]="isNotValid"
+        #reasonInput autofocus>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="passBack(false)">Annuleren</button>
+    <button
+      type="button"
+      class="btn text-capitalize"
+      [class.btn-success]="isCorrect"
+      [class.btn-danger]="!isCorrect"
+      (click)="passBack(true)">
+      {{ isCorrect ? 'goedkeuren' : 'afkeuren' }}
+    </button>
+  </div>
+</div>

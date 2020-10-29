@@ -83,6 +83,15 @@ p {
   margin: 0;
 }
 
+h1, h2, h3, h4, h5, h6, p, small {
+  &.success {
+    color: $green;
+  }
+  &.danger {
+    color: $red;
+  }
+}
+
 .app-body {
   margin-left: 75px;
   position: relative;

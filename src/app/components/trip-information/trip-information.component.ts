@@ -1,10 +1,16 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 
 import { Trip, TripLocation } from 'src/app/models/trip.model';
 import { LicensePlatePipe } from 'src/app/pipes/license-plate.pipe';
 
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 import { tileLayer, latLng, marker, icon, Map, polyline, LatLng, point, latLngBounds } from 'leaflet';
 import * as L from 'leaflet';
+import { NgTemplateOutlet } from '@angular/common';
+import { ApproveModalComponent } from '../approve-modal/approve-modal.component';
+import { HttpClient } from '@angular/common/http';
+import { EnvService } from 'src/app/services/env/env.service';
 
 @Component({
   selector: 'app-trip-information',
@@ -14,6 +20,8 @@ import * as L from 'leaflet';
 })
 
 export class TripInformationComponent implements OnChanges {
+  @ViewChild('reasonInput') reasonInput: ElementRef;
+
   @Input() tripInfo: Trip;
   @Input() indexInfo: {current: number, min: number, max: number};
 
@@ -49,6 +57,14 @@ export class TripInformationComponent implements OnChanges {
     attributionControl: false
   };
 
+  public failedResponse = false;
+
+  constructor(
+    private env: EnvService,
+    private httpClient: HttpClient,
+    private modalService: NgbModal
+  ) {}
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.tripInfo['currentValue'] && this.initialLoad && this.leafletMap) {
       this.resetMap();
@@ -64,6 +80,34 @@ export class TripInformationComponent implements OnChanges {
 
   navigatePage(index: number): void {
     this.indexChange.emit(index);
+  }
+
+  openVerticallyCentered(content: NgTemplateOutlet, isCorrect: boolean): void {
+    const modalRef = this.modalService.open(ApproveModalComponent, { centered: true });
+    modalRef.componentInstance.isCorrect = isCorrect;
+    modalRef.result.then((result) => this.handleModalResponse(result));
+  }
+
+  handleModalResponse(result: {saving: boolean, correct: boolean, value: string | null}): void {
+    if (result.saving) {
+      const requestBody = {
+        checked: true,
+        correct: result.correct ? true : false,
+        reason: result.value ? result.value : null
+      };
+      this.httpClient.put(
+        `${this.env.apiUrl}/trips/${this.tripInfo.id}`, requestBody).subscribe(
+          response => this.handleCheckResponse(response, requestBody),
+          error => {
+            console.log(error);
+            this.failedResponse = true;
+          });
+    }
+  }
+
+  handleCheckResponse(response: unknown, requestBody = null): void {
+    this.failedResponse = false;
+    this.tripInfo.checking_info = requestBody;
   }
 
   onMapReady(map: Map): void {
@@ -147,6 +191,11 @@ export class TripInformationComponent implements OnChanges {
     return latLng(location.geometry.coordinates[1], location.geometry.coordinates[0]);
   }
 
+  /* eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any */
+  getNested(obj: any, ...args: any[]): any {
+    return args.reduce((obj, level) => obj && obj[level], obj);
+  }
+
   get driverName(): string {
     return this.tripInfo.driver_info ?
       `${this.tripInfo.driver_info.initial } ${this.tripInfo.driver_info.prefix } ${this.tripInfo.driver_info.last_name}` :
@@ -156,5 +205,9 @@ export class TripInformationComponent implements OnChanges {
   get driverFunction(): string {
     return this.tripInfo.driver_info && this.tripInfo.driver_info.function_name ?
       this.tripInfo.driver_info.function_name : '-';
+  }
+
+  get canBeChecked(): boolean {
+    return this.getNested(this.tripInfo, 'checking_info', 'checked') === true ? false : true;
   }
 }
