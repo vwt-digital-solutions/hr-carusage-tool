@@ -48,7 +48,7 @@
             placement="bottom"
             ngbTooltip="Reden: {{ this.tripInfo.checking_info.reason || 'geen' }}">
             {{ this.tripInfo.checking_info.correct ? 'Goedgekeurd' : 'Afgekeurd' }}
-            <i class="fas fa-comment ml-2"></i>
+            <i *ngIf="this.tripInfo.checking_info.reason" class="fas fa-comment ml-2"></i>
           </span>
         </ng-container>
       </div>

@@ -174,12 +174,17 @@ export class DashboardComponent {
     event.columnApi.autoSizeAllColumns();
   }
 
-  onIndexChange(event: number): void {
-    const newIndex = this.gridApi.getSelectedNodes()[0].rowIndex + event;
+  onIndexChange(event: {index: number, trip: Trip, approving: boolean}): void {
+    let newIndex = this.gridApi.getSelectedNodes()[0].rowIndex + event.index;
+    this.gridApi.getSelectedNodes()[0].setData(event.trip);
 
     this.gridApi.forEachNodeAfterFilterAndSort((rowNode: RowNode, index: number) => {
       if (index === newIndex) {
-        rowNode.setSelected(true, true);
+        if (event.approving && rowNode.data.checking_info.checked) {
+          newIndex += 1;
+        } else {
+          rowNode.setSelected(true, true);
+        }
       }
     });
   }

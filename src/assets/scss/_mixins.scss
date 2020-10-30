@@ -101,6 +101,11 @@ $breakpoint-desktop-big: 1800px;
   background-color: $gray;
 }
 
+.alert.alert-sm {
+  font-size: 80%;
+  padding: 10px 15px;
+}
+
 .btn-xs {
   padding: 0.25rem 0.5rem;
   font-size: 0.75rem;

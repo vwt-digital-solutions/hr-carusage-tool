@@ -18,9 +18,13 @@
       <input
         type="text" id="reasonInput"
         class="form-control"
+        (keyup.enter)="passBack(true)"
         [(ngModel)]="reasonInputValue"
         [required]="!isCorrect" [class.notValid]="isNotValid"
-        #reasonInput autofocus>
+        #reasonInput ngbAutofocus>
+    </div>
+    <div *ngIf="isNotValid" class="alert alert-danger alert-sm m-0 mt-2" role="alert">
+      Het melden van een reden is verplicht!
     </div>
   </div>
   <div class="modal-footer">

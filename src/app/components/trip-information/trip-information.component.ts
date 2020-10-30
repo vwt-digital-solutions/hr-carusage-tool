@@ -25,7 +25,7 @@ export class TripInformationComponent implements OnChanges {
   @Input() tripInfo: Trip;
   @Input() indexInfo: {current: number, min: number, max: number};
 
-  @Output() indexChange = new EventEmitter<number>();
+  @Output() indexChange = new EventEmitter<{index: number, trip: Trip, approving: boolean}>();
 
   private initialLoad = false;
   private leafletMap: Map;
@@ -79,11 +79,11 @@ export class TripInformationComponent implements OnChanges {
   }
 
   navigatePage(index: number): void {
-    this.indexChange.emit(index);
+    this.indexChange.emit({index, trip: this.tripInfo, approving: false});
   }
 
   openVerticallyCentered(content: NgTemplateOutlet, isCorrect: boolean): void {
-    const modalRef = this.modalService.open(ApproveModalComponent, { centered: true });
+    const modalRef = this.modalService.open(ApproveModalComponent);
     modalRef.componentInstance.isCorrect = isCorrect;
     modalRef.result.then((result) => this.handleModalResponse(result));
   }
@@ -108,6 +108,10 @@ export class TripInformationComponent implements OnChanges {
   handleCheckResponse(response: unknown, requestBody = null): void {
     this.failedResponse = false;
     this.tripInfo.checking_info = requestBody;
+
+    setTimeout(() => {
+      this.indexChange.emit({index: 1, trip: this.tripInfo, approving: true});
+    }, 2000);
   }
 
   onMapReady(map: Map): void {
