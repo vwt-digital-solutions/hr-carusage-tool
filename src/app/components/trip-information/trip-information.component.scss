@@ -17,6 +17,10 @@
 
   .badge {
     padding: 9.5px 15px;
+
+    &.reason {
+      cursor: help;
+    }
   }
 }
 

@@ -42,10 +42,13 @@
 
         <ng-container *ngIf="this.getNested(this.tripInfo, 'checking_info', 'checked')">
           <span
-            class="badge"
+            class="badge reason ml-4"
             [class.badge-success]="this.tripInfo.checking_info.correct"
-            [class.badge-danger]="!this.tripInfo.checking_info.correct">
-            {{ this.tripInfo.checking_info.reason }}
+            [class.badge-danger]="!this.tripInfo.checking_info.correct"
+            placement="bottom"
+            ngbTooltip="Reden: {{ this.tripInfo.checking_info.reason || 'geen' }}">
+            {{ this.tripInfo.checking_info.correct ? 'Goedgekeurd' : 'Afgekeurd' }}
+            <i class="fas fa-comment ml-2"></i>
           </span>
         </ng-container>
       </div>

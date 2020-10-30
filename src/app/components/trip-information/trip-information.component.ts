@@ -197,9 +197,16 @@ export class TripInformationComponent implements OnChanges {
   }
 
   get driverName(): string {
-    return this.tripInfo.driver_info ?
-      `${this.tripInfo.driver_info.initial } ${this.tripInfo.driver_info.prefix } ${this.tripInfo.driver_info.last_name}` :
-      'Onbekend';
+    const driverInfo = this.tripInfo.driver_info;
+    let driverName = '';
+
+    for (const value of [driverInfo.initial, driverInfo.prefix, driverInfo.last_name]) {
+      if (value !== null) {
+        driverName = `${driverName} ${value}`;
+      }
+    }
+
+    return driverName !== '' ? driverName : 'Onbekend';
   }
 
   get driverFunction(): string {

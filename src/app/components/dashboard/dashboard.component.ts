@@ -50,6 +50,23 @@ export class DashboardComponent {
       },
       columnDefs: [
         {
+          headerName: '',
+          field: 'checking_info.correct',
+          pinned: 'left',
+          maxWidth: 50,
+          cellStyle: {textAlign: 'center'},
+          suppressSizeToFit: true,
+          suppressMenu: true,
+          sortable: false,
+          cellRenderer: (params: ValueFormatterParams): string => {
+            if (params.value !== null) {
+              return params.value ?
+              `<i class="fas fa-check-circle success" title="Goedgekeurd"></i>` :
+              '<i class="fas fa-times-circle danger" title="Afgekeurd"></i>';
+            }
+          }
+        },
+        {
           headerName: 'Starttijd',
           children: [
             {
@@ -120,7 +137,7 @@ export class DashboardComponent {
         {
           headerName: 'Afdeling',
           field: 'driver_info.department.name'
-        },
+        }
       ],
       domLayout: 'normal',
       rowSelection: 'single',
