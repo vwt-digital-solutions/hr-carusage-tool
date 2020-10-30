@@ -58,6 +58,7 @@ export class TripInformationComponent implements OnChanges {
   };
 
   public failedResponse = false;
+  public autoSelect = false;
 
   constructor(
     private env: EnvService,
@@ -106,10 +107,12 @@ export class TripInformationComponent implements OnChanges {
   }
 
   handleCheckResponse(response: unknown, requestBody = null): void {
+    this.autoSelect = true;
     this.failedResponse = false;
     this.tripInfo.checking_info = requestBody;
 
     setTimeout(() => {
+      this.autoSelect = false;
       this.indexChange.emit({index: 1, trip: this.tripInfo, approving: true});
     }, 2000);
   }

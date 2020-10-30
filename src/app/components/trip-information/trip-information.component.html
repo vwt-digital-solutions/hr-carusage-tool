@@ -51,6 +51,8 @@
             <i *ngIf="this.tripInfo.checking_info.reason" class="fas fa-comment ml-2"></i>
           </span>
         </ng-container>
+
+        <small *ngIf="autoSelect" class="text-muted ml-auto p-1"><i class="fas fa-spinner fa-spin mr-1"></i> De volgende rit wordt geselecteerd</small>
       </div>
     </div>
   </div>
