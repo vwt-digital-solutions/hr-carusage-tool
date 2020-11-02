@@ -1,0 +1,51 @@
+<div class="audit-modal">
+  <div class="modal-header">
+    <h4 class="modal-title">
+      <i class="fas fa-history mr-2"></i> Audit logging
+    </h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ng-container *ngIf="auditLogging.length > 0; else nologs">
+      <div *ngFor="let log of auditLogging" class="card mb-3">
+        <div class="card-header text-uppercase px-3">
+          <strong><samp>{{ log.user || 'Onbekende gebruiker' }}</samp></strong>
+        </div>
+        <div class="card-body px-3 py-2">
+          <table class="table table-sm m-0">
+            <thead>
+              <tr>
+              <th scope="col"></th>
+              <th scope="col"><small>Oude waarde</small></th>
+              <th scope="col"><small>Nieuwe waarde</small></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Correcte rit</th>
+                <td>{{ getAttributeValue(log, 'checking_info.old.correct') || '-' }}</td>
+                <td>{{ getAttributeValue(log, 'checking_info.new.correct') || '-' }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Reden</th>
+                <td>{{ getAttributeValue(log, 'checking_info.old.reason') || '-' }}</td>
+                <td>{{ getAttributeValue(log, 'checking_info.new.reason') || '-' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer px-3">
+          <small class="text-muted">{{ log.timestamp | date:"dd-MM-yyyy HH:mm" }}</small>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #nologs>
+  <div class="alert alert-info" role="alert">
+    Geen audit logging gevonden
+  </div>
+</ng-template>

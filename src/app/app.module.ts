@@ -24,6 +24,7 @@ import { PageNotAuthorizedComponent } from './components/not-authorized/not-auth
 import { TripInformationComponent } from './components/trip-information/trip-information.component';
 import { LoginComponent } from './components/login/login.component';
 import { ApproveModalComponent } from './components/approve-modal/approve-modal.component';
+import { AuditModalComponent } from './components/audit-modal/audit-modal.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { ApproveModalComponent } from './components/approve-modal/approve-modal.
     DashboardComponent,
     TripInformationComponent,
     LoginComponent,
-    ApproveModalComponent
+    ApproveModalComponent,
+    AuditModalComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,11 @@
+@import "~src/assets/scss/constants";
+@import "~src/assets/scss/mixins";
+
+.audit-modal {
+  .card:last-child {
+    margin-bottom: 0 !important;
+  }
+  .table th {
+    border-top: none;
+  }
+}

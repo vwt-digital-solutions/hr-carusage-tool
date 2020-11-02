@@ -24,14 +24,14 @@
             class="btn btn-success btn-sm m-0 px-3"
             type="button"
             title="Goedkeuren"
-            (click)="openVerticallyCentered(content, true)">
+            (click)="openModalApprove(true)">
             <i class="fas fa-check"></i>
           </button>
           <button
             class="btn btn-danger btn-sm m-0 px-3"
             type="button"
             title="Afkeuren"
-            (click)="openVerticallyCentered(content, false)">
+            (click)="openModalApprove(false)">
             <i class="fas fa-times"></i>
           </button>
         </div>
@@ -51,6 +51,14 @@
             <i *ngIf="this.tripInfo.checking_info.reason" class="fas fa-comment ml-2"></i>
           </span>
         </ng-container>
+
+        <button
+          class="btn btn-outline-info btn-sm ml-4"
+          type="button"
+          title="Bekijk audit logging"
+          (click)="openModalAudit()">
+          <i class="fas fa-history"></i> Audit logs
+        </button>
 
         <small *ngIf="autoSelect" class="text-muted ml-auto p-1"><i class="fas fa-spinner fa-spin mr-1"></i> De volgende rit wordt geselecteerd</small>
       </div>

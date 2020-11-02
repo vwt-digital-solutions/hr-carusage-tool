@@ -1,16 +1,19 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 
+import { HttpClient } from '@angular/common/http';
+import { EnvService } from 'src/app/services/env/env.service';
+
+
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ApproveModalComponent } from '../approve-modal/approve-modal.component';
+import { AuditModalComponent } from '../audit-modal/audit-modal.component';
+
 import { Trip, TripLocation } from 'src/app/models/trip.model';
 import { LicensePlatePipe } from 'src/app/pipes/license-plate.pipe';
 
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
 import { tileLayer, latLng, marker, icon, Map, polyline, LatLng, point, latLngBounds } from 'leaflet';
 import * as L from 'leaflet';
-import { NgTemplateOutlet } from '@angular/common';
-import { ApproveModalComponent } from '../approve-modal/approve-modal.component';
-import { HttpClient } from '@angular/common/http';
-import { EnvService } from 'src/app/services/env/env.service';
+
 
 @Component({
   selector: 'app-trip-information',
@@ -83,10 +86,15 @@ export class TripInformationComponent implements OnChanges {
     this.indexChange.emit({index, trip: this.tripInfo, approving: false});
   }
 
-  openVerticallyCentered(content: NgTemplateOutlet, isCorrect: boolean): void {
+  openModalApprove(isCorrect: boolean): void {
     const modalRef = this.modalService.open(ApproveModalComponent);
     modalRef.componentInstance.isCorrect = isCorrect;
     modalRef.result.then((result) => this.handleModalResponse(result));
+  }
+
+  openModalAudit(): void {
+    const modalRef = this.modalService.open(AuditModalComponent);
+    modalRef.componentInstance.tripId = this.tripInfo.id;
   }
 
   handleModalResponse(result: {saving: boolean, correct: boolean, value: string | null}): void {
