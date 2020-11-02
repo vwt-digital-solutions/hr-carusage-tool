@@ -192,6 +192,10 @@ export class DashboardComponent {
     });
   }
 
+  onFilterChanged(): void {
+    this.activeIndexInfo.max = this.getTotalNodeCount;
+  }
+
   rowDataSetPage(index: number): void {
     const pageSize = this.gridApi.paginationGetPageSize();
     const pageNumber = Math.floor(index / pageSize);
@@ -217,7 +221,7 @@ export class DashboardComponent {
 
   get getTotalNodeCount(): number {
     const rowData = [];
-    this.gridApi.forEachNode(node => rowData.push(node.data));
+    this.gridApi.forEachNodeAfterFilterAndSort(node => rowData.push(node.data));
     return rowData.length - 1;
   }
 

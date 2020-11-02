@@ -65,6 +65,7 @@
         [gridOptions]="gridOptions"
         [overlayNoRowsTemplate]="overlayNoRowsTemplate"
         (selectionChanged)="onSelectionChanged($event)"
+        (filterChanged)="onFilterChanged()"
         (gridReady)="onGridReady($event)"
         (gridSizeChanged)="onGridSizeChanged($event)" >
       </ag-grid-angular>
