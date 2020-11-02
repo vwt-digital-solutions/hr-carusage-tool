@@ -98,7 +98,7 @@ export class TripInformationComponent implements OnChanges {
       };
       this.httpClient.put(
         `${this.env.apiUrl}/trips/${this.tripInfo.id}`, requestBody).subscribe(
-          response => this.handleCheckResponse(response, requestBody),
+          (response: Trip) => this.handleCheckResponse(response),
           error => {
             console.log(error);
             this.failedResponse = true;
@@ -106,10 +106,10 @@ export class TripInformationComponent implements OnChanges {
     }
   }
 
-  handleCheckResponse(response: unknown, requestBody = null): void {
+  handleCheckResponse(response: Trip): void {
     this.autoSelect = true;
     this.failedResponse = false;
-    this.tripInfo.checking_info = requestBody;
+    this.tripInfo = response;
 
     setTimeout(() => {
       this.autoSelect = false;

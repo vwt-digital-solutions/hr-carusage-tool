@@ -23,35 +23,40 @@
           </ul>
         </nav>
 
-        <div class="custom-filters w-100" aria-label="pagination">
-          <button
-            type="button" class="btn btn-link"
-            [class.active]="activeFilter === null"
-            [class.disabled]="isLoading"
-            (click)="toggleFilter(null)">
-            Alle ritten
-          </button>
-          <button
-            type="button" class="btn btn-link"
-            [class.active]="activeFilter === 'checked'"
-            [class.disabled]="isLoading"
-            (click)="toggleFilter('checked')">
-            Nog te beoordelen ritten
-          </button>
-          <button
-            type="button" class="btn btn-link"
-            [class.active]="activeFilter === 'incorrect'"
-            [class.disabled]="isLoading"
-            (click)="toggleFilter('incorrect')">
-            Afgekeurde ritten
-          </button>
-          <button
-            type="button" class="btn btn-link"
-            [class.active]="activeFilter === 'correct'"
-            [class.disabled]="isLoading"
-            (click)="toggleFilter('correct')">
-            Goedgekeurde ritten
-          </button>
+        <div
+          class="custom-filters w-100"
+          aria-label="pagination"
+          [class.error]="isError">
+          <ng-container *ngIf="!isError; else retrieveError">
+            <button
+              type="button" class="btn btn-link"
+              [class.active]="activeFilter === null"
+              [class.disabled]="isLoading"
+              (click)="toggleFilter(null)">
+              Alle ritten
+            </button>
+            <button
+              type="button" class="btn btn-link"
+              [class.active]="activeFilter === 'checked'"
+              [class.disabled]="isLoading"
+              (click)="toggleFilter('checked')">
+              Nog te beoordelen ritten
+            </button>
+            <button
+              type="button" class="btn btn-link"
+              [class.active]="activeFilter === 'incorrect'"
+              [class.disabled]="isLoading"
+              (click)="toggleFilter('incorrect')">
+              Afgekeurde ritten
+            </button>
+            <button
+              type="button" class="btn btn-link"
+              [class.active]="activeFilter === 'correct'"
+              [class.disabled]="isLoading"
+              (click)="toggleFilter('correct')">
+              Goedgekeurde ritten
+            </button>
+          </ng-container>
         </div>
       </div>
 
@@ -74,8 +79,8 @@
   </div>
 </div>
 
-<ng-template #nolocations>
-  <div class="alert alert-info" role="alert">
-    <p><i class="fas fa-magic mr-2"></i> Geen trips gevonden</p>
+<ng-template #retrieveError>
+  <div class="alert alert-danger alert-sm m-0" role="alert">
+    <p><i class="fas fa-exclamation-circle"></i> Er is een fout opgetreden, probeer het later nog een keer</p>
   </div>
 </ng-template>

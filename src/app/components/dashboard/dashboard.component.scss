@@ -49,7 +49,16 @@
           cursor: not-allowed;
         }
       }
+    }
 
+    .custom-filters {
+      &.error {
+        padding: 5px;
+        .alert {
+          font-size: 11px;
+          padding: 5px 10px;
+        }
+      }
     }
   }
 }

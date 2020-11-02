@@ -30,6 +30,7 @@ export class DashboardComponent {
   public activeTrip: Trip = null;
   public activeIndexInfo = {current: null, min: 0, max: null};
   public isLoading = false;
+  public isError = false;
 
   public now = moment();
   public dynamicMoment = moment().subtract(1, 'weeks');
@@ -154,7 +155,7 @@ export class DashboardComponent {
       }
     };
 
-    this.overlayNoRowsTemplate = '<span class="alert alert-primary" role="alert">Geen ritten gevonden</span>';
+    this.overlayNoRowsTemplate = '<span class="alert alert-primary" role="alert"><i class="fas fa-magic mr-2"></i> Geen ritten gevonden</span>';
   }
 
   onSelectionChanged(event: AgGridEvent): void | boolean {
@@ -220,25 +221,35 @@ export class DashboardComponent {
     return rowData.length - 1;
   }
 
-  async retrieveTripData(): Promise<void> {
+  retrieveTripData(): void {
     this.activeFilter = null;
+    this.isError = false;
     this.isLoading = true;
     this.gridApi.showLoadingOverlay();
 
-    const response = await this.httpClient.get<Array<Trip>>(
+    this.httpClient.get<Array<Trip>>(
       `${this.env.apiUrl}/trips`,
       { params: {
         ended_after: this.currentWeekStartTimestamp,
         ended_before: this.currentWeekEndTimestamp,
         outside_time_window: 'true'
-      }}).toPromise();
-    this.gridApi.setRowData(('results' in response) ? response['results'] : []);
-    this.activeIndexInfo.max = this.getTotalNodeCount;
+      }}).subscribe(
+        response => {
+          this.gridApi.setRowData(('results' in response) ? response['results'] : []);
+          this.activeIndexInfo.max = this.getTotalNodeCount;
 
-    this.gridColumnApi.autoSizeAllColumns();
+          this.gridColumnApi.autoSizeAllColumns();
 
-    this.gridApi.hideOverlay();
-    this.isLoading = false;
+          this.gridApi.hideOverlay();
+          this.isLoading = false;
+        }, error => {
+          console.log(error);
+          this.gridApi.hideOverlay();
+          this.gridApi.showNoRowsOverlay();
+          this.isLoading = false;
+          this.isError = true;
+        }
+      );
   }
 
   get currentWeekStartTimestamp(): string {
