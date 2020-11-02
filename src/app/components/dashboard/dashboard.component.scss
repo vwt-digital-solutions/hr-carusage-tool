@@ -12,11 +12,22 @@
     border: 1px solid $aggrid-header-border;
     border-bottom: 0;
 
-    .date-info {
+    .date-info, .btn-link {
       font-size: 12px;
       line-height: 14px;
       padding: 12px 10px;
       font-weight: 800;
+    }
+
+    .btn-link {
+      color: $aggrid-header-title-inactive;
+      border: none;
+      margin: 0;
+
+      &:hover, &:focus, &.active {
+        color: $aggrid-header-title;
+        text-decoration: none;
+      }
     }
 
     .pagination {
@@ -46,7 +57,7 @@
 @media (min-width: $breakpoint-desktop + 1) {
   .dashboard-content {
     .ag-grid {
-      height: calc(100% - 39px);
+      height: calc(100% - 77px);
     }
   }
 
@@ -60,7 +71,7 @@
     overflow-y: scroll;
 
     .ag-grid {
-      height: calc(100% - 39px);
+      height: calc(100% - 77px);
     }
   }
 

@@ -36,6 +36,8 @@ export class DashboardComponent {
   public weekHasNext = true;
   public weekHasPrev = true;
 
+  public activeFilter = null;
+
   constructor(
     private env: EnvService,
     private httpClient: HttpClient,
@@ -219,6 +221,7 @@ export class DashboardComponent {
   }
 
   async retrieveTripData(): Promise<void> {
+    this.activeFilter = null;
     this.isLoading = true;
     this.gridApi.showLoadingOverlay();
 
@@ -277,5 +280,31 @@ export class DashboardComponent {
     this.weekHasNext = this.isCurrentWeek ? false : true;
 
     this.retrieveTripData();
+  }
+
+  toggleFilter(name: string): void {
+    let model = {};
+    this.activeFilter = name;
+
+    if (name === 'checked') {
+      model['checking_info.correct'] = {
+        filterType: 'set',
+        values: [null]
+      };
+    } else if (name === 'incorrect') {
+      model['checking_info.correct'] = {
+        filterType: 'set',
+        values: ['false']
+      };
+    } else if (name === 'correct') {
+      model['checking_info.correct'] = {
+        filterType: 'set',
+        values: ['true']
+      };
+    } else {
+      model = null;
+    }
+
+    this.gridApi.setFilterModel(model);
   }
 }
