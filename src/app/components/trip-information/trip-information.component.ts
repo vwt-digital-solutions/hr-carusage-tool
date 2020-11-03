@@ -89,7 +89,7 @@ export class TripInformationComponent implements OnChanges {
   openModalApprove(isCorrect: boolean): void {
     const modalRef = this.modalService.open(ApproveModalComponent);
     modalRef.componentInstance.isCorrect = isCorrect;
-    modalRef.result.then((result) => this.handleModalResponse(result));
+    modalRef.result.then((result) => this.handleModalResponse(result), error => console.log(error));
   }
 
   openModalAudit(): void {

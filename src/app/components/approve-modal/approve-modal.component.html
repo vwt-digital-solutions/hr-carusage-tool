@@ -6,7 +6,7 @@
       [class.danger]="!isCorrect">
       <i class="fas fa-route mr-2"></i> Rit {{ isCorrect ? 'goedkeuren' : 'afkeuren' }}
     </h4>
-  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+  <button type="button" class="close" aria-label="Close" (click)="passBack(false)">
     <i class="fas fa-times"></i>
   </button>
   </div>
@@ -24,7 +24,7 @@
         #reasonInput ngbAutofocus>
     </div>
     <div *ngIf="isNotValid" class="alert alert-danger alert-sm m-0 mt-2" role="alert">
-      Het melden van een reden is verplicht!
+      Het vermelden van een reden is verplicht bij het afkeuren!
     </div>
   </div>
   <div class="modal-footer">

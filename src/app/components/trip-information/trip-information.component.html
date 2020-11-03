@@ -41,15 +41,44 @@
         </div>
 
         <ng-container *ngIf="this.getNested(this.tripInfo, 'checking_info', 'checked')">
-          <span
-            class="badge reason ml-4"
-            [class.badge-success]="this.tripInfo.checking_info.correct"
-            [class.badge-danger]="!this.tripInfo.checking_info.correct"
-            placement="bottom"
-            ngbTooltip="Reden: {{ this.tripInfo.checking_info.reason || 'geen' }}">
-            {{ this.tripInfo.checking_info.correct ? 'Goedgekeurd' : 'Afgekeurd' }}
-            <i *ngIf="this.tripInfo.checking_info.reason" class="fas fa-comment ml-2"></i>
-          </span>
+          <div class="btn-group ml-4">
+            <button
+              type="button" class="btn btn-sm reason"
+              [class.btn-success]="this.tripInfo.checking_info.correct"
+              [class.btn-danger]="!this.tripInfo.checking_info.correct"
+              placement="bottom"
+              ngbTooltip="Reden: {{ this.tripInfo.checking_info.reason || 'geen' }}">
+              {{ this.tripInfo.checking_info.correct ? 'Goedgekeurd' : 'Afgekeurd' }}
+              <i *ngIf="this.tripInfo.checking_info.reason" class="fas fa-comment ml-2"></i>
+            </button>
+            <div class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
+              <button
+                type="button"
+                class="btn btn-sm dropdown-toggle-split"
+                title="Bewerken"
+                [class.btn-outline-success]="this.tripInfo.checking_info.correct"
+                [class.btn-outline-danger]="!this.tripInfo.checking_info.correct"
+                ngbDropdownToggle>
+                <i class="fas fa-edit mr-2"></i>
+              </button>
+              <div class="dropdown-menu" ngbDropdownMenu>
+                <button
+                  type="button"
+                  class="btn-sm"
+                  (click)="openModalApprove(this.tripInfo.checking_info.correct)"
+                  ngbDropdownItem >
+                  Opmerking wijzigen
+                </button>
+                <button
+                  type="button"
+                  class="btn-sm"
+                  (click)="openModalApprove(this.tripInfo.checking_info.correct ? false : true)"
+                  ngbDropdownItem >
+                  Rit {{ this.tripInfo.checking_info.correct ? 'afkeuren' : 'goedkeuren' }}
+                </button>
+              </div>
+            </div>
+          </div>
         </ng-container>
 
         <button
