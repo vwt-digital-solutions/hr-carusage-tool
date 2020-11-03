@@ -8,22 +8,22 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./approve-modal.component.scss']
 })
 export class ApproveModalComponent {
-  @ViewChild('reasonInput') reasonInput: ElementRef;
-  @Input() isCorrect: boolean;
+  @ViewChild('descriptionInput') descriptionInput: ElementRef;
+  @Input() tripKind: string;
 
-  public reasonInputValue: NgModel;
+  public descriptionInputValue: NgModel;
   public isNotValid = false;
 
   constructor(public activeModal: NgbActiveModal) {}
 
   passBack(isSave: boolean): void {
-    if (isSave && !this.isCorrect && !this.reasonInputValue) {
+    if (isSave && this.tripKind === 'personal' && !this.descriptionInputValue) {
       this.isNotValid = true;
     } else {
       this.activeModal.close({
         saving: isSave,
-        correct: this.isCorrect,
-        value: this.reasonInputValue
+        tripKind: this.tripKind,
+        value: this.descriptionInputValue
       });
     }
   }

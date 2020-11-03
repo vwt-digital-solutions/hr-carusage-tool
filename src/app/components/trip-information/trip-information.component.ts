@@ -23,7 +23,7 @@ import * as L from 'leaflet';
 })
 
 export class TripInformationComponent implements OnChanges {
-  @ViewChild('reasonInput') reasonInput: ElementRef;
+  @ViewChild('descriptionInput') descriptionInput: ElementRef;
 
   @Input() tripInfo: Trip;
   @Input() indexInfo: {current: number, min: number, max: number};
@@ -86,9 +86,9 @@ export class TripInformationComponent implements OnChanges {
     this.indexChange.emit({index, trip: this.tripInfo, approving: false});
   }
 
-  openModalApprove(isCorrect: boolean): void {
+  openModalApprove(tripKind: string): void {
     const modalRef = this.modalService.open(ApproveModalComponent);
-    modalRef.componentInstance.isCorrect = isCorrect;
+    modalRef.componentInstance.tripKind = tripKind;
     modalRef.result.then((result) => this.handleModalResponse(result), error => console.log(error));
   }
 
@@ -97,12 +97,11 @@ export class TripInformationComponent implements OnChanges {
     modalRef.componentInstance.tripId = this.tripInfo.id;
   }
 
-  handleModalResponse(result: {saving: boolean, correct: boolean, value: string | null}): void {
+  handleModalResponse(result: {saving: boolean, tripKind: string, value: string | null}): void {
     if (result.saving) {
       const requestBody = {
-        checked: true,
-        correct: result.correct ? true : false,
-        reason: result.value ? result.value : null
+        trip_kind: result.tripKind,
+        description: result.value ? result.value : null
       };
       this.httpClient.put(
         `${this.env.apiUrl}/trips/${this.tripInfo.id}`, requestBody).subscribe(
@@ -230,6 +229,6 @@ export class TripInformationComponent implements OnChanges {
   }
 
   get canBeChecked(): boolean {
-    return this.getNested(this.tripInfo, 'checking_info', 'checked') === true ? false : true;
+    return this.getNested(this.tripInfo, 'checking_info', 'trip_kind') === null ? true : false;
   }
 }

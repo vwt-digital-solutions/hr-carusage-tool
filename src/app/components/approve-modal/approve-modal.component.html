@@ -2,40 +2,38 @@
   <div class="modal-header">
     <h4
       class="modal-title"
-      [class.success]="isCorrect"
-      [class.danger]="!isCorrect">
-      <i class="fas fa-route mr-2"></i> Rit {{ isCorrect ? 'goedkeuren' : 'afkeuren' }}
+      [class.success]="tripKind === 'work'"
+      [class.danger]="tripKind === 'personal'">
+      <i class="fas fa-route mr-2"></i> Markeren als {{ tripKind === 'work' ? 'zakelijke rit' : 'privérit' }}
     </h4>
   <button type="button" class="close" aria-label="Close" (click)="passBack(false)">
     <i class="fas fa-times"></i>
   </button>
   </div>
   <div class="modal-body">
-    <div class="input-group" [class.required]="!isCorrect">
+    <div class="input-group" [class.required]="tripKind === 'personal'">
       <div class="input-group-prepend">
-        <label class="input-group-text" for="reasonInput">Reden</label>
+        <label class="input-group-text" for="descriptionInput">Reden</label>
       </div>
       <input
-        type="text" id="reasonInput"
+        type="text" id="descriptionInput"
         class="form-control"
         (keyup.enter)="passBack(true)"
-        [(ngModel)]="reasonInputValue"
-        [required]="!isCorrect" [class.notValid]="isNotValid"
-        #reasonInput ngbAutofocus>
+        [(ngModel)]="descriptionInputValue"
+        [required]="tripKind === 'personal'" [class.notValid]="isNotValid"
+        #descriptionInput ngbAutofocus>
     </div>
     <div *ngIf="isNotValid" class="alert alert-danger alert-sm m-0 mt-2" role="alert">
-      Het vermelden van een reden is verplicht bij het afkeuren!
+      Het vermelden van een reden is verplicht bij markeren als privérit!
     </div>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-light" (click)="passBack(false)">Annuleren</button>
     <button
       type="button"
-      class="btn text-capitalize"
-      [class.btn-success]="isCorrect"
-      [class.btn-danger]="!isCorrect"
+      class="btn btn-primary text-capitalize"
       (click)="passBack(true)">
-      {{ isCorrect ? 'goedkeuren' : 'afkeuren' }}
+      Opslaan
     </button>
   </div>
 </div>

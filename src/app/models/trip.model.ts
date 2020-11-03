@@ -11,9 +11,8 @@ export interface Trip {
 }
 
 export interface CheckingInfo {
-  checked: boolean;
-  correct: boolean;
-  reason: string;
+  trip_kind: string;
+  description: string;
 }
 
 export interface DriverInfo {

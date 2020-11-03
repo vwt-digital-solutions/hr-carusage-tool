@@ -54,7 +54,7 @@ export class DashboardComponent {
       columnDefs: [
         {
           headerName: '',
-          field: 'checking_info.correct',
+          field: 'checking_info.trip_kind',
           pinned: 'left',
           maxWidth: 50,
           cellStyle: {textAlign: 'center'},
@@ -63,7 +63,7 @@ export class DashboardComponent {
           sortable: false,
           cellRenderer: (params: ValueFormatterParams): string => {
             if (params.value !== null) {
-              return params.value ?
+              return params.value === 'work' ?
               `<i class="fas fa-check-circle success" title="Goedgekeurd"></i>` :
               '<i class="fas fa-times-circle danger" title="Afgekeurd"></i>';
             }
@@ -183,7 +183,7 @@ export class DashboardComponent {
 
     this.gridApi.forEachNodeAfterFilterAndSort((rowNode: RowNode, index: number) => {
       if (index === newIndex) {
-        if (event.approving && rowNode.data.checking_info.checked) {
+        if (event.approving && rowNode.data.checking_info.trip_kind !== null) {
           newIndex += 1;
         } else {
           rowNode.setSelected(true, true);
@@ -302,19 +302,19 @@ export class DashboardComponent {
     this.activeFilter = name;
 
     if (name === 'checked') {
-      model['checking_info.correct'] = {
+      model['checking_info.trip_kind'] = {
         filterType: 'set',
         values: [null]
       };
     } else if (name === 'incorrect') {
-      model['checking_info.correct'] = {
+      model['checking_info.trip_kind'] = {
         filterType: 'set',
-        values: ['false']
+        values: ['personal']
       };
     } else if (name === 'correct') {
-      model['checking_info.correct'] = {
+      model['checking_info.trip_kind'] = {
         filterType: 'set',
-        values: ['true']
+        values: ['work']
       };
     } else {
       model = null;
