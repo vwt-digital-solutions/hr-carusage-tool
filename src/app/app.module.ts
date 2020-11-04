@@ -5,10 +5,13 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { LicensePlatePipe } from './pipes/license-plate.pipe';
+import { NestedValuePipe } from './pipes/nested-value.pipe';
+import { TripKindPipe } from './pipes/trip-kind.pipe';
 
 import { AgGridModule } from 'ag-grid-angular';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
 
 import { OAuthModule, OAuthService } from 'angular-oauth2-oidc';
 import { AuthGuard } from './services/auth/auth.guard';
@@ -22,6 +25,8 @@ import { PageNotFoundComponent } from './components/not-found/not-found.componen
 import { PageNotAuthorizedComponent } from './components/not-authorized/not-authorized.component';
 import { TripInformationComponent } from './components/trip-information/trip-information.component';
 import { LoginComponent } from './components/login/login.component';
+import { ApproveModalComponent } from './components/approve-modal/approve-modal.component';
+import { AuditModalComponent } from './components/audit-modal/audit-modal.component';
 
 @NgModule({
   declarations: [
@@ -32,12 +37,18 @@ import { LoginComponent } from './components/login/login.component';
     PageNotAuthorizedComponent,
     DashboardComponent,
     TripInformationComponent,
-    LoginComponent
+    LoginComponent,
+    ApproveModalComponent,
+    AuditModalComponent,
+    NestedValuePipe,
+    TripKindPipe
   ],
   imports: [
     BrowserModule,
     CommonModule,
     HttpClientModule,
+    FormsModule,
+    NgbDropdownModule,
     NgbModule,
     OAuthModule.forRoot(),
     AgGridModule.withComponents([]),

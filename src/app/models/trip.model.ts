@@ -1,18 +1,18 @@
 import { Geometry } from './geometry.model';
 
 export interface Trip {
-  license: string;
-  started_at: string;
-  ended_at: string;
+  checking_info: CheckingInfo;
   driver_info: DriverInfo;
+  ended_at: string;
+  id: string | number;
+  license: string;
   locations: TripLocation[];
+  started_at: string;
 }
 
-export interface TripLocation {
-  geometry: Geometry;
-  token: string;
-  what: string;
-  when: string;
+export interface CheckingInfo {
+  trip_kind: string;
+  description: string;
 }
 
 export interface DriverInfo {
@@ -22,4 +22,11 @@ export interface DriverInfo {
   last_name: string;
   prefix: string;
   registration_number: number;
+}
+
+export interface TripLocation {
+  geometry: Geometry;
+  token: string;
+  what: string;
+  when: string;
 }

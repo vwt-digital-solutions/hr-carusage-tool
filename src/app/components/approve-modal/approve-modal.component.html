@@ -1,0 +1,40 @@
+<div class="approve-modal">
+  <div class="modal-header">
+    <h4
+      class="modal-title"
+      [class.success]="tripKind === 'work'"
+      [class.danger]="tripKind === 'personal'">
+      <i class="fas fa-route mr-2"></i> Markeren als {{ tripKind === 'work' ? 'zakelijke rit' : 'privérit' }}
+    </h4>
+  <button type="button" class="close" aria-label="Close" (click)="passBack(false)">
+    <i class="fas fa-times"></i>
+  </button>
+  </div>
+  <div class="modal-body">
+    <div class="input-group" [class.required]="tripKind === 'personal'">
+      <div class="input-group-prepend">
+        <label class="input-group-text" for="descriptionInput">Beschrijving</label>
+      </div>
+      <input
+        type="text" id="descriptionInput"
+        class="form-control"
+        (keyup.enter)="passBack(true)"
+        [(ngModel)]="descriptionValue"
+        [required]="tripKind === 'personal'" [class.notValid]="isNotValid"
+        #descriptionInput ngbAutofocus>
+    </div>
+    <div *ngIf="isNotValid" class="alert alert-danger alert-sm m-0 mt-2" role="alert">
+      Het vermelden van een beschrijving is verplicht bij het markeren als privérit!
+    </div>
+  </div>
+  <div class="modal-footer">
+    <small class="text-muted mr-auto">Gebruik <code>enter</code> om op te slaan</small>
+    <button type="button" class="btn btn-light" (click)="passBack(false)">Annuleren</button>
+    <button
+      type="button"
+      class="btn btn-primary text-capitalize"
+      (click)="passBack(true)">
+      Opslaan
+    </button>
+  </div>
+</div>

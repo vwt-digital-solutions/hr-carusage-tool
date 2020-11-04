@@ -30,11 +30,14 @@ export class DashboardComponent {
   public activeTrip: Trip = null;
   public activeIndexInfo = {current: null, min: 0, max: null};
   public isLoading = false;
+  public isError = false;
 
   public now = moment();
   public dynamicMoment = moment().subtract(1, 'weeks');
   public weekHasNext = true;
   public weekHasPrev = true;
+
+  public activeFilter = null;
 
   constructor(
     private env: EnvService,
@@ -49,6 +52,23 @@ export class DashboardComponent {
         editable: false
       },
       columnDefs: [
+        {
+          headerName: '',
+          field: 'checking_info.trip_kind',
+          pinned: 'left',
+          maxWidth: 50,
+          cellStyle: {textAlign: 'center'},
+          suppressSizeToFit: true,
+          suppressMenu: true,
+          sortable: false,
+          cellRenderer: (params: ValueFormatterParams): string => {
+            if (params.value !== null) {
+              return params.value === 'work' ?
+              `<span class="fa-stack fa-xs" title="Zakelijke rit"><i class="fas fa-circle fa-stack-2x success"></i><i class="fas fa-briefcase fa-stack-1x fa-inverse"></i></span>` :
+              `<span class="fa-stack fa-xs" title="Privérit"><i class="fas fa-circle fa-stack-2x danger"></i><i class="fas fa-user fa-stack-1x fa-inverse"></i></span>`;
+            }
+          }
+        },
         {
           headerName: 'Starttijd',
           children: [
@@ -120,7 +140,7 @@ export class DashboardComponent {
         {
           headerName: 'Afdeling',
           field: 'driver_info.department.name'
-        },
+        }
       ],
       domLayout: 'normal',
       rowSelection: 'single',
@@ -135,7 +155,7 @@ export class DashboardComponent {
       }
     };
 
-    this.overlayNoRowsTemplate = '<span class="alert alert-primary" role="alert">Geen ritten gevonden</span>';
+    this.overlayNoRowsTemplate = '<span class="alert alert-primary" role="alert"><i class="fas fa-magic mr-2"></i> Geen ritten gevonden</span>';
   }
 
   onSelectionChanged(event: AgGridEvent): void | boolean {
@@ -157,14 +177,23 @@ export class DashboardComponent {
     event.columnApi.autoSizeAllColumns();
   }
 
-  onIndexChange(event: number): void {
-    const newIndex = this.gridApi.getSelectedNodes()[0].rowIndex + event;
+  onIndexChange(event: {index: number, trip: Trip, approving: boolean}): void {
+    let newIndex = this.gridApi.getSelectedNodes()[0].rowIndex + event.index;
+    this.gridApi.getSelectedNodes()[0].setData(event.trip);
 
     this.gridApi.forEachNodeAfterFilterAndSort((rowNode: RowNode, index: number) => {
       if (index === newIndex) {
-        rowNode.setSelected(true, true);
+        if (event.approving && rowNode.data.checking_info.trip_kind !== null) {
+          newIndex += 1;
+        } else {
+          rowNode.setSelected(true, true);
+        }
       }
     });
+  }
+
+  onFilterChanged(): void {
+    this.activeIndexInfo.max = this.getTotalNodeCount;
   }
 
   rowDataSetPage(index: number): void {
@@ -192,28 +221,39 @@ export class DashboardComponent {
 
   get getTotalNodeCount(): number {
     const rowData = [];
-    this.gridApi.forEachNode(node => rowData.push(node.data));
+    this.gridApi.forEachNodeAfterFilterAndSort(node => rowData.push(node.data));
     return rowData.length - 1;
   }
 
-  async retrieveTripData(): Promise<void> {
+  retrieveTripData(): void {
+    this.activeFilter = null;
+    this.isError = false;
     this.isLoading = true;
     this.gridApi.showLoadingOverlay();
 
-    const response = await this.httpClient.get<Array<Trip>>(
+    this.httpClient.get<Array<Trip>>(
       `${this.env.apiUrl}/trips`,
       { params: {
         ended_after: this.currentWeekStartTimestamp,
         ended_before: this.currentWeekEndTimestamp,
         outside_time_window: 'true'
-      }}).toPromise();
-    this.gridApi.setRowData(('results' in response) ? response['results'] : []);
-    this.activeIndexInfo.max = this.getTotalNodeCount;
+      }}).subscribe(
+        response => {
+          this.gridApi.setRowData(('results' in response) ? response['results'] : []);
+          this.activeIndexInfo.max = this.getTotalNodeCount;
 
-    this.gridColumnApi.autoSizeAllColumns();
+          this.gridColumnApi.autoSizeAllColumns();
 
-    this.gridApi.hideOverlay();
-    this.isLoading = false;
+          this.gridApi.hideOverlay();
+          this.isLoading = false;
+        }, error => {
+          console.log(error);
+          this.gridApi.hideOverlay();
+          this.gridApi.showNoRowsOverlay();
+          this.isLoading = false;
+          this.isError = true;
+        }
+      );
   }
 
   get currentWeekStartTimestamp(): string {
@@ -255,5 +295,31 @@ export class DashboardComponent {
     this.weekHasNext = this.isCurrentWeek ? false : true;
 
     this.retrieveTripData();
+  }
+
+  toggleFilter(name: string): void {
+    let model = {};
+    this.activeFilter = name;
+
+    if (name === 'checked') {
+      model['checking_info.trip_kind'] = {
+        filterType: 'set',
+        values: [null]
+      };
+    } else if (name === 'personal') {
+      model['checking_info.trip_kind'] = {
+        filterType: 'set',
+        values: ['personal']
+      };
+    } else if (name === 'work') {
+      model['checking_info.trip_kind'] = {
+        filterType: 'set',
+        values: ['work']
+      };
+    } else {
+      model = null;
+    }
+
+    this.gridApi.setFilterModel(model);
   }
 }

@@ -1,0 +1,13 @@
+@import "~src/assets/scss/constants";
+@import "~src/assets/scss/mixins";
+
+.approve-modal {
+  .input-group.required label:after {
+    content: "*";
+    color: $red;
+  }
+
+  .notValid {
+    border-color: $red;
+  }
+}

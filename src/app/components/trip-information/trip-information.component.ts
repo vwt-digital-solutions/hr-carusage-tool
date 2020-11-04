@@ -1,23 +1,36 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+
+import { HttpClient } from '@angular/common/http';
+import { EnvService } from 'src/app/services/env/env.service';
+
+
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ApproveModalComponent } from '../approve-modal/approve-modal.component';
+import { AuditModalComponent } from '../audit-modal/audit-modal.component';
 
 import { Trip, TripLocation } from 'src/app/models/trip.model';
 import { LicensePlatePipe } from 'src/app/pipes/license-plate.pipe';
+import { NestedValuePipe } from 'src/app/pipes/nested-value.pipe';
+import { TripKindPipe } from 'src/app/pipes/trip-kind.pipe';
 
 import { tileLayer, latLng, marker, icon, Map, polyline, LatLng, point, latLngBounds } from 'leaflet';
 import * as L from 'leaflet';
+
 
 @Component({
   selector: 'app-trip-information',
   templateUrl: './trip-information.component.html',
   styleUrls: ['./trip-information.component.scss'],
-  providers: [LicensePlatePipe]
+  providers: [LicensePlatePipe, NestedValuePipe, TripKindPipe]
 })
 
 export class TripInformationComponent implements OnChanges {
+  @ViewChild('descriptionInput') descriptionInput: ElementRef;
+
   @Input() tripInfo: Trip;
   @Input() indexInfo: {current: number, min: number, max: number};
 
-  @Output() indexChange = new EventEmitter<number>();
+  @Output() indexChange = new EventEmitter<{index: number, trip: Trip, approving: boolean}>();
 
   private initialLoad = false;
   private leafletMap: Map;
@@ -49,6 +62,16 @@ export class TripInformationComponent implements OnChanges {
     attributionControl: false
   };
 
+  public failedResponse = false;
+  public autoSelect = false;
+
+  constructor(
+    private env: EnvService,
+    private httpClient: HttpClient,
+    private modalService: NgbModal,
+    private nestedValuePipe: NestedValuePipe
+  ) {}
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.tripInfo['currentValue'] && this.initialLoad && this.leafletMap) {
       this.resetMap();
@@ -63,7 +86,48 @@ export class TripInformationComponent implements OnChanges {
   }
 
   navigatePage(index: number): void {
-    this.indexChange.emit(index);
+    this.indexChange.emit({index, trip: this.tripInfo, approving: false});
+  }
+
+  openModalApprove(tripKind: string, newApprove = true): void {
+    const modalRef = this.modalService.open(ApproveModalComponent);
+    if (!newApprove) {
+      modalRef.componentInstance.descriptionValue = this.nestedValuePipe.transform(this.tripInfo, 'checking_info', 'description');
+    }
+    modalRef.componentInstance.tripKind = tripKind;
+    modalRef.result.then((result) => this.handleModalResponse(result), error => console.log(error));
+  }
+
+  openModalAudit(): void {
+    const modalRef = this.modalService.open(AuditModalComponent);
+    modalRef.componentInstance.tripId = this.tripInfo.id;
+  }
+
+  handleModalResponse(result: {saving: boolean, tripKind: string, value: string | null}): void {
+    if (result.saving) {
+      const requestBody = {
+        trip_kind: result.tripKind,
+        description: result.value ? result.value : null
+      };
+      this.httpClient.put(
+        `${this.env.apiUrl}/trips/${this.tripInfo.id}`, requestBody).subscribe(
+          (response: Trip) => this.handleCheckResponse(response),
+          error => {
+            console.log(error);
+            this.failedResponse = true;
+          });
+    }
+  }
+
+  handleCheckResponse(response: Trip): void {
+    this.autoSelect = true;
+    this.failedResponse = false;
+    this.tripInfo = response;
+
+    setTimeout(() => {
+      this.autoSelect = false;
+      this.indexChange.emit({index: 1, trip: this.tripInfo, approving: true});
+    }, 2000);
   }
 
   onMapReady(map: Map): void {
@@ -148,13 +212,24 @@ export class TripInformationComponent implements OnChanges {
   }
 
   get driverName(): string {
-    return this.tripInfo.driver_info ?
-      `${this.tripInfo.driver_info.initial } ${this.tripInfo.driver_info.prefix } ${this.tripInfo.driver_info.last_name}` :
-      'Onbekend';
+    const driverInfo = this.tripInfo.driver_info;
+    let driverName = '';
+
+    for (const value of [driverInfo.initial, driverInfo.prefix, driverInfo.last_name]) {
+      if (value !== null) {
+        driverName = `${driverName} ${value}`;
+      }
+    }
+
+    return driverName !== '' ? driverName : 'Onbekend';
   }
 
   get driverFunction(): string {
     return this.tripInfo.driver_info && this.tripInfo.driver_info.function_name ?
       this.tripInfo.driver_info.function_name : '-';
+  }
+
+  get canBeChecked(): boolean {
+    return this.nestedValuePipe.transform(this.tripInfo, 'checking_info', 'trip_kind') === null ? true : false;
   }
 }

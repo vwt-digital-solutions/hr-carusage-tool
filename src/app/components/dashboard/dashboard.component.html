@@ -22,6 +22,42 @@
             </li>
           </ul>
         </nav>
+
+        <div
+          class="custom-filters w-100"
+          aria-label="pagination"
+          [class.error]="isError">
+          <ng-container *ngIf="!isError; else retrieveError">
+            <button
+              type="button" class="btn btn-link"
+              [class.active]="activeFilter === null"
+              [class.disabled]="isLoading"
+              (click)="toggleFilter(null)">
+              Alle ritten
+            </button>
+            <button
+              type="button" class="btn btn-link"
+              [class.active]="activeFilter === 'checked'"
+              [class.disabled]="isLoading"
+              (click)="toggleFilter('checked')">
+              Nog te beoordelen ritten
+            </button>
+            <button
+              type="button" class="btn btn-link"
+              [class.active]="activeFilter === 'personal'"
+              [class.disabled]="isLoading"
+              (click)="toggleFilter('personal')">
+              Privéritten
+            </button>
+            <button
+              type="button" class="btn btn-link"
+              [class.active]="activeFilter === 'work'"
+              [class.disabled]="isLoading"
+              (click)="toggleFilter('work')">
+              Zakelijke ritten
+            </button>
+          </ng-container>
+        </div>
       </div>
 
       <ag-grid-angular
@@ -29,6 +65,7 @@
         [gridOptions]="gridOptions"
         [overlayNoRowsTemplate]="overlayNoRowsTemplate"
         (selectionChanged)="onSelectionChanged($event)"
+        (filterChanged)="onFilterChanged()"
         (gridReady)="onGridReady($event)"
         (gridSizeChanged)="onGridSizeChanged($event)" >
       </ag-grid-angular>
@@ -43,8 +80,8 @@
   </div>
 </div>
 
-<ng-template #nolocations>
-  <div class="alert alert-info" role="alert">
-    <p><i class="fas fa-magic mr-2"></i> Geen trips gevonden</p>
+<ng-template #retrieveError>
+  <div class="alert alert-danger alert-sm m-0" role="alert">
+    <p><i class="fas fa-exclamation-circle"></i> Er is een fout opgetreden, probeer het later nog een keer</p>
   </div>
 </ng-template>
