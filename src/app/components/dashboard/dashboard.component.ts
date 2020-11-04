@@ -306,12 +306,12 @@ export class DashboardComponent {
         filterType: 'set',
         values: [null]
       };
-    } else if (name === 'incorrect') {
+    } else if (name === 'personal') {
       model['checking_info.trip_kind'] = {
         filterType: 'set',
         values: ['personal']
       };
-    } else if (name === 'correct') {
+    } else if (name === 'work') {
       model['checking_info.trip_kind'] = {
         filterType: 'set',
         values: ['work']

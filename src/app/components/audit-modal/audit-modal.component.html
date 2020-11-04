@@ -1,7 +1,7 @@
 <div class="audit-modal">
   <div class="modal-header">
     <h4 class="modal-title">
-      <i class="fas fa-history mr-2"></i> Audit logging
+      <i class="fas fa-history mr-2"></i> Eerdere wijzigingen
     </h4>
     <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
       <i class="fas fa-times"></i>
@@ -46,9 +46,9 @@
 
 <ng-template #nologs>
   <div *ngIf="!isLoading" class="alert alert-info" role="alert">
-    Geen audit logging gevonden
+    Geen eerdere wijzigingen gevonden
   </div>
   <div *ngIf="isLoading" class="alert alert-warning" role="alert">
-    <i class="fas fa-spinner fa-spin mr-1"></i> De audit logging wordt opgevraagd
+    <i class="fas fa-spinner fa-spin mr-1"></i> De eerdere wijzigingen wordt opgevraagd
   </div>
 </ng-template>

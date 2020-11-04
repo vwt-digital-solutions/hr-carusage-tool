@@ -44,17 +44,17 @@
             </button>
             <button
               type="button" class="btn btn-link"
-              [class.active]="activeFilter === 'incorrect'"
+              [class.active]="activeFilter === 'personal'"
               [class.disabled]="isLoading"
-              (click)="toggleFilter('incorrect')">
-              Afgekeurde ritten
+              (click)="toggleFilter('personal')">
+              Privéritten
             </button>
             <button
               type="button" class="btn btn-link"
-              [class.active]="activeFilter === 'correct'"
+              [class.active]="activeFilter === 'work'"
               [class.disabled]="isLoading"
-              (click)="toggleFilter('correct')">
-              Goedgekeurde ritten
+              (click)="toggleFilter('work')">
+              Zakelijke ritten
             </button>
           </ng-container>
         </div>

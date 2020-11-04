@@ -6,6 +6,8 @@
           <label
             class="btn btn-secondary btn-sm"
             title="Vorige rit"
+            placement="auto"
+            ngbTooltip="Vorige rit"
             [class.disabled]="indexInfo.current === 0"
             (click)="navigatePage(-1)">
             <i class="fas fa-chevron-left"></i>
@@ -13,6 +15,8 @@
           <label
             class="btn btn-secondary btn-sm"
             title="Volgende rit"
+            placement="auto"
+            ngbTooltip="Volgende rit"
             [class.disabled]="indexInfo.current === indexInfo.max"
             (click)="navigatePage(1)">
             <i class="fas fa-chevron-right"></i>
@@ -23,16 +27,16 @@
           <button
             class="btn btn-success btn-sm m-0 px-3"
             type="button"
-            title="Zakelijke rit"
+            title="Markeren als zakelijke rit"
             (click)="openModalApprove('work', true)">
-            <i class="fas fa-check"></i>
+            <i class="fas fa-briefcase"></i>
           </button>
           <button
             class="btn btn-danger btn-sm m-0 px-3"
             type="button"
-            title="Privérit"
+            title="Markeren als privérit"
             (click)="openModalApprove('personal', true)">
-            <i class="fas fa-times"></i>
+            <i class="fas fa-user"></i>
           </button>
         </div>
 
@@ -47,7 +51,8 @@
               [class.btn-success]="(this.tripInfo.checking_info.trip_kind | tripKind:'boolean':'work')"
               [class.btn-danger]="(this.tripInfo.checking_info.trip_kind | tripKind:'boolean':'personal')"
               placement="bottom"
-              ngbTooltip="Beschrijving: {{ this.tripInfo.checking_info.description || 'geen' }}">
+              ngbTooltip="Beschrijving: {{ this.tripInfo.checking_info.description || 'geen' }}"
+              tooltipClass="tooltip-description">
               {{ this.tripInfo.checking_info.trip_kind === 'work' ? 'Zakelijke rit' : 'Privérit' }}
               <i *ngIf="this.tripInfo.checking_info.description" class="fas fa-comment ml-2"></i>
             </button>
@@ -58,6 +63,8 @@
                 title="Bewerken"
                 [class.btn-outline-success]="(this.tripInfo.checking_info.trip_kind | tripKind:'boolean':'work')"
                 [class.btn-outline-danger]="(this.tripInfo.checking_info.trip_kind | tripKind:'boolean':'personal')"
+                placement="auto"
+                ngbTooltip="Beoordeling bewerken"
                 ngbDropdownToggle>
                 <i class="fas fa-edit mr-2"></i>
               </button>
@@ -81,15 +88,17 @@
           </div>
         </ng-container>
 
-        <button
-          class="btn btn-outline-info btn-sm ml-4"
-          type="button"
-          title="Bekijk audit logging"
-          (click)="openModalAudit()">
-          <i class="fas fa-history"></i> Audit logs
-        </button>
+        <span *ngIf="autoSelect" class="badge badge-warning ml-4"><i class="fas fa-spinner fa-spin mr-1"></i> De volgende niet beoordeelde rit wordt geselecteerd</span>
 
-        <small *ngIf="autoSelect" class="text-muted ml-auto p-1"><i class="fas fa-spinner fa-spin mr-1"></i> De volgende rit wordt geselecteerd</small>
+        <button
+          class="btn btn-outline-info btn-sm ml-auto"
+          type="button"
+          title="Bekijk eerdere wijzigingen"
+          (click)="openModalAudit()"
+          placement="auto"
+          ngbTooltip="Bekijk eerdere wijzigingen">
+          <i class="fas fa-history"></i>
+        </button>
       </div>
     </div>
   </div>

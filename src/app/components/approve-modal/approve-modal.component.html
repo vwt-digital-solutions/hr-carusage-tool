@@ -24,10 +24,11 @@
         #descriptionInput ngbAutofocus>
     </div>
     <div *ngIf="isNotValid" class="alert alert-danger alert-sm m-0 mt-2" role="alert">
-      Het vermelden van een beschrijving is verplicht bij markeren als privérit!
+      Het vermelden van een beschrijving is verplicht bij het markeren als privérit!
     </div>
   </div>
   <div class="modal-footer">
+    <small class="text-muted mr-auto">Gebruik <code>enter</code> om op te slaan</small>
     <button type="button" class="btn btn-light" (click)="passBack(false)">Annuleren</button>
     <button
       type="button"

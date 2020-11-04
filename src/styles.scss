@@ -112,6 +112,24 @@ h1, h2, h3, h4, h5, h6, p, i, small {
   }
 }
 
+.tooltip-description {
+  .tooltip-inner {
+    background-color: $gray-dark-hover;
+  }
+  &.bs-tooltip-top .arrow::before {
+    border-top-color: $gray-dark-hover;
+  }
+  &.bs-tooltip-right .arrow::before {
+    border-right-color: $gray-dark-hover;
+  }
+  &.bs-tooltip-bottom .arrow::before {
+    border-bottom-color: $gray-dark-hover;
+  }
+  &.bs-tooltip-left .arrow::before {
+    border-left-color: $gray-dark-hover;
+  }
+}
+
 .license-plate {
   display: flex;
   align-items: center;
