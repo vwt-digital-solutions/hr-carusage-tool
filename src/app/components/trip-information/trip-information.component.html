@@ -24,14 +24,14 @@
             class="btn btn-success btn-sm m-0 px-3"
             type="button"
             title="Zakelijke rit"
-            (click)="openModalApprove('work')">
+            (click)="openModalApprove('work', true)">
             <i class="fas fa-check"></i>
           </button>
           <button
             class="btn btn-danger btn-sm m-0 px-3"
             type="button"
             title="Privérit"
-            (click)="openModalApprove('personal')">
+            (click)="openModalApprove('personal', true)">
             <i class="fas fa-times"></i>
           </button>
         </div>
@@ -40,14 +40,14 @@
           <small>Er is iets fout gegaan tijdens het beoordelen, probeer het later nog een keer.</small>
         </div>
 
-        <ng-container *ngIf="this.getNested(this.tripInfo, 'checking_info', 'trip_kind')">
+        <ng-container *ngIf="(this.tripInfo | nestedValue:'checking_info':'trip_kind')">
           <div class="btn-group ml-4">
             <button
               type="button" class="btn btn-sm description"
-              [class.btn-success]="this.tripInfo.checking_info.trip_kind === 'work'"
-              [class.btn-danger]="this.tripInfo.checking_info.trip_kind === 'personal'"
+              [class.btn-success]="(this.tripInfo.checking_info.trip_kind | tripKind:'boolean':'work')"
+              [class.btn-danger]="(this.tripInfo.checking_info.trip_kind | tripKind:'boolean':'personal')"
               placement="bottom"
-              ngbTooltip="Reden: {{ this.tripInfo.checking_info.description || 'geen' }}">
+              ngbTooltip="Beschrijving: {{ this.tripInfo.checking_info.description || 'geen' }}">
               {{ this.tripInfo.checking_info.trip_kind === 'work' ? 'Zakelijke rit' : 'Privérit' }}
               <i *ngIf="this.tripInfo.checking_info.description" class="fas fa-comment ml-2"></i>
             </button>
@@ -56,8 +56,8 @@
                 type="button"
                 class="btn btn-sm dropdown-toggle-split"
                 title="Bewerken"
-                [class.btn-outline-success]="this.tripInfo.checking_info.trip_kind === 'work'"
-                [class.btn-outline-danger]="this.tripInfo.checking_info.trip_kind === 'personal'"
+                [class.btn-outline-success]="(this.tripInfo.checking_info.trip_kind | tripKind:'boolean':'work')"
+                [class.btn-outline-danger]="(this.tripInfo.checking_info.trip_kind | tripKind:'boolean':'personal')"
                 ngbDropdownToggle>
                 <i class="fas fa-edit mr-2"></i>
               </button>
@@ -65,14 +65,14 @@
                 <button
                   type="button"
                   class="btn-sm"
-                  (click)="openModalApprove(this.tripInfo.checking_info.trip_kind)"
+                  (click)="openModalApprove(this.tripInfo.checking_info.trip_kind, false)"
                   ngbDropdownItem >
                   Opmerking wijzigen
                 </button>
                 <button
                   type="button"
                   class="btn-sm"
-                  (click)="openModalApprove(this.tripInfo.checking_info.trip_kind === 'work' ? 'personal' : 'work')"
+                  (click)="openModalApprove((this.tripInfo.checking_info.trip_kind === 'work' ? 'personal' : 'work'), true)"
                   ngbDropdownItem >
                   Markeren als {{ this.tripInfo.checking_info.trip_kind === 'work' ? 'privérit' : 'zakelijke rit' }}
                 </button>

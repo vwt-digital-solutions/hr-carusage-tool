@@ -64,8 +64,8 @@ export class DashboardComponent {
           cellRenderer: (params: ValueFormatterParams): string => {
             if (params.value !== null) {
               return params.value === 'work' ?
-              `<i class="fas fa-check-circle success" title="Goedgekeurd"></i>` :
-              '<i class="fas fa-times-circle danger" title="Afgekeurd"></i>';
+              `<span class="fa-stack fa-xs" title="Zakelijke rit"><i class="fas fa-circle fa-stack-2x success"></i><i class="fas fa-briefcase fa-stack-1x fa-inverse"></i></span>` :
+              `<span class="fa-stack fa-xs" title="Privérit"><i class="fas fa-circle fa-stack-2x danger"></i><i class="fas fa-user fa-stack-1x fa-inverse"></i></span>`;
             }
           }
         },

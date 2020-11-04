@@ -25,13 +25,13 @@
             <tbody>
               <tr>
                 <th scope="row">Rit soort</th>
-                <td>{{ checking_info.old.trip_kind || '-' }}</td>
-                <td>{{ checking_info.new.trip_kind || '-' }}</td>
+                <td>{{ ((log.attributes_changed | nestedValue:'checking_info':'old':'trip_kind') | tripKind:'string') || '-' }}</td>
+                <td>{{ ((log.attributes_changed | nestedValue:'checking_info':'new':'trip_kind') | tripKind:'string') || '-' }}</td>
               </tr>
               <tr>
-                <th scope="row">Reden</th>
-                <td>{{ checking_info.old.description || '-' }}</td>
-                <td>{{ checking_info.new.description || '-' }}</td>
+                <th scope="row">Beschrijving</th>
+                <td>{{ (log.attributes_changed | nestedValue:'checking_info':'old':'description') || '-' }}</td>
+                <td>{{ (log.attributes_changed | nestedValue:'checking_info':'new':'description') || '-' }}</td>
               </tr>
             </tbody>
           </table>
@@ -45,7 +45,10 @@
 </div>
 
 <ng-template #nologs>
-  <div class="alert alert-info" role="alert">
+  <div *ngIf="!isLoading" class="alert alert-info" role="alert">
     Geen audit logging gevonden
+  </div>
+  <div *ngIf="isLoading" class="alert alert-warning" role="alert">
+    <i class="fas fa-spinner fa-spin mr-1"></i> De audit logging wordt opgevraagd
   </div>
 </ng-template>

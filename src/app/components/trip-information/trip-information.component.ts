@@ -10,6 +10,8 @@ import { AuditModalComponent } from '../audit-modal/audit-modal.component';
 
 import { Trip, TripLocation } from 'src/app/models/trip.model';
 import { LicensePlatePipe } from 'src/app/pipes/license-plate.pipe';
+import { NestedValuePipe } from 'src/app/pipes/nested-value.pipe';
+import { TripKindPipe } from 'src/app/pipes/trip-kind.pipe';
 
 import { tileLayer, latLng, marker, icon, Map, polyline, LatLng, point, latLngBounds } from 'leaflet';
 import * as L from 'leaflet';
@@ -19,7 +21,7 @@ import * as L from 'leaflet';
   selector: 'app-trip-information',
   templateUrl: './trip-information.component.html',
   styleUrls: ['./trip-information.component.scss'],
-  providers: [LicensePlatePipe]
+  providers: [LicensePlatePipe, NestedValuePipe, TripKindPipe]
 })
 
 export class TripInformationComponent implements OnChanges {
@@ -66,7 +68,8 @@ export class TripInformationComponent implements OnChanges {
   constructor(
     private env: EnvService,
     private httpClient: HttpClient,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private nestedValuePipe: NestedValuePipe
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -86,8 +89,11 @@ export class TripInformationComponent implements OnChanges {
     this.indexChange.emit({index, trip: this.tripInfo, approving: false});
   }
 
-  openModalApprove(tripKind: string): void {
+  openModalApprove(tripKind: string, newApprove = true): void {
     const modalRef = this.modalService.open(ApproveModalComponent);
+    if (!newApprove) {
+      modalRef.componentInstance.descriptionValue = this.nestedValuePipe.transform(this.tripInfo, 'checking_info', 'description');
+    }
     modalRef.componentInstance.tripKind = tripKind;
     modalRef.result.then((result) => this.handleModalResponse(result), error => console.log(error));
   }
@@ -205,11 +211,6 @@ export class TripInformationComponent implements OnChanges {
     return latLng(location.geometry.coordinates[1], location.geometry.coordinates[0]);
   }
 
-  /* eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any */
-  getNested(obj: any, ...args: any[]): any {
-    return args.reduce((obj, level) => obj && obj[level], obj);
-  }
-
   get driverName(): string {
     const driverInfo = this.tripInfo.driver_info;
     let driverName = '';
@@ -229,6 +230,6 @@ export class TripInformationComponent implements OnChanges {
   }
 
   get canBeChecked(): boolean {
-    return this.getNested(this.tripInfo, 'checking_info', 'trip_kind') === null ? true : false;
+    return this.nestedValuePipe.transform(this.tripInfo, 'checking_info', 'trip_kind') === null ? true : false;
   }
 }

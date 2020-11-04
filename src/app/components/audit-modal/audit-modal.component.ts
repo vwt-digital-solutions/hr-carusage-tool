@@ -5,31 +5,40 @@ import { AuditLog } from 'src/app/models/audit-log.model';
 import { HttpClient } from '@angular/common/http';
 import { EnvService } from 'src/app/services/env/env.service';
 
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NestedValuePipe } from 'src/app/pipes/nested-value.pipe';
+import { TripKindPipe } from 'src/app/pipes/trip-kind.pipe';
 
-import * as dot from 'dot-object';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-audit-modal',
   templateUrl: './audit-modal.component.html',
-  styleUrls: ['./audit-modal.component.scss']
+  styleUrls: ['./audit-modal.component.scss'],
+  providers: [NestedValuePipe, TripKindPipe]
 })
 export class AuditModalComponent implements OnInit, OnDestroy {
   @Input() tripId: string;
 
   public auditLogging = [];
+  public isLoading = false;
 
   constructor(
     private env: EnvService,
     private httpClient: HttpClient,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    public nestedValue: NestedValuePipe
   ) { }
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.httpClient.get<Array<AuditLog>>(
       `${this.env.apiUrl}/audit-logs`,
       { params: { trip_id: this.tripId }}).subscribe(
-        response => this.processAuditLogging(response['results']),
+        response => {
+          const result = response['results'].sort((a, b) => a.timestamp > b.timestamp ? -1 : (a.timestamp < b.timestamp ? 1 : 0));
+          this.isLoading = false;
+          this.auditLogging = result;
+        },
         error => {
           console.log(error);
         }
@@ -38,25 +47,5 @@ export class AuditModalComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.auditLogging = [];
-  }
-
-  processAuditLogging(auditLogs: AuditLog[]): void {
-    for (const log of auditLogs) {
-      log['attributes_changed'] = dot.dot(log['attributes_changed']);
-    }
-
-    this.auditLogging = auditLogs.sort((a, b) => a.timestamp > b.timestamp ? -1 : (a.timestamp < b.timestamp ? 1 : 0));
-  }
-
-  getAttributeValue(log: AuditLog, attribute: string): string | null {
-    if (attribute in log.attributes_changed) {
-      if (typeof log.attributes_changed[attribute] === 'boolean') {
-        return log.attributes_changed[attribute] ? 'Ja' : 'Nee';
-      } else {
-        return log.attributes_changed[attribute];
-      }
-    } else {
-      return null;
-    }
   }
 }

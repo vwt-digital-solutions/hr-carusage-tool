@@ -5,6 +5,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { LicensePlatePipe } from './pipes/license-plate.pipe';
+import { NestedValuePipe } from './pipes/nested-value.pipe';
+import { TripKindPipe } from './pipes/trip-kind.pipe';
 
 import { AgGridModule } from 'ag-grid-angular';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
@@ -37,7 +39,9 @@ import { AuditModalComponent } from './components/audit-modal/audit-modal.compon
     TripInformationComponent,
     LoginComponent,
     ApproveModalComponent,
-    AuditModalComponent
+    AuditModalComponent,
+    NestedValuePipe,
+    TripKindPipe
   ],
   imports: [
     BrowserModule,

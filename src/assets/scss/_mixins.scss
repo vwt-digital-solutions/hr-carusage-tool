@@ -78,6 +78,25 @@ $breakpoint-desktop-big: 1800px;
   &:focus { background-color: $gray-hover; }
 }
 
+.btn-outline-primary {
+  @include button-outline-variant($primary, $white, $primary-hover, $primary-hover);
+}
+.btn-outline-secondary {
+  @include button-outline-variant($gray-dark, $white, $gray-dark-hover, $gray-dark-hover);
+}
+.btn-outline-success {
+  @include button-outline-variant($green, $white, $green-hover, $green-hover);
+}
+.btn-outline-danger {
+  @include button-outline-variant($red, $white, $red-hover, $red-hover);
+}
+.btn-outline-warning {
+  @include button-outline-variant($orange, $white, $orange-hover, $orange-hover);
+}
+.btn-outline-light {
+  @include button-outline-variant($gray, $black, $gray-hover, $gray-hover);
+}
+
 .badge {
   padding: 4px 5px;
 }
