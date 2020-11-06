@@ -59,6 +59,17 @@
           padding: 5px 10px;
         }
       }
+
+      .dropdown-toggle.btn-link[aria-expanded="true"] {
+        color: $aggrid-header-title;
+      }
+
+      .dropdown-menu {
+        .dropdown-item-text.text-sm {
+          font-size: 0.875rem;
+          line-height: 1.5;
+        }
+      }
     }
   }
 }
