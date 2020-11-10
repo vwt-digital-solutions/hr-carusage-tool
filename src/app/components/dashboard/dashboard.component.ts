@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Trip } from 'src/app/models/trip.model';
 import { EnvService } from 'src/app/services/env/env.service';
@@ -9,6 +9,7 @@ import { DatePipe } from '@angular/common';
 import { LicensePlatePipe } from 'src/app/pipes/license-plate.pipe';
 
 import * as moment from 'moment';
+import { saveAs } from 'file-saver';
 
 import { agGridLocaleNL } from 'src/assets/locale/locale.nl';
 
@@ -295,6 +296,39 @@ export class DashboardComponent {
     this.weekHasNext = this.isCurrentWeek ? false : true;
 
     this.retrieveTripData();
+  }
+
+  exportTrips(contentType: string): void {
+    this.isError = false;
+    this.isLoading = true;
+    this.gridApi.showLoadingOverlay();
+
+    const headers = new HttpHeaders({
+      'Content-Type': contentType
+    });
+    const params = {
+      ended_after: this.currentWeekStartTimestamp,
+      ended_before: this.currentWeekEndTimestamp,
+      outside_time_window: 'true'
+    };
+
+    this.httpClient.get<Blob>(
+      `${this.env.apiUrl}/trips/export`,
+      { headers, params, observe: 'response', responseType: 'blob' as 'json'}).subscribe(
+        response => {
+          const matches = /(?:filename=)([\w\d-_.]*)/g.exec(
+            response.headers.get('content-disposition'));
+
+          saveAs(response.body, matches && matches.length > 1 ? matches[1] : null);
+
+          this.gridApi.hideOverlay();
+          this.isLoading = false;
+        }, error => {
+          console.log(error);
+          this.isLoading = false;
+          this.isError = true;
+        }
+      );
   }
 
   toggleFilter(name: string): void {
