@@ -23,4 +23,7 @@ export class EnvService {
   // Feedback email address
   public feedbackEmail = '';
 
+  // Current environment
+  public environment = '';
+
 }

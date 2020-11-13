@@ -33,9 +33,9 @@ export class DashboardComponent {
   public isLoading = false;
   public isError = false;
 
-  public now = moment();
+  public now = moment().subtract(1, 'weeks');
   public dynamicMoment = moment().subtract(1, 'weeks');
-  public weekHasNext = true;
+  public weekHasNext = this.isDevelopment ? true : false;
   public weekHasPrev = true;
 
   public activeFilter = null;
@@ -277,25 +277,30 @@ export class DashboardComponent {
     return this.dynamicMoment.format('w');
   }
 
-  get isCurrentWeek(): boolean {
+  get isActiveWeek(): boolean {
     return this.now.startOf('week').toISOString() === this.dynamicMoment.startOf('week').toISOString() ? true : false;
   }
 
   changeWeek(action: number): void {
-    this.gridApi.deselectAll();
-    this.activeTrip = null;
-
-    if (action < 0) {
-      this.dynamicMoment = this.dynamicMoment.subtract(1, 'weeks');
-    } else if (action > 0) {
-      this.dynamicMoment = this.dynamicMoment.add(1, 'weeks');
+    if (action > 0 && !this.weekHasNext) {
+      return;
     } else {
-      this.dynamicMoment = moment();
+      this.gridApi.deselectAll();
+      this.activeTrip = null;
+
+      if (action < 0) {
+        this.dynamicMoment = this.dynamicMoment.subtract(1, 'weeks');
+      } else if (action > 0) {
+        this.dynamicMoment = this.dynamicMoment.add(1, 'weeks');
+      } else {
+        this.dynamicMoment = moment().subtract(1, 'weeks');
+      }
+
+      this.weekHasNext = this.isActiveWeek ?
+        (this.isDevelopment ? true : false) : true;
+
+      this.retrieveTripData();
     }
-
-    this.weekHasNext = this.isCurrentWeek ? false : true;
-
-    this.retrieveTripData();
   }
 
   exportTrips(contentType: string): void {
@@ -354,5 +359,9 @@ export class DashboardComponent {
     }
 
     this.gridApi.setFilterModel(model);
+  }
+
+  get isDevelopment(): boolean {
+    return this.env.environment === 'development' ? true : false;
   }
 }

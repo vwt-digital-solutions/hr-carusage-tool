@@ -8,8 +8,13 @@
           </div>
 
           <ul class="pagination ml-auto mb-0">
-            <li class="page-item page-today mr-4" [class.disabled]="isCurrentWeek || isLoading" (click)="changeWeek(0)">
-              <i class="fas fa-calendar mr-1"></i> Huidige week
+            <li
+              class="page-item page-today mr-4"
+              placement="auto"
+              ngbTooltip="Navigeer naar de actieve week"
+              [class.disabled]="isActiveWeek || isLoading"
+              (click)="changeWeek(0)">
+              <i class="fas fa-calendar mr-1"></i> Actieve week
             </li>
             <li class="page-item page-prev" [class.disabled]="isLoading" (click)="changeWeek(-1)" title="Vorige week">
               <i class="fas fa-chevron-left"></i>
