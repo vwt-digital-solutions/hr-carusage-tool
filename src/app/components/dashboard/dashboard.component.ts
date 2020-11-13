@@ -308,12 +308,11 @@ export class DashboardComponent {
     });
     const params = {
       ended_after: this.currentWeekStartTimestamp,
-      ended_before: this.currentWeekEndTimestamp,
-      outside_time_window: 'true'
+      ended_before: this.currentWeekEndTimestamp
     };
 
     this.httpClient.get<Blob>(
-      `${this.env.apiUrl}/data/trips/export`,
+      `${this.env.apiUrl}/export/trips`,
       { headers, params, observe: 'response', responseType: 'blob' as 'json'}).subscribe(
         response => {
           const matches = /(?:filename=)([\w\d-_.]*)/g.exec(
