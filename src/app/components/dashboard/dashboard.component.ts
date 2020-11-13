@@ -233,7 +233,7 @@ export class DashboardComponent {
     this.gridApi.showLoadingOverlay();
 
     this.httpClient.get<Array<Trip>>(
-      `${this.env.apiUrl}/trips`,
+      `${this.env.apiUrl}/data/trips`,
       { params: {
         ended_after: this.currentWeekStartTimestamp,
         ended_before: this.currentWeekEndTimestamp,
@@ -313,7 +313,7 @@ export class DashboardComponent {
     };
 
     this.httpClient.get<Blob>(
-      `${this.env.apiUrl}/trips/export`,
+      `${this.env.apiUrl}/data/trips/export`,
       { headers, params, observe: 'response', responseType: 'blob' as 'json'}).subscribe(
         response => {
           const matches = /(?:filename=)([\w\d-_.]*)/g.exec(

@@ -110,7 +110,7 @@ export class TripInformationComponent implements OnChanges {
         description: result.value ? result.value : null
       };
       this.httpClient.put(
-        `${this.env.apiUrl}/trips/${this.tripInfo.id}`, requestBody).subscribe(
+        `${this.env.apiUrl}/data/trips/${this.tripInfo.id}`, requestBody).subscribe(
           (response: Trip) => this.handleCheckResponse(response),
           error => {
             console.log(error);

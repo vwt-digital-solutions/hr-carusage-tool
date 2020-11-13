@@ -32,7 +32,7 @@ export class AuditModalComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.isLoading = true;
     this.httpClient.get<Array<AuditLog>>(
-      `${this.env.apiUrl}/audit-logs`,
+      `${this.env.apiUrl}/data/audit-logs`,
       { params: { trip_id: this.tripId }}).subscribe(
         response => {
           const result = response['results'].sort((a, b) => a.timestamp > b.timestamp ? -1 : (a.timestamp < b.timestamp ? 1 : 0));
