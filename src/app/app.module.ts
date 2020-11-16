@@ -27,6 +27,7 @@ import { TripInformationComponent } from './components/trip-information/trip-inf
 import { LoginComponent } from './components/login/login.component';
 import { ApproveModalComponent } from './components/approve-modal/approve-modal.component';
 import { AuditModalComponent } from './components/audit-modal/audit-modal.component';
+import { FrequentOffendersComponent } from './components/frequent-offenders/frequent-offenders.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { AuditModalComponent } from './components/audit-modal/audit-modal.compon
     ApproveModalComponent,
     AuditModalComponent,
     NestedValuePipe,
-    TripKindPipe
+    TripKindPipe,
+    FrequentOffendersComponent
   ],
   imports: [
     BrowserModule,

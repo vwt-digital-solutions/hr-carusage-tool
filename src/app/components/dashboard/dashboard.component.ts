@@ -63,6 +63,7 @@ export class DashboardComponent {
           suppressMenu: true,
           sortable: false,
           cellRenderer: (params: ValueFormatterParams): string => {
+            console.log(params.value);
             if (params.value !== null) {
               return params.value === 'work' ?
               `<span class="fa-stack fa-xs" title="Zakelijke rit"><i class="fas fa-circle fa-stack-2x success"></i><i class="fas fa-briefcase fa-stack-1x fa-inverse"></i></span>` :

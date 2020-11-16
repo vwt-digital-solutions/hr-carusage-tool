@@ -1,0 +1,20 @@
+<div class="container-fluid offenders-content h-100">
+  <div class="row h-100">
+    <div class="col-12 p-4">
+      <div class="mb-2">
+        <h1 class="mb-1">Veelplegers</h1>
+        <div class="alert alert-info alert-sm" role="alert">
+          <strong><i class="fas fa-question-circle mr-2"></i></strong> Een bestuurder wordt <i>veelpleger</i> genoemd als hij of zij in twee maanden drie maal een privérit rijd
+        </div>
+      </div>
+
+      <ag-grid-angular
+        class="ag-grid ag-theme-balham w-100 p-0"
+        [gridOptions]="gridOptions"
+        [overlayNoRowsTemplate]="overlayNoRowsTemplate"
+        (gridReady)="onGridReady($event)"
+        (gridSizeChanged)="onGridSizeChanged($event)" >
+      </ag-grid-angular>
+    </div>
+  </div>
+</div>

@@ -23,30 +23,34 @@ export class LicensePlatePipe implements PipeTransform {
   }
 
   transform(value: string): string {
-    let licensePlate = value.replace(/-/g, '').toUpperCase();
+    if (value) {
+      let licensePlate = value.replace(/-/g, '').toUpperCase();
 
-    if (licensePlate.length === 6) {
-      const sidecode = this.sidecodes().findIndex(item => licensePlate.match(item)) + 1;
+      if (licensePlate.length === 6) {
+        const sidecode = this.sidecodes().findIndex(item => licensePlate.match(item)) + 1;
 
-      if (sidecode) {
-        if (sidecode <= 6) {
-          licensePlate = `${licensePlate.substr(0, 2)}-${licensePlate.substr(2, 2)}-${licensePlate.substr(4, 2)}`;
-        }
-        if (sidecode === 7 || sidecode === 9) {
-          licensePlate = `${licensePlate.substr(0, 2)}-${licensePlate.substr(2, 3)}-${licensePlate.substr(5, 1)}`;
-        }
-        if (sidecode === 8 || sidecode === 10) {
-          licensePlate = `${licensePlate.substr(0, 1)}-${licensePlate.substr(1, 3)}-${licensePlate.substr(4, 2)}`;
-        }
-        if (sidecode === 11 || sidecode === 14) {
-          licensePlate = `${licensePlate.substr(0, 3)}-${licensePlate.substr(3, 2)}-${licensePlate.substr(5, 1)}`;
-        }
-        if (sidecode === 12 || sidecode === 13) {
-          licensePlate = `${licensePlate.substr(0, 1)}-${licensePlate.substr(1, 2)}-${licensePlate.substr(3, 3)}`;
+        if (sidecode) {
+          if (sidecode <= 6) {
+            licensePlate = `${licensePlate.substr(0, 2)}-${licensePlate.substr(2, 2)}-${licensePlate.substr(4, 2)}`;
+          }
+          if (sidecode === 7 || sidecode === 9) {
+            licensePlate = `${licensePlate.substr(0, 2)}-${licensePlate.substr(2, 3)}-${licensePlate.substr(5, 1)}`;
+          }
+          if (sidecode === 8 || sidecode === 10) {
+            licensePlate = `${licensePlate.substr(0, 1)}-${licensePlate.substr(1, 3)}-${licensePlate.substr(4, 2)}`;
+          }
+          if (sidecode === 11 || sidecode === 14) {
+            licensePlate = `${licensePlate.substr(0, 3)}-${licensePlate.substr(3, 2)}-${licensePlate.substr(5, 1)}`;
+          }
+          if (sidecode === 12 || sidecode === 13) {
+            licensePlate = `${licensePlate.substr(0, 1)}-${licensePlate.substr(1, 2)}-${licensePlate.substr(3, 3)}`;
+          }
         }
       }
-    }
 
-    return licensePlate;
+      return licensePlate;
+    } else {
+      return 'N/B';
+    }
   }
 }
