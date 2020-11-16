@@ -237,8 +237,7 @@ export class DashboardComponent {
       `${this.env.apiUrl}/data/trips`,
       { params: {
         ended_after: this.currentWeekStartTimestamp,
-        ended_before: this.currentWeekEndTimestamp,
-        outside_time_window: 'true'
+        ended_before: this.currentWeekEndTimestamp
       }}).subscribe(
         response => {
           this.gridApi.setRowData(('results' in response) ? response['results'] : []);
