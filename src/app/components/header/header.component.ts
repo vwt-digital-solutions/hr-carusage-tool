@@ -14,7 +14,7 @@ export class HeaderComponent {
 
   constructor(
     private env: EnvService,
-    private authService: AuthService
+    public authService: AuthService
   ) {}
 
   sendFeedback(): void {
