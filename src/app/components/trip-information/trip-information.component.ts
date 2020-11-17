@@ -28,7 +28,7 @@ export class TripInformationComponent implements OnChanges {
   @ViewChild('descriptionInput') descriptionInput: ElementRef;
 
   @Input() tripInfo: Trip;
-  @Input() indexInfo: {current: number, min: number, max: number};
+  @Input() indexInfo: {current: number, min: number, max: number, total: number};
 
   @Output() indexChange = new EventEmitter<{index: number, trip: Trip, approving: boolean}>();
 

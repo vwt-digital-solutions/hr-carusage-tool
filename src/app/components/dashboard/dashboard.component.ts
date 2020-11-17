@@ -12,6 +12,7 @@ import * as moment from 'moment';
 import { saveAs } from 'file-saver';
 
 import { agGridLocaleNL } from 'src/assets/locale/locale.nl';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,12 +25,14 @@ export class DashboardComponent {
   private gridApi: GridApi;
   private gridColumnApi: ColumnApi;
 
+  private isManager = true;
+
   public gridOptions: GridOptions;
   public overlayNoRowsTemplate: string;
   public locations: Array<Trip> = [];
 
   public activeTrip: Trip = null;
-  public activeIndexInfo = {current: null, min: 0, max: null};
+  public activeIndexInfo = {current: null, min: 0, max: null, total: null};
   public isLoading = false;
   public isError = false;
 
@@ -41,11 +44,15 @@ export class DashboardComponent {
   public activeFilter = null;
 
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private env: EnvService,
     private httpClient: HttpClient,
     private datePipe: DatePipe,
     private licensePlatePipe: LicensePlatePipe
   ) {
+    this.isManager = route.snapshot.data['isManager'];
+
     this.gridOptions = {
       defaultColDef: {
         sortable: true,
@@ -63,7 +70,6 @@ export class DashboardComponent {
           suppressMenu: true,
           sortable: false,
           cellRenderer: (params: ValueFormatterParams): string => {
-            console.log(params.value);
             if (params.value !== null) {
               return params.value === 'work' ?
               `<span class="fa-stack fa-xs" title="Zakelijke rit"><i class="fas fa-circle fa-stack-2x success"></i><i class="fas fa-briefcase fa-stack-1x fa-inverse"></i></span>` :
@@ -195,7 +201,7 @@ export class DashboardComponent {
   }
 
   onFilterChanged(): void {
-    this.activeIndexInfo.max = this.getTotalNodeCount;
+    this.activeIndexInfo.max = this.getTotalFilteredNodeCount;
   }
 
   rowDataSetPage(index: number): void {
@@ -221,10 +227,20 @@ export class DashboardComponent {
     this.retrieveTripData();
   }
 
-  get getTotalNodeCount(): number {
+  get getTotalFilteredNodeCount(): number {
     const rowData = [];
     this.gridApi.forEachNodeAfterFilterAndSort(node => rowData.push(node.data));
-    return rowData.length - 1;
+    return rowData.length;
+  }
+
+  get getTotalNodeCount(): number {
+    const rowData = [];
+    this.gridApi.forEachNode(node => rowData.push(node.data));
+    return rowData.length;
+  }
+
+  get hasNoRows(): boolean {
+    return this.activeIndexInfo.total === 0 ? true : false;
   }
 
   retrieveTripData(): void {
@@ -233,15 +249,18 @@ export class DashboardComponent {
     this.isLoading = true;
     this.gridApi.showLoadingOverlay();
 
+    const url = this.isManager ? '/trips/managers' : '/trips';
+
     this.httpClient.get<Array<Trip>>(
-      `${this.env.apiUrl}/data/trips`,
+      `${this.env.apiUrl}/data${url}`,
       { params: {
         ended_after: this.currentWeekStartTimestamp,
         ended_before: this.currentWeekEndTimestamp
       }}).subscribe(
         response => {
           this.gridApi.setRowData(('results' in response) ? response['results'] : []);
-          this.activeIndexInfo.max = this.getTotalNodeCount;
+          this.activeIndexInfo.total = this.getTotalNodeCount;
+          this.activeIndexInfo.max = this.getTotalFilteredNodeCount;
 
           this.gridColumnApi.autoSizeAllColumns();
 

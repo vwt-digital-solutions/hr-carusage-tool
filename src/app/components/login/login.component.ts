@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { OAuthService } from 'angular-oauth2-oidc';
+
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -9,19 +10,15 @@ import { OAuthService } from 'angular-oauth2-oidc';
 })
 export class LoginComponent implements OnInit {
   constructor(
-    private oauthService: OAuthService,
+    private authService: AuthService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
-    if (this.oauthService.hasValidAccessToken()) {
+    if (this.authService.hasValidAccessToken) {
       this.router.navigate(['home']);
     } else {
-      this.login();
+      this.authService.login();
     }
-  }
-
-  public login(): void {
-    this.oauthService.initLoginFlow();
   }
 }

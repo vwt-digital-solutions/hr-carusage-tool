@@ -37,28 +37,28 @@
               <button
                 type="button" class="btn btn-link"
                 [class.active]="activeFilter === null"
-                [class.disabled]="isLoading"
+                [class.disabled]="isLoading || hasNoRows"
                 (click)="toggleFilter(null)">
                 Alle ritten
               </button>
               <button
                 type="button" class="btn btn-link"
                 [class.active]="activeFilter === 'checked'"
-                [class.disabled]="isLoading"
+                [class.disabled]="isLoading || hasNoRows"
                 (click)="toggleFilter('checked')">
                 Nog te beoordelen ritten
               </button>
               <button
                 type="button" class="btn btn-link"
                 [class.active]="activeFilter === 'personal'"
-                [class.disabled]="isLoading"
+                [class.disabled]="isLoading || hasNoRows"
                 (click)="toggleFilter('personal')">
                 Privéritten
               </button>
               <button
                 type="button" class="btn btn-link"
                 [class.active]="activeFilter === 'work'"
-                [class.disabled]="isLoading"
+                [class.disabled]="isLoading || hasNoRows"
                 (click)="toggleFilter('work')">
                 Zakelijke ritten
               </button>
@@ -71,7 +71,7 @@
                 title="Ritten exporteren"
                 placement="auto"
                 ngbTooltip="Ritten exporteren"
-                [class.disabled]="isLoading"
+                [class.disabled]="isLoading || hasNoRows"
                 ngbDropdownToggle>
                 <i class="fas fa-cloud-download-alt"></i>
               </button>

@@ -15,13 +15,19 @@ const routes: Routes = [
     path: 'home',
     component: DashboardComponent,
     canActivate: [AuthGuard],
-    data: { roles: [Role.Write] }
+    data: { roles: [Role.Read], isManager: true }
   },
   {
     path: 'veelplegers',
     component: FrequentOffendersComponent,
     canActivate: [AuthGuard],
-    data: { roles: [Role.Write] }
+    data: { roles: [Role.Read] }
+  },
+  {
+    path: 'ritten-overzicht',
+    component: DashboardComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Write], isManager: false }
   },
   { path: 'login', component: LoginComponent },
   { path: 'not-authorized', component: PageNotAuthorizedComponent },

@@ -1,39 +1,39 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
 
-import { OAuthService } from 'angular-oauth2-oidc';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
   constructor(
-    private oauthService: OAuthService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    if (this.oauthService.hasValidAccessToken()) {
-      const claims = this.oauthService.getIdentityClaims();
+    if (this.authService.hasValidAccessToken) {
+      const roles = this.authService.getRoles;
 
-      if (route.data.roles) {
-        if (claims && 'roles' in claims) {
-          let isAuthorisedRoute = false;
+      if (roles) {
+        let isAuthorisedRoute = false;
 
-          for (const value of claims['roles']) {
-            if (route.data.roles.indexOf(value) > -1) {
-              isAuthorisedRoute = true;
-            }
+        for (const value of roles) {
+          if (route.data.roles.indexOf(value) > -1) {
+            isAuthorisedRoute = true;
           }
+        }
 
-          if (isAuthorisedRoute) {
-            return true;
-          }
+        if (isAuthorisedRoute) {
+          this.authService.initRoles();
+          return true;
         }
 
         this.router.navigate(['not-authorized']);
         return false;
       } else {
+        this.authService.initRoles();
         return true;
       }
     } else {
