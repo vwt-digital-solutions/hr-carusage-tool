@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
 import { Trip } from 'src/app/models/trip.model';
 import { EnvService } from 'src/app/services/env/env.service';
@@ -35,6 +35,7 @@ export class DashboardComponent {
   public activeIndexInfo = {current: null, min: 0, max: null, total: null};
   public isLoading = false;
   public isError = false;
+  public errorMessage = null;
 
   public now = moment().subtract(1, 'weeks');
   public dynamicMoment = moment().subtract(1, 'weeks');
@@ -322,36 +323,43 @@ export class DashboardComponent {
     }
   }
 
-  exportTrips(contentType: string): void {
-    this.isError = false;
-    this.isLoading = true;
-    this.gridApi.showLoadingOverlay();
+  exportTrips(): void {
+    if (confirm(
+        'Weet je zeker dat je de huidige week wilt afsluiten en exporteren? ' +
+        'Dit kan niet ongedaan worden gemaakt!')) {
+      this.isError = false;
+      this.isLoading = true;
+      this.gridApi.showLoadingOverlay();
 
-    const headers = new HttpHeaders({
-      'Content-Type': contentType
-    });
-    const params = {
-      ended_after: this.currentWeekStartTimestamp,
-      ended_before: this.currentWeekEndTimestamp
-    };
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      });
+      const params = {
+        ended_after: this.currentWeekStartTimestamp,
+        ended_before: this.currentWeekEndTimestamp
+      };
 
-    this.httpClient.get<Blob>(
-      `${this.env.apiUrl}/export/trips`,
-      { headers, params, observe: 'response', responseType: 'blob' as 'json'}).subscribe(
-        response => {
-          const matches = /(?:filename=)([\w\d-_.]*)/g.exec(
-            response.headers.get('content-disposition'));
+      this.httpClient.get<Blob>(
+        `${this.env.apiUrl}/export/trips`,
+        { headers, params, observe: 'response', responseType: 'blob' as 'json'}).subscribe(
+          response => {
+            const matches = /(?:filename=)([\w\d-_.]*)/g.exec(
+              response.headers.get('content-disposition'));
+            saveAs(response.body, matches && matches.length > 1 ? matches[1] : null);
 
-          saveAs(response.body, matches && matches.length > 1 ? matches[1] : null);
+            this.gridApi.hideOverlay();
+            this.isLoading = false;
+          }, error => this.handleError(error)
+        );
+    }
+  }
 
-          this.gridApi.hideOverlay();
-          this.isLoading = false;
-        }, error => {
-          console.log(error);
-          this.isLoading = false;
-          this.isError = true;
-        }
-      );
+  handleError(error: HttpErrorResponse): void {
+    console.log(error.error);
+    this.isLoading = false;
+    this.isError = true;
+    this.gridApi.hideOverlay();
+    this.errorMessage = 'detail' in error.error ? error.error['detail'] : null;
   }
 
   toggleFilter(name: string): void {

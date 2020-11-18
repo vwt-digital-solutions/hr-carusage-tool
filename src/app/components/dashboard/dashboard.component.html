@@ -64,35 +64,27 @@
               </button>
             </div>
 
-            <div class="btn-group ml-auto" ngbDropdown role="group">
+            <div *ngIf="isManager" class="btn-group ml-auto" ngbDropdown role="group">
               <button
                 type="button"
                 class="btn btn-link dropdown-toggle-split"
-                title="Ritten exporteren"
-                placement="auto"
-                ngbTooltip="Ritten exporteren"
+                title="Week afsluiten en ritten exporteren"
                 [class.disabled]="isLoading || hasNoRows"
                 ngbDropdownToggle>
                 <i class="fas fa-cloud-download-alt"></i>
               </button>
               <div class="dropdown-menu" ngbDropdownMenu>
-                <button
-                  type="button"
-                  class="btn-sm"
-                  (click)="exportTrips('text/csv')"
-                  ngbDropdownItem >
-                  Exporteren als CSV
-                </button>
-                <button
-                  type="button"
-                  class="btn-sm"
-                  (click)="exportTrips('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')"
-                  ngbDropdownItem >
-                  Exporteren als Excel
-                </button>
-                <span class="dropdown-item-text text-sm mt-2 pt-2 text-muted border-top">
-                  De exports bevatten alle ritten van de huidige week
+                <span class="dropdown-item-text text-sm mb-2 pb-2 text-muted border-bottom">
+                  Na het afsluiten en exporteren van de huidige week kunnen ritten niet meer aangepast worden. <br />
+                  <strong>Dit kan niet ongedaan worden!</strong>
                 </span>
+                <button
+                  type="button"
+                  class="btn-sm"
+                  (click)="exportTrips()"
+                  ngbDropdownItem >
+                  Week afsluiten en exporteren
+                </button>
               </div>
             </div>
           </ng-container>
@@ -121,6 +113,6 @@
 
 <ng-template #retrieveError>
   <div class="alert alert-danger alert-sm m-0" role="alert">
-    <p><i class="fas fa-exclamation-circle"></i> Er is een fout opgetreden, probeer het later nog een keer</p>
+    <p><i class="fas fa-exclamation-circle"></i> {{ errorMessage || 'Er is een fout opgetreden, probeer het later nog een keer' }}</p>
   </div>
 </ng-template>

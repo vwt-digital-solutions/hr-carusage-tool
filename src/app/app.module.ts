@@ -16,6 +16,7 @@ import { FormsModule } from '@angular/forms';
 import { OAuthModule, OAuthService } from 'angular-oauth2-oidc';
 import { AuthGuard } from './services/auth/auth.guard';
 import { TokenInterceptor } from './services/auth/token.interceptor';
+import { BlobErrorHttpInterceptor } from './services/blob-error-http.interceptor';
 import { EnvServiceProvider } from './services/env/env.service.provider';
 
 import { AppComponent } from './app.component';
@@ -74,7 +75,12 @@ import { FrequentOffendersComponent } from './components/frequent-offenders/freq
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
-    }
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: BlobErrorHttpInterceptor,
+      multi: true
+    },
   ],
   bootstrap: [AppComponent]
 })
