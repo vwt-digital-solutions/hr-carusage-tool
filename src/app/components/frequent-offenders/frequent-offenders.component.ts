@@ -1,14 +1,11 @@
 import { Component } from '@angular/core';
 
-import { HttpClient } from '@angular/common/http';
-import { EnvService } from 'src/app/services/env/env.service';
-
 import { AgGridEvent, ColumnApi, GridApi, GridOptions, ValueFormatterParams } from 'ag-grid-community';
-import { FrequentOffender } from 'src/app/models/frequent-offenders.model';
 
 import { LicensePlatePipe } from 'src/app/pipes/license-plate.pipe';
 
 import { agGridLocaleNL } from 'src/assets/locale/locale.nl';
+import { FrequentOffendersService } from './frequent-offenders.service';
 
 @Component({
   selector: 'app-frequent-offenders',
@@ -22,15 +19,13 @@ export class FrequentOffendersComponent {
 
   public gridOptions: GridOptions;
   public overlayNoRowsTemplate: string;
-  public offenders: Array<FrequentOffender> = [];
 
   public isLoading = false;
   public isError = false;
 
   constructor(
-    private env: EnvService,
-    private httpClient: HttpClient,
-    private licensePlatePipe: LicensePlatePipe
+    private licensePlatePipe: LicensePlatePipe,
+    private offendersService: FrequentOffendersService
   ) {
     this.gridOptions = {
       defaultColDef: {
@@ -87,30 +82,11 @@ export class FrequentOffendersComponent {
     this.gridColumnApi = event.columnApi;
 
     this.gridApi.addEventListener('rowDataChanged', this.rowDataChangedHandler);
-    this.retrieveOffendersData();
-  }
+    this.gridApi.setRowData(this.offendersService.getFrequentOffenders());
 
-  retrieveOffendersData(): void {
-    this.isError = false;
-    this.isLoading = true;
-    this.gridApi.showLoadingOverlay();
+    this.gridColumnApi.autoSizeAllColumns();
 
-    this.httpClient.get<Array<FrequentOffender>>(
-      `${this.env.apiUrl}/data/frequent-offenders`).subscribe(
-        response => {
-          this.gridApi.setRowData(('results' in response) ? response['results'] : []);
-
-          this.gridColumnApi.autoSizeAllColumns();
-
-          this.gridApi.hideOverlay();
-          this.isLoading = false;
-        }, error => {
-          console.log(error);
-          this.gridApi.hideOverlay();
-          this.gridApi.showNoRowsOverlay();
-          this.isLoading = false;
-          this.isError = true;
-        }
-      );
+    this.gridApi.hideOverlay();
+    this.isLoading = false;
   }
 }
