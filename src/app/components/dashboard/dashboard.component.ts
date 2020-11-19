@@ -156,6 +156,11 @@ export class DashboardComponent {
       pagination: true,
       paginationAutoPageSize: true,
       localeTextFunc: (key: string, defaultValue: string) =>  agGridLocaleNL[key] || defaultValue,
+      rowClassRules: {
+        'ag-row-exported': (params) => {
+          return params.data['exported']['exported_at'] === null ? false : true;
+        }
+      },
       statusBar: {
         statusPanels: [
           { statusPanel: 'agTotalRowCountComponent', align: 'left' },
