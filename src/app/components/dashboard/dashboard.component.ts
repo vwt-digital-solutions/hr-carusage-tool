@@ -65,7 +65,7 @@ export class DashboardComponent {
           headerName: '',
           field: 'checking_info.trip_kind',
           pinned: 'left',
-          maxWidth: 50,
+          maxWidth: 60,
           cellStyle: {textAlign: 'center'},
           suppressSizeToFit: true,
           suppressMenu: true,

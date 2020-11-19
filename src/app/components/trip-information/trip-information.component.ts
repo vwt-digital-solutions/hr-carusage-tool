@@ -229,7 +229,11 @@ export class TripInformationComponent implements OnChanges {
       this.tripInfo.driver_info.function_name : '-';
   }
 
-  get canBeChecked(): boolean {
-    return this.nestedValuePipe.transform(this.tripInfo, 'checking_info', 'trip_kind') === null ? true : false;
+  get isChecked(): boolean {
+    return this.nestedValuePipe.transform(this.tripInfo, 'checking_info', 'trip_kind') === null ? false : true;
+  }
+
+  get isExported(): boolean {
+    return this.nestedValuePipe.transform(this.tripInfo, 'exported', 'exported_at') ? true : false;
   }
 }
