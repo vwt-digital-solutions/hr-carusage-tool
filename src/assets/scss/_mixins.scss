@@ -136,3 +136,7 @@ input.form-control:focus {
   outline: none !important;
   box-shadow: none !important;
 }
+
+.dropdown-toggle-split::after {
+  margin-left: 5px;
+}

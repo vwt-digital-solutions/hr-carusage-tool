@@ -359,6 +359,35 @@ export class DashboardComponent {
     }
   }
 
+  checkTrips(): void {
+    this.isError = false;
+    this.isLoading = true;
+    this.gridApi.showLoadingOverlay();
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
+    const params = {
+      ended_after: this.currentWeekStartTimestamp,
+      ended_before: this.currentWeekEndTimestamp
+    };
+
+    this.httpClient.get<Blob>(
+      `${this.env.apiUrl}/check/open-trips`,
+      { headers, params, observe: 'response', responseType: 'blob' as 'json'}).subscribe(
+        response => {
+          if (response.status === 200) {
+            const matches = /(?:filename=)([\w\d-_.]*)/g.exec(
+              response.headers.get('content-disposition'));
+            saveAs(response.body, matches && matches.length > 1 ? matches[1] : null);
+          }
+
+          this.gridApi.hideOverlay();
+          this.isLoading = false;
+        }, error => this.handleError(error)
+      );
+  }
+
   handleError(error: HttpErrorResponse): void {
     console.log(error.error);
     this.isLoading = false;
