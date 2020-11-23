@@ -91,21 +91,21 @@
             <button
               type="button"
               class="btn btn-link dropdown-toggle-split"
-              title="Controleer openstaande ritten"
+              title="Controleer niet geëxporteerde ritten"
               [class.disabled]="isLoading || hasNoRows"
               ngbDropdownToggle>
               <i class="fas fa-tasks"></i>
             </button>
             <div class="dropdown-menu" ngbDropdownMenu>
               <span class="dropdown-item-text text-sm mb-2 pb-2 text-muted border-bottom">
-                Genereer een Excel bestand met alle openstaande ritten van de huidige week
+                Genereer een Excel bestand met alle niet-geëxporteerde ritten van de huidige week
               </span>
               <button
                 type="button"
                 class="btn-sm"
                 (click)="checkTrips()"
                 ngbDropdownItem >
-                Controleer openstaande ritten
+                Controleer niet-geëxporteerde ritten
               </button>
             </div>
           </div>

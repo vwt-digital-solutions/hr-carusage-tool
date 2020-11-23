@@ -363,7 +363,7 @@ export class DashboardComponent {
   }
 
   checkTrips(): void {
-    const toastTitle = 'Open ritten';
+    const toastTitle = 'Niet geëxporteerde ritten';
     this.isError = false;
     this.isLoading = true;
     this.gridApi.showLoadingOverlay();
@@ -386,7 +386,7 @@ export class DashboardComponent {
             saveAs(response.body, matches && matches.length > 1 ? matches[1] : null);
           } else {
             this.toastService.show(
-              'Er zijn geen openstaande ritten voor de actieve week', toastTitle,
+              'Er zijn geen niet-geëxporteerde ritten voor de actieve week', toastTitle,
               { classname: 'toast-success' });
           }
 
