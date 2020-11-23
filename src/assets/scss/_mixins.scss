@@ -120,6 +120,24 @@ $breakpoint-desktop-big: 1800px;
   background-color: $gray;
 }
 
+.toast {
+  background-color: $blue-light; color: $blue-light-text;
+  .toast-header { background-color: $blue-light-hover !important; color: $blue-light-text;}
+}
+.toast.toast-success {
+  background-color: $green; color: $white;
+  .toast-header { background-color: $green-hover !important; color: $white;}
+}
+.toast.toast-danger {
+  background-color: $red; color: $white;
+  .toast-header { background-color: $red-hover !important; color: $white;}
+}
+.toast.toast-warning {
+  background-color: $orange; color: $white;
+  .toast-header { background-color: $orange-hover !important; color: $white;}
+}
+
+
 .alert.alert-sm {
   font-size: 80%;
   padding: 10px 15px;

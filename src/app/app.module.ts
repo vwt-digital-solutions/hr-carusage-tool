@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { LicensePlatePipe } from './pipes/license-plate.pipe';
 import { NestedValuePipe } from './pipes/nested-value.pipe';
 import { TripKindPipe } from './pipes/trip-kind.pipe';
+import { TimeDifferencePipe } from './pipes/time-difference.pipe';
 
 import { AgGridModule } from 'ag-grid-angular';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
@@ -29,6 +30,7 @@ import { LoginComponent } from './components/login/login.component';
 import { ApproveModalComponent } from './components/approve-modal/approve-modal.component';
 import { AuditModalComponent } from './components/audit-modal/audit-modal.component';
 import { FrequentOffendersComponent } from './components/frequent-offenders/frequent-offenders.component';
+import { ToastComponent } from './components/toast/toast.component';
 
 @NgModule({
   declarations: [
@@ -42,8 +44,10 @@ import { FrequentOffendersComponent } from './components/frequent-offenders/freq
     LoginComponent,
     ApproveModalComponent,
     AuditModalComponent,
+    ToastComponent,
     NestedValuePipe,
     TripKindPipe,
+    TimeDifferencePipe,
     FrequentOffendersComponent
   ],
   imports: [
@@ -60,6 +64,7 @@ import { FrequentOffendersComponent } from './components/frequent-offenders/freq
   ],
   exports: [
     LicensePlatePipe,
+    TimeDifferencePipe,
     PageNotFoundComponent,
     PageNotAuthorizedComponent
   ],

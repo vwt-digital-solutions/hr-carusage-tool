@@ -3,9 +3,10 @@ import { Component } from '@angular/core';
 import { AgGridEvent, ColumnApi, GridApi, GridOptions, ValueFormatterParams } from 'ag-grid-community';
 
 import { LicensePlatePipe } from 'src/app/pipes/license-plate.pipe';
+import { FrequentOffendersService } from 'src/app/services/frequent-offenders.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 import { agGridLocaleNL } from 'src/assets/locale/locale.nl';
-import { FrequentOffendersService } from './frequent-offenders.service';
 
 @Component({
   selector: 'app-frequent-offenders',
@@ -25,7 +26,8 @@ export class FrequentOffendersComponent {
 
   constructor(
     private licensePlatePipe: LicensePlatePipe,
-    private offendersService: FrequentOffendersService
+    private offendersService: FrequentOffendersService,
+    private toastService: ToastService
   ) {
     this.gridOptions = {
       defaultColDef: {
@@ -80,13 +82,26 @@ export class FrequentOffendersComponent {
   onGridReady(event: AgGridEvent): void {
     this.gridApi = event.api;
     this.gridColumnApi = event.columnApi;
+    this.gridApi.showLoadingOverlay();
+
+    if (!this.offendersService.isInit) {
+      this.toastService.show(
+        'Een bestuurder wordt "veelpleger" genoemd als hij of zij in twee maanden drie maal een privérit rijd',
+        'Veelplegers', {delay: 10000});
+    }
 
     this.gridApi.addEventListener('rowDataChanged', this.rowDataChangedHandler);
-    this.gridApi.setRowData(this.offendersService.getFrequentOffenders());
+    this.offendersService.retrieveOffendersData();
+    this.offendersService.offenders.subscribe(
+      data => {
+        if (data) {
+          this.gridApi.setRowData(data);
+          this.gridColumnApi.autoSizeAllColumns();
 
-    this.gridColumnApi.autoSizeAllColumns();
-
-    this.gridApi.hideOverlay();
-    this.isLoading = false;
+          this.gridApi.hideOverlay();
+          this.isLoading = false;
+        }
+      }
+    );
   }
 }

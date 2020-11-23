@@ -32,85 +32,83 @@
           class="custom-filters d-flex w-100"
           aria-label="pagination"
           [class.error]="isError">
-          <ng-container *ngIf="!isError; else retrieveError">
-            <div class="btn-group" role="group">
-              <button
-                type="button" class="btn btn-link"
-                [class.active]="activeFilter === null"
-                [class.disabled]="isLoading || hasNoRows"
-                (click)="toggleFilter(null)">
-                Alle ritten
-              </button>
-              <button
-                type="button" class="btn btn-link"
-                [class.active]="activeFilter === 'checked'"
-                [class.disabled]="isLoading || hasNoRows"
-                (click)="toggleFilter('checked')">
-                Nog te beoordelen ritten
-              </button>
-              <button
-                type="button" class="btn btn-link"
-                [class.active]="activeFilter === 'personal'"
-                [class.disabled]="isLoading || hasNoRows"
-                (click)="toggleFilter('personal')">
-                Privéritten
-              </button>
-              <button
-                type="button" class="btn btn-link"
-                [class.active]="activeFilter === 'work'"
-                [class.disabled]="isLoading || hasNoRows"
-                (click)="toggleFilter('work')">
-                Zakelijke ritten
-              </button>
-            </div>
+          <div class="btn-group" role="group">
+            <button
+              type="button" class="btn btn-link"
+              [class.active]="activeFilter === null"
+              [class.disabled]="isLoading || hasNoRows"
+              (click)="toggleFilter(null)">
+              Alle ritten
+            </button>
+            <button
+              type="button" class="btn btn-link"
+              [class.active]="activeFilter === 'checked'"
+              [class.disabled]="isLoading || hasNoRows"
+              (click)="toggleFilter('checked')">
+              Nog te beoordelen ritten
+            </button>
+            <button
+              type="button" class="btn btn-link"
+              [class.active]="activeFilter === 'personal'"
+              [class.disabled]="isLoading || hasNoRows"
+              (click)="toggleFilter('personal')">
+              Privéritten
+            </button>
+            <button
+              type="button" class="btn btn-link"
+              [class.active]="activeFilter === 'work'"
+              [class.disabled]="isLoading || hasNoRows"
+              (click)="toggleFilter('work')">
+              Zakelijke ritten
+            </button>
+          </div>
 
-            <div *ngIf="isManager" class="btn-group ml-auto" ngbDropdown role="group">
+          <div *ngIf="isManager" class="btn-group ml-auto" ngbDropdown role="group">
+            <button
+              type="button"
+              class="btn btn-link dropdown-toggle-split"
+              title="Week afsluiten en ritten exporteren"
+              [class.disabled]="isLoading || hasNoRows"
+              ngbDropdownToggle>
+              <i class="fas fa-cloud-download-alt"></i>
+            </button>
+            <div class="dropdown-menu" ngbDropdownMenu>
+              <span class="dropdown-item-text text-sm mb-2 pb-2 text-muted border-bottom">
+                Na het afsluiten en exporteren van de huidige week kunnen ritten niet meer aangepast worden. <br />
+                <strong>Dit kan niet ongedaan worden!</strong>
+              </span>
               <button
                 type="button"
-                class="btn btn-link dropdown-toggle-split"
-                title="Week afsluiten en ritten exporteren"
-                [class.disabled]="isLoading || hasNoRows"
-                ngbDropdownToggle>
-                <i class="fas fa-cloud-download-alt"></i>
+                class="btn-sm"
+                (click)="exportTrips()"
+                ngbDropdownItem >
+                Week afsluiten en exporteren
               </button>
-              <div class="dropdown-menu" ngbDropdownMenu>
-                <span class="dropdown-item-text text-sm mb-2 pb-2 text-muted border-bottom">
-                  Na het afsluiten en exporteren van de huidige week kunnen ritten niet meer aangepast worden. <br />
-                  <strong>Dit kan niet ongedaan worden!</strong>
-                </span>
-                <button
-                  type="button"
-                  class="btn-sm"
-                  (click)="exportTrips()"
-                  ngbDropdownItem >
-                  Week afsluiten en exporteren
-                </button>
-              </div>
             </div>
+          </div>
 
-            <div *ngIf="!isManager" class="btn-group ml-auto" ngbDropdown role="group">
+          <div *ngIf="!isManager" class="btn-group ml-auto" ngbDropdown role="group">
+            <button
+              type="button"
+              class="btn btn-link dropdown-toggle-split"
+              title="Controleer openstaande ritten"
+              [class.disabled]="isLoading || hasNoRows"
+              ngbDropdownToggle>
+              <i class="fas fa-tasks"></i>
+            </button>
+            <div class="dropdown-menu" ngbDropdownMenu>
+              <span class="dropdown-item-text text-sm mb-2 pb-2 text-muted border-bottom">
+                Genereer een Excel bestand met alle openstaande ritten van de huidige week
+              </span>
               <button
                 type="button"
-                class="btn btn-link dropdown-toggle-split"
-                title="Controleer openstaande ritten"
-                [class.disabled]="isLoading || hasNoRows"
-                ngbDropdownToggle>
-                <i class="fas fa-tasks"></i>
+                class="btn-sm"
+                (click)="checkTrips()"
+                ngbDropdownItem >
+                Controleer openstaande ritten
               </button>
-              <div class="dropdown-menu" ngbDropdownMenu>
-                <span class="dropdown-item-text text-sm mb-2 pb-2 text-muted border-bottom">
-                  Genereer een Excel bestand met alle openstaande ritten van de huidige week
-                </span>
-                <button
-                  type="button"
-                  class="btn-sm"
-                  (click)="checkTrips()"
-                  ngbDropdownItem >
-                  Controleer openstaande ritten
-                </button>
-              </div>
             </div>
-          </ng-container>
+          </div>
         </div>
       </div>
 
@@ -133,9 +131,3 @@
     </div>
   </div>
 </div>
-
-<ng-template #retrieveError>
-  <div class="alert alert-danger alert-sm m-0" role="alert">
-    <p><i class="fas fa-exclamation-circle"></i> {{ requestAlert || 'Er is een fout opgetreden, probeer het later nog een keer' }}</p>
-  </div>
-</ng-template>

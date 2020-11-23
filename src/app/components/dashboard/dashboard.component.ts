@@ -13,6 +13,7 @@ import { saveAs } from 'file-saver';
 
 import { agGridLocaleNL } from 'src/assets/locale/locale.nl';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,7 +26,7 @@ export class DashboardComponent {
   private gridApi: GridApi;
   private gridColumnApi: ColumnApi;
 
-  private isManager = true;
+  public isManager = true;
 
   public gridOptions: GridOptions;
   public overlayNoRowsTemplate: string;
@@ -49,6 +50,7 @@ export class DashboardComponent {
     private router: Router,
     private env: EnvService,
     private httpClient: HttpClient,
+    private toastService: ToastService,
     private datePipe: DatePipe,
     private licensePlatePipe: LicensePlatePipe
   ) {
@@ -332,6 +334,7 @@ export class DashboardComponent {
     if (confirm(
         'Weet je zeker dat je de huidige week wilt afsluiten en exporteren? ' +
         'Dit kan niet ongedaan worden gemaakt!')) {
+      const toastTitle = 'Ritten exporteren';
       this.isError = false;
       this.isLoading = true;
       this.gridApi.showLoadingOverlay();
@@ -354,12 +357,13 @@ export class DashboardComponent {
 
             this.gridApi.hideOverlay();
             this.isLoading = false;
-          }, error => this.handleError(error)
+          }, error => this.handleError(error, toastTitle)
         );
     }
   }
 
   checkTrips(): void {
+    const toastTitle = 'Open ritten';
     this.isError = false;
     this.isLoading = true;
     this.gridApi.showLoadingOverlay();
@@ -380,20 +384,26 @@ export class DashboardComponent {
             const matches = /(?:filename=)([\w\d-_.]*)/g.exec(
               response.headers.get('content-disposition'));
             saveAs(response.body, matches && matches.length > 1 ? matches[1] : null);
+          } else {
+            this.toastService.show(
+              'Er zijn geen openstaande ritten voor de actieve week', toastTitle,
+              { classname: 'toast-success' });
           }
 
           this.gridApi.hideOverlay();
           this.isLoading = false;
-        }, error => this.handleError(error)
+        }, error => this.handleError(error, toastTitle)
       );
   }
 
-  handleError(error: HttpErrorResponse): void {
-    console.log(error.error);
+  handleError(error: HttpErrorResponse, title: string): void {
+    this.toastService.show(
+      'detail' in error.error ? error.error['detail'] : error.error, title,
+      { classname: 'toast-danger'});
+
     this.isLoading = false;
     this.isError = true;
     this.gridApi.hideOverlay();
-    this.errorMessage = 'detail' in error.error ? error.error['detail'] : null;
   }
 
   toggleFilter(name: string): void {

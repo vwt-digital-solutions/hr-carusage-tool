@@ -40,10 +40,6 @@
           </button>
         </div>
 
-        <div *ngIf="failedResponse" class="alert alert-danger m-0 ml-4" role="alert">
-          <small>Er is iets fout gegaan tijdens het beoordelen, probeer het later nog een keer.</small>
-        </div>
-
         <ng-container>
           <div class="btn-group ml-4">
             <button
@@ -87,8 +83,6 @@
             </div>
           </div>
         </ng-container>
-
-        <span *ngIf="autoSelect" class="badge badge-warning ml-4"><i class="fas fa-spinner fa-spin mr-1"></i> De volgende niet beoordeelde rit wordt geselecteerd</span>
 
         <button
           class="btn btn-outline-info btn-sm ml-auto"
