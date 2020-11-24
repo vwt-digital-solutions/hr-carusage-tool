@@ -13,7 +13,7 @@
         <h1>Inloggen!</h1>
         <p class="lead">U wordt doorgestuurd naar de inlog pagina. Mocht dit niet werken, klik hier onder om in te loggen.</p>
         <button
-          (click)="login()"
+          (click)="this.authService.login()"
           type="button"
           class="btn btn-primary mt-4" >
           Inloggen

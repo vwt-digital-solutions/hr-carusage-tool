@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { OAuthService } from 'angular-oauth2-oidc';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-not-authorized',
@@ -11,17 +11,13 @@ import { OAuthService } from 'angular-oauth2-oidc';
 
 export class PageNotAuthorizedComponent implements OnInit {
   constructor(
-    private oauthService: OAuthService,
-    private router: Router
+    private router: Router,
+    public authService: AuthService
   ) { }
 
   ngOnInit(): void {
-    if (!this.oauthService.hasValidAccessToken()) {
+    if (!this.authService.hasValidAccessToken) {
       this.router.navigate(['login']);
     }
-  }
-
-  navigateLogin(): void {
-    this.oauthService.logOut();
   }
 }

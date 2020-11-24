@@ -5,7 +5,7 @@ nav.sidenav {
   height: 100%;
   width: 75px;
   position: fixed;
-  z-index: 1;
+  z-index: 100;
   top: 0;
   left: 0;
   background-color: $white;
@@ -42,25 +42,23 @@ nav.sidenav {
 
     li {
       width: 100%;
-      padding: 10px;
-      padding-left: 25px;
-      box-sizing: border-box;
-      border-right: 4px solid transparent;
-      border-left: 4px solid transparent;
-      background-color: $white;
-
-      -webkit-transition: background-color .2s ease-in;
-      -moz-transition: background-color .2s ease-in;
-      -o-transition: background-color .2s ease-in;
-      transition: background-color .2s ease-in;
+      display: table;
 
       a {
+        display: table;
+        width: 100%;
+        padding: 10px;
+        padding-left: 25px;
+        box-sizing: border-box;
+        border-right: 4px solid transparent;
+        border-left: 4px solid transparent;
+        background-color: $white;
         color: $primary;
 
-        -webkit-transition: color .2s ease-in;
-        -moz-transition: color .2s ease-in;
-        -o-transition: color .2s ease-in;
-        transition: color .2s ease-in;
+        -webkit-transition: background-color .2s ease-in, color .2s ease-in;
+        -moz-transition: background-color .2s ease-in, color .2s ease-in;
+        -o-transition: background-color .2s ease-in, color .2s ease-in;
+        transition: background-color .2s ease-in, color .2s ease-in;
       }
 
       span {
@@ -68,14 +66,14 @@ nav.sidenav {
       }
 
       &:hover {
-        background-color: $primary;
         cursor: pointer;
         a {
+          background-color: $primary;
           color: $white;
           text-decoration: none;
         }
       }
-      &.active {
+      &.active a {
         border-left-color: $primary;
       }
     }

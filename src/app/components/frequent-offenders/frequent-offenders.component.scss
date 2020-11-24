@@ -1,0 +1,10 @@
+@import "~src/assets/scss/constants";
+@import "~src/assets/scss/mixins";
+
+.offenders-content {
+  position: relative;
+
+  .ag-grid {
+    height: calc(100% - 50px);
+  }
+}

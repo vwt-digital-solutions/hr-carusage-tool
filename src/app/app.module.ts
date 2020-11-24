@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { LicensePlatePipe } from './pipes/license-plate.pipe';
 import { NestedValuePipe } from './pipes/nested-value.pipe';
 import { TripKindPipe } from './pipes/trip-kind.pipe';
+import { TimeDifferencePipe } from './pipes/time-difference.pipe';
 
 import { AgGridModule } from 'ag-grid-angular';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
@@ -16,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { OAuthModule, OAuthService } from 'angular-oauth2-oidc';
 import { AuthGuard } from './services/auth/auth.guard';
 import { TokenInterceptor } from './services/auth/token.interceptor';
+import { BlobErrorHttpInterceptor } from './services/blob-error-http.interceptor';
 import { EnvServiceProvider } from './services/env/env.service.provider';
 
 import { AppComponent } from './app.component';
@@ -27,6 +29,8 @@ import { TripInformationComponent } from './components/trip-information/trip-inf
 import { LoginComponent } from './components/login/login.component';
 import { ApproveModalComponent } from './components/approve-modal/approve-modal.component';
 import { AuditModalComponent } from './components/audit-modal/audit-modal.component';
+import { FrequentOffendersComponent } from './components/frequent-offenders/frequent-offenders.component';
+import { ToastComponent } from './components/toast/toast.component';
 
 @NgModule({
   declarations: [
@@ -40,8 +44,11 @@ import { AuditModalComponent } from './components/audit-modal/audit-modal.compon
     LoginComponent,
     ApproveModalComponent,
     AuditModalComponent,
+    ToastComponent,
     NestedValuePipe,
-    TripKindPipe
+    TripKindPipe,
+    TimeDifferencePipe,
+    FrequentOffendersComponent
   ],
   imports: [
     BrowserModule,
@@ -57,6 +64,7 @@ import { AuditModalComponent } from './components/audit-modal/audit-modal.compon
   ],
   exports: [
     LicensePlatePipe,
+    TimeDifferencePipe,
     PageNotFoundComponent,
     PageNotAuthorizedComponent
   ],
@@ -72,7 +80,12 @@ import { AuditModalComponent } from './components/audit-modal/audit-modal.compon
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
-    }
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: BlobErrorHttpInterceptor,
+      multi: true
+    },
   ],
   bootstrap: [AppComponent]
 })

@@ -1,0 +1,17 @@
+<div class="container-fluid offenders-content h-100">
+  <div class="row h-100">
+    <div class="col-12 p-4">
+      <div class="mb-2">
+        <h1 class="mb-1">Veelplegers</h1>
+      </div>
+
+      <ag-grid-angular
+        class="ag-grid ag-theme-balham w-100 p-0"
+        [gridOptions]="gridOptions"
+        [overlayNoRowsTemplate]="overlayNoRowsTemplate"
+        (gridReady)="onGridReady($event)"
+        (gridSizeChanged)="onGridSizeChanged($event)" >
+      </ag-grid-angular>
+    </div>
+  </div>
+</div>

@@ -13,7 +13,7 @@
         <h1>Onbevoegd!</h1>
         <p class="lead">U heeft onvoldoende rechten om deze pagina te bekijken. Log in met een ander account om het nog een keer te proberen.</p>
         <button
-          (click)="navigateLogin()"
+          (click)="this.authService.logout()"
           type="button"
           class="btn btn-danger mt-4" >
           Log uit

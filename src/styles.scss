@@ -104,9 +104,15 @@ h1, h2, h3, h4, h5, h6, p, i, small {
 .ag-theme-balham {
   --ag-border-color: #e5e5e5;               // $gray
 
-  .ag-row:hover {
-    cursor: pointer;
+  .ag-row {
+    &.ag-row-exported {
+      background-color: rgb(245, 245, 245);
+    }
+    &:hover {
+      cursor: pointer;
+    }
   }
+
   span.ag-header-icon.ag-header-label-icon.ag-sort-order {
     color: #a5a5a5;
   }
@@ -128,6 +134,10 @@ h1, h2, h3, h4, h5, h6, p, i, small {
   &.bs-tooltip-left .arrow::before {
     border-left-color: $gray-dark-hover;
   }
+}
+
+.toast > .toast-body {
+  padding: 0;
 }
 
 .license-plate {

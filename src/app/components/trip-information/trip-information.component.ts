@@ -1,8 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { EnvService } from 'src/app/services/env/env.service';
-
+import { ToastService } from 'src/app/services/toast.service';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ApproveModalComponent } from '../approve-modal/approve-modal.component';
@@ -28,7 +28,7 @@ export class TripInformationComponent implements OnChanges {
   @ViewChild('descriptionInput') descriptionInput: ElementRef;
 
   @Input() tripInfo: Trip;
-  @Input() indexInfo: {current: number, min: number, max: number};
+  @Input() indexInfo: {current: number, min: number, max: number, total: number};
 
   @Output() indexChange = new EventEmitter<{index: number, trip: Trip, approving: boolean}>();
 
@@ -63,13 +63,13 @@ export class TripInformationComponent implements OnChanges {
   };
 
   public failedResponse = false;
-  public autoSelect = false;
 
   constructor(
     private env: EnvService,
     private httpClient: HttpClient,
     private modalService: NgbModal,
-    private nestedValuePipe: NestedValuePipe
+    private nestedValuePipe: NestedValuePipe,
+    private toastService: ToastService
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -110,24 +110,29 @@ export class TripInformationComponent implements OnChanges {
         description: result.value ? result.value : null
       };
       this.httpClient.put(
-        `${this.env.apiUrl}/trips/${this.tripInfo.id}`, requestBody).subscribe(
+        `${this.env.apiUrl}/data/trips/${this.tripInfo.id}`, requestBody).subscribe(
           (response: Trip) => this.handleCheckResponse(response),
-          error => {
-            console.log(error);
-            this.failedResponse = true;
-          });
+          error => this.handleError(error));
     }
   }
 
   handleCheckResponse(response: Trip): void {
-    this.autoSelect = true;
-    this.failedResponse = false;
     this.tripInfo = response;
 
+    this.toastService.show(
+      'De rit is succesvol beoordeeld. De volgende niet beoordeelde rit wordt geselecteerd', 'Rit beoordelen',
+      { classname: 'toast-success', delay: 2000});
+
     setTimeout(() => {
-      this.autoSelect = false;
       this.indexChange.emit({index: 1, trip: this.tripInfo, approving: true});
     }, 2000);
+  }
+
+  handleError(error: HttpErrorResponse): void {
+    console.log(error);
+    this.toastService.show(
+      'Er is iets fout gegaan tijdens het beoordelen, probeer het later nog een keer', 'Rit beoordelen',
+      { classname: 'toast-danger'});
   }
 
   onMapReady(map: Map): void {
@@ -229,7 +234,11 @@ export class TripInformationComponent implements OnChanges {
       this.tripInfo.driver_info.function_name : '-';
   }
 
-  get canBeChecked(): boolean {
-    return this.nestedValuePipe.transform(this.tripInfo, 'checking_info', 'trip_kind') === null ? true : false;
+  get isChecked(): boolean {
+    return this.nestedValuePipe.transform(this.tripInfo, 'checking_info', 'trip_kind') === null ? false : true;
+  }
+
+  get isExported(): boolean {
+    return this.nestedValuePipe.transform(this.tripInfo, 'exported', 'exported_at') ? true : false;
   }
 }

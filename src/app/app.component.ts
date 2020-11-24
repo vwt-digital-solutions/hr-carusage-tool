@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localeNl from '@angular/common/locales/nl';
 
-import { OAuthService, AuthConfig } from 'angular-oauth2-oidc';
 import { EnvService } from './services/env/env.service';
 
 import { LicenseManager } from 'ag-grid-enterprise';
 
 import * as moment from 'moment';
+import { AuthService } from './services/auth/auth.service';
 
 registerLocaleData(localeNl);
 
@@ -18,19 +18,9 @@ registerLocaleData(localeNl);
 export class AppComponent {
   constructor(
     private env: EnvService,
-    private oauthService: OAuthService
+    private authService: AuthService
   ) {
-    const config = new AuthConfig();
-    config.loginUrl = env.loginUrl;
-    config.redirectUri = window.location.origin + '/login';
-    config.logoutUrl = env.logoutUrl;
-    config.clientId = env.clientId;
-    config.scope = env.scope;
-    config.issuer = env.issuer;
-    config.silentRefreshRedirectUri = window.location.origin + '/silent-refresh.html';
-    this.oauthService.configure(config);
-    this.oauthService.setupAutomaticSilentRefresh();
-    this.oauthService.tryLogin({});
+    this.authService.initAuth();
 
     moment.locale('nl');
     LicenseManager.setLicenseKey(env.agGridKey);
