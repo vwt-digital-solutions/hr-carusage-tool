@@ -28,6 +28,8 @@
             class="btn btn-success btn-sm m-0 px-3"
             type="button"
             title="Markeren als zakelijke rit"
+            placement="auto"
+            ngbTooltip="Markeren als zakelijke rit"
             (click)="openModalApprove('work', true)">
             <i class="fas fa-briefcase"></i>
           </button>
@@ -35,12 +37,14 @@
             class="btn btn-danger btn-sm m-0 px-3"
             type="button"
             title="Markeren als privérit"
+            placement="auto"
+            ngbTooltip="Markeren als privérit"
             (click)="openModalApprove('personal', true)">
             <i class="fas fa-user"></i>
           </button>
         </div>
 
-        <ng-container>
+        <ng-container *ngIf="isChecked">
           <div class="btn-group ml-4">
             <button
               type="button" class="btn btn-sm description"
@@ -52,7 +56,7 @@
               {{ this.tripInfo.checking_info.trip_kind === 'work' ? 'Zakelijke rit' : 'Privérit' }}
               <i *ngIf="this.tripInfo.checking_info.description" class="fas fa-comment ml-2"></i>
             </button>
-            <div *ngIf="isChecked && !isExported" class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
+            <div *ngIf="!isExported" class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
               <button
                 type="button"
                 class="btn btn-sm dropdown-toggle-split"
