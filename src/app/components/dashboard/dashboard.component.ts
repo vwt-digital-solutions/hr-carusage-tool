@@ -352,9 +352,15 @@ export class DashboardComponent {
         `${this.env.apiUrl}/export/trips`,
         { headers, params, observe: 'response', responseType: 'blob' as 'json'}).subscribe(
           response => {
-            const matches = /(?:filename=)([\w\d-_.]*)/g.exec(
-              response.headers.get('content-disposition'));
-            saveAs(response.body, matches && matches.length > 1 ? matches[1] : null);
+            if (response.status === 200) {
+              const matches = /(?:filename=)([\w\d-_.]*)/g.exec(
+                response.headers.get('content-disposition'));
+              saveAs(response.body, matches && matches.length > 1 ? matches[1] : null);
+            } else {
+              this.toastService.show(
+                'Er zijn geen ritten om te exporteren voor de actieve week', toastTitle,
+                { classname: 'toast-warning' });
+            }
 
             this.gridApi.hideOverlay();
             this.isLoading = false;
@@ -389,7 +395,7 @@ export class DashboardComponent {
           } else {
             this.toastService.show(
               'Er zijn geen niet-geëxporteerde ritten voor de actieve week', toastTitle,
-              { classname: 'toast-success' });
+              { classname: 'toast-warning' });
           }
 
           this.gridApi.hideOverlay();
