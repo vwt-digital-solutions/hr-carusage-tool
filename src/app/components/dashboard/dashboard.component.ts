@@ -337,6 +337,7 @@ export class DashboardComponent {
       const toastTitle = 'Ritten exporteren';
       this.isError = false;
       this.isLoading = true;
+      this.gridApi.deselectAll();
       this.gridApi.showLoadingOverlay();
 
       const headers = new HttpHeaders({
@@ -351,9 +352,15 @@ export class DashboardComponent {
         `${this.env.apiUrl}/export/trips`,
         { headers, params, observe: 'response', responseType: 'blob' as 'json'}).subscribe(
           response => {
-            const matches = /(?:filename=)([\w\d-_.]*)/g.exec(
-              response.headers.get('content-disposition'));
-            saveAs(response.body, matches && matches.length > 1 ? matches[1] : null);
+            if (response.status === 200) {
+              const matches = /(?:filename=)([\w\d-_.]*)/g.exec(
+                response.headers.get('content-disposition'));
+              saveAs(response.body, matches && matches.length > 1 ? matches[1] : null);
+            } else {
+              this.toastService.show(
+                'Er zijn geen ritten om te exporteren voor de actieve week', toastTitle,
+                { classname: 'toast-warning' });
+            }
 
             this.gridApi.hideOverlay();
             this.isLoading = false;
@@ -366,6 +373,7 @@ export class DashboardComponent {
     const toastTitle = 'Niet geëxporteerde ritten';
     this.isError = false;
     this.isLoading = true;
+    this.gridApi.deselectAll();
     this.gridApi.showLoadingOverlay();
 
     const headers = new HttpHeaders({
@@ -387,7 +395,7 @@ export class DashboardComponent {
           } else {
             this.toastService.show(
               'Er zijn geen niet-geëxporteerde ritten voor de actieve week', toastTitle,
-              { classname: 'toast-success' });
+              { classname: 'toast-warning' });
           }
 
           this.gridApi.hideOverlay();
@@ -397,9 +405,14 @@ export class DashboardComponent {
   }
 
   handleError(error: HttpErrorResponse, title: string): void {
-    this.toastService.show(
-      'detail' in error.error ? error.error['detail'] : error.error, title,
-      { classname: 'toast-danger'});
+    if (error.status === 409) {
+      this.toastService.show(
+        'Niet elke rit is gecontroleerd', title, { classname: 'toast-warning'});
+    } else if ('detail' in error.error) {
+      this.toastService.show(error.error['detail'], title, { classname: 'toast-danger'});
+    } else {
+      this.toastService.show(error.error, title, { classname: 'toast-danger'});
+    }
 
     this.isLoading = false;
     this.isError = true;
@@ -429,6 +442,7 @@ export class DashboardComponent {
       model = null;
     }
 
+    this.gridApi.deselectAll();
     this.gridApi.setFilterModel(model);
   }
 

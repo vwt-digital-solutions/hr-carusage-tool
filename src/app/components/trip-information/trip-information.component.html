@@ -17,7 +17,7 @@
             title="Volgende rit"
             placement="auto"
             ngbTooltip="Volgende rit"
-            [class.disabled]="indexInfo.current === indexInfo.max"
+            [class.disabled]="indexInfo.current === indexInfo.max || indexInfo.max === 1"
             (click)="navigatePage(1)">
             <i class="fas fa-chevron-right"></i>
           </label>
