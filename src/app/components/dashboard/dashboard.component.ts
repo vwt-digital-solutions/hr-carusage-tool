@@ -405,9 +405,14 @@ export class DashboardComponent {
   }
 
   handleError(error: HttpErrorResponse, title: string): void {
-    this.toastService.show(
-      'detail' in error.error ? error.error['detail'] : error.error, title,
-      { classname: 'toast-danger'});
+    if (error.status === 409) {
+      this.toastService.show(
+        'Niet elke rit is gecontroleerd', title, { classname: 'toast-warning'});
+    } else if ('detail' in error.error) {
+      this.toastService.show(error.error['detail'], title, { classname: 'toast-danger'});
+    } else {
+      this.toastService.show(error.error, title, { classname: 'toast-danger'});
+    }
 
     this.isLoading = false;
     this.isError = true;
