@@ -337,6 +337,7 @@ export class DashboardComponent {
       const toastTitle = 'Ritten exporteren';
       this.isError = false;
       this.isLoading = true;
+      this.gridApi.deselectAll();
       this.gridApi.showLoadingOverlay();
 
       const headers = new HttpHeaders({
@@ -366,6 +367,7 @@ export class DashboardComponent {
     const toastTitle = 'Niet geëxporteerde ritten';
     this.isError = false;
     this.isLoading = true;
+    this.gridApi.deselectAll();
     this.gridApi.showLoadingOverlay();
 
     const headers = new HttpHeaders({
@@ -429,6 +431,7 @@ export class DashboardComponent {
       model = null;
     }
 
+    this.gridApi.deselectAll();
     this.gridApi.setFilterModel(model);
   }
 
