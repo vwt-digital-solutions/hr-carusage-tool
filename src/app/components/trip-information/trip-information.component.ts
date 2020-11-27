@@ -220,7 +220,7 @@ export class TripInformationComponent implements OnChanges {
     const driverInfo = this.tripInfo.driver_info;
     let driverName = '';
 
-    for (const value of [driverInfo.initial, driverInfo.prefix, driverInfo.last_name]) {
+    for (const value of [driverInfo.driver_first_name, driverInfo.driver_prefix_name, driverInfo.driver_last_name]) {
       if (value !== null) {
         driverName = `${driverName} ${value}`;
       }
@@ -229,9 +229,9 @@ export class TripInformationComponent implements OnChanges {
     return driverName !== '' ? driverName : 'Onbekend';
   }
 
-  get driverFunction(): string {
-    return this.tripInfo.driver_info && this.tripInfo.driver_info.function_name ?
-      this.tripInfo.driver_info.function_name : '-';
+  get driverDepartment(): string {
+    return this.tripInfo.driver_info && this.tripInfo.driver_info.department_name ?
+      this.tripInfo.driver_info.department_name : '-';
   }
 
   get isChecked(): boolean {

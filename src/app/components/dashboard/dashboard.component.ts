@@ -150,7 +150,7 @@ export class DashboardComponent {
         },
         {
           headerName: 'Afdeling',
-          field: 'driver_info.department.name'
+          field: 'department.department_name'
         }
       ],
       domLayout: 'normal',
