@@ -234,6 +234,16 @@ export class TripInformationComponent implements OnChanges {
       this.tripInfo.driver_info.department_name : '-';
   }
 
+  get driverCarName(): string {
+    return this.tripInfo.driver_info && this.tripInfo.driver_info.car_brand_name ?
+      this.tripInfo.driver_info.car_brand_name : 'Onbekend';
+  }
+
+  get driverCarModel(): string {
+    return this.tripInfo.driver_info && this.tripInfo.driver_info.car_brand_type ?
+      this.tripInfo.driver_info.car_brand_type : '-';
+  }
+
   get isChecked(): boolean {
     return this.nestedValuePipe.transform(this.tripInfo, 'checking_info', 'trip_kind') === null ? false : true;
   }
