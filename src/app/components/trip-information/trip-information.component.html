@@ -164,6 +164,16 @@
       </div>
     </div>
 
+    <div *ngIf="driverOffends" class="col-12 col-md-6 col-xl-4 float-left float-xl-none">
+      <div class="card trip-info-content">
+        <div class="card-body">
+          <small class="form-text text-muted">Overtredingen</small>
+          <h3>{{ driverOffends['trips'].length }}</h3>
+          <h5 class="text-uppercase">In de laatste 8 weken</h5>
+        </div>
+      </div>
+    </div>
+
     <div class="col-12 col-md-6 col-xl-4 float-left float-xl-none">
       <div class="card trip-info-content">
         <div class="card-body">

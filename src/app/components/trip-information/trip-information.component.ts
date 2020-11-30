@@ -3,6 +3,7 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleCh
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { EnvService } from 'src/app/services/env/env.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { FrequentOffendersService } from 'src/app/services/frequent-offenders.service';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ApproveModalComponent } from '../approve-modal/approve-modal.component';
@@ -64,13 +65,15 @@ export class TripInformationComponent implements OnChanges {
   };
 
   public failedResponse = false;
+  public driverOffends = null;
 
   constructor(
     private env: EnvService,
     private httpClient: HttpClient,
     private modalService: NgbModal,
     private nestedValuePipe: NestedValuePipe,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private offendersService: FrequentOffendersService
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -78,6 +81,7 @@ export class TripInformationComponent implements OnChanges {
       this.resetMap();
 
       if (changes.tripInfo['currentValue'] && changes.tripInfo.currentValue['locations']) {
+        this.setDriverOffends();
         this.initMapLocations(changes.tripInfo.currentValue);
       }
     } else {
@@ -243,6 +247,19 @@ export class TripInformationComponent implements OnChanges {
   get driverCarModel(): string {
     return this.tripInfo.driver_info && this.tripInfo.driver_info.car_brand_type ?
       this.tripInfo.driver_info.car_brand_type : '-';
+  }
+
+  setDriverOffends(): void {
+    this.offendersService.offenders.subscribe(
+      data => {
+        const driverEmployeeNumber = this.nestedValuePipe.transform(this.tripInfo, 'driver_info', 'driver_employee_number');
+        for (const item of data) {
+          if (this.nestedValuePipe.transform(item, 'driver_info', 'driver_employee_number') === driverEmployeeNumber) {
+            this.driverOffends = item;
+          }
+        }
+      }
+    );
   }
 
   get isChecked(): boolean {

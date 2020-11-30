@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
 import { Trip } from 'src/app/models/trip.model';
+import { FrequentOffender } from 'src/app/models/frequent-offenders.model';
 import { EnvService } from 'src/app/services/env/env.service';
 
 import { GridOptions, AgGridEvent, ValueFormatterParams, RowNode, ValueGetterParams, GridApi, ColumnApi } from 'ag-grid-community';
@@ -13,6 +14,7 @@ import { saveAs } from 'file-saver';
 
 import { agGridLocaleNL } from 'src/assets/locale/locale.nl';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FrequentOffendersService } from 'src/app/services/frequent-offenders.service';
 import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
@@ -31,6 +33,8 @@ export class DashboardComponent {
   public gridOptions: GridOptions;
   public overlayNoRowsTemplate: string;
   public locations: Array<Trip> = [];
+
+  public frequentOffenders: Array<FrequentOffender> = [];
 
   public activeTrip: Trip = null;
   public activeIndexInfo = {current: null, min: 0, max: null, total: null};
@@ -51,6 +55,7 @@ export class DashboardComponent {
     private env: EnvService,
     private httpClient: HttpClient,
     private toastService: ToastService,
+    private offendersService: FrequentOffendersService,
     private datePipe: DatePipe,
     private licensePlatePipe: LicensePlatePipe
   ) {
@@ -232,6 +237,7 @@ export class DashboardComponent {
     this.gridColumnApi = event.columnApi;
 
     this.gridApi.addEventListener('rowDataChanged', this.rowDataChangedHandler);
+    this.offendersService.retrieveOffendersData();
     this.retrieveTripData();
   }
 
@@ -359,7 +365,7 @@ export class DashboardComponent {
             } else {
               this.toastService.show(
                 'Er zijn geen ritten om te exporteren voor de actieve week', toastTitle,
-                { classname: 'toast-warning' });
+                { classname: 'toast-info' });
             }
 
             this.gridApi.hideOverlay();
@@ -395,7 +401,7 @@ export class DashboardComponent {
           } else {
             this.toastService.show(
               'Er zijn geen niet-geëxporteerde ritten voor de actieve week', toastTitle,
-              { classname: 'toast-warning' });
+              { classname: 'toast-info' });
           }
 
           this.gridApi.hideOverlay();
@@ -405,7 +411,7 @@ export class DashboardComponent {
   }
 
   handleError(error: HttpErrorResponse, title: string): void {
-    if (error.status === 409) {
+    if (error.status === 405) {
       this.toastService.show(
         'Niet elke rit is gecontroleerd', title, { classname: 'toast-warning'});
     } else if ('detail' in error.error) {
