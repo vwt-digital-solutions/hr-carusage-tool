@@ -37,19 +37,40 @@ export class FrequentOffendersComponent {
       },
       columnDefs: [
         {
-          headerName: 'Achternaam',
-          field: 'offender_info.last_name'
+          headerName: 'Bestuurder',
+          children: [
+            {
+              headerName: 'Achternaam',
+              field: 'driver_info.driver_last_name'
+            },
+            {
+              headerName: 'Voornaam',
+              field: 'driver_info.driver_first_name'
+            },
+            {
+              headerName: 'Personeelsnummer',
+              field: 'driver_info.driver_employee_number'
+            }
+          ]
         },
         {
           headerName: 'Afdeling',
-          field: 'offender_info.department_name'
+          children: [
+            {
+              headerName: 'Naam',
+              field: 'department.department_name'
+            },
+            {
+              headerName: 'Nummer',
+              field: 'department.department_id'
+            }
+          ]
         },
         {
-          headerName: 'Kenteken',
-          field: 'license',
+          headerName: 'Totale overtredingen',
+          field: 'trips',
           cellRenderer: (params: ValueFormatterParams): string => {
-            const licensePlate = this.licensePlatePipe.transform(params.value);
-            return `<span class="license-plate license-nl">${licensePlate}</span>`;
+            return params.value.length;
           }
         },
       ],

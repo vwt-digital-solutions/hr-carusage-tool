@@ -125,6 +125,7 @@
     <div class="col-12 col-lg-12 col-xl-7 dashboard-content-right">
       <app-trip-information
         [tripInfo]="activeTrip"
+        [isManager]="isManager"
         [indexInfo]="activeIndexInfo"
         (indexChange)="onIndexChange($event)">
       </app-trip-information>

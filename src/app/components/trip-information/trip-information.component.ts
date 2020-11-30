@@ -3,6 +3,7 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleCh
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { EnvService } from 'src/app/services/env/env.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { FrequentOffendersService } from 'src/app/services/frequent-offenders.service';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ApproveModalComponent } from '../approve-modal/approve-modal.component';
@@ -28,6 +29,7 @@ export class TripInformationComponent implements OnChanges {
   @ViewChild('descriptionInput') descriptionInput: ElementRef;
 
   @Input() tripInfo: Trip;
+  @Input() isManager: boolean;
   @Input() indexInfo: {current: number, min: number, max: number, total: number};
 
   @Output() indexChange = new EventEmitter<{index: number, trip: Trip, approving: boolean}>();
@@ -63,13 +65,15 @@ export class TripInformationComponent implements OnChanges {
   };
 
   public failedResponse = false;
+  public driverOffends = null;
 
   constructor(
     private env: EnvService,
     private httpClient: HttpClient,
     private modalService: NgbModal,
     private nestedValuePipe: NestedValuePipe,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private offendersService: FrequentOffendersService
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -77,6 +81,7 @@ export class TripInformationComponent implements OnChanges {
       this.resetMap();
 
       if (changes.tripInfo['currentValue'] && changes.tripInfo.currentValue['locations']) {
+        this.setDriverOffends();
         this.initMapLocations(changes.tripInfo.currentValue);
       }
     } else {
@@ -220,7 +225,7 @@ export class TripInformationComponent implements OnChanges {
     const driverInfo = this.tripInfo.driver_info;
     let driverName = '';
 
-    for (const value of [driverInfo.initial, driverInfo.prefix, driverInfo.last_name]) {
+    for (const value of [driverInfo.driver_first_name, driverInfo.driver_prefix_name, driverInfo.driver_last_name]) {
       if (value !== null) {
         driverName = `${driverName} ${value}`;
       }
@@ -229,9 +234,32 @@ export class TripInformationComponent implements OnChanges {
     return driverName !== '' ? driverName : 'Onbekend';
   }
 
-  get driverFunction(): string {
-    return this.tripInfo.driver_info && this.tripInfo.driver_info.function_name ?
-      this.tripInfo.driver_info.function_name : '-';
+  get driverDepartment(): string {
+    return this.tripInfo.driver_info && this.tripInfo.driver_info.department_name ?
+      this.tripInfo.driver_info.department_name : '-';
+  }
+
+  get driverCarName(): string {
+    return this.tripInfo.driver_info && this.tripInfo.driver_info.car_brand_name ?
+      this.tripInfo.driver_info.car_brand_name : 'Onbekend';
+  }
+
+  get driverCarModel(): string {
+    return this.tripInfo.driver_info && this.tripInfo.driver_info.car_brand_type ?
+      this.tripInfo.driver_info.car_brand_type : '-';
+  }
+
+  setDriverOffends(): void {
+    this.offendersService.offenders.subscribe(
+      data => {
+        const driverEmployeeNumber = this.nestedValuePipe.transform(this.tripInfo, 'driver_info', 'driver_employee_number');
+        for (const item of data) {
+          if (this.nestedValuePipe.transform(item, 'driver_info', 'driver_employee_number') === driverEmployeeNumber) {
+            this.driverOffends = item;
+          }
+        }
+      }
+    );
   }
 
   get isChecked(): boolean {

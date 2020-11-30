@@ -23,7 +23,7 @@
           </label>
         </div>
 
-        <div *ngIf="!isChecked" class="btn-group btn-group-toggle ml-4" role="group">
+        <div *ngIf="!isChecked && isManager" class="btn-group btn-group-toggle ml-4" role="group">
           <button
             class="btn btn-success btn-sm m-0 px-3"
             type="button"
@@ -56,7 +56,7 @@
               {{ this.tripInfo.checking_info.trip_kind === 'work' ? 'Zakelijke rit' : 'Privérit' }}
               <i *ngIf="this.tripInfo.checking_info.description" class="fas fa-comment ml-2"></i>
             </button>
-            <div *ngIf="!isExported" class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
+            <div *ngIf="!isExported && isManager" class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
               <button
                 type="button"
                 class="btn btn-sm dropdown-toggle-split"
@@ -159,7 +159,27 @@
         <div class="card-body">
           <small class="form-text text-muted">Bestuurder</small>
           <h3>{{ driverName }}</h3>
-          <h5>Functie: {{ driverFunction }}</h5>
+          <h5>{{ driverDepartment }}</h5>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="driverOffends" class="col-12 col-md-6 col-xl-4 float-left float-xl-none">
+      <div class="card trip-info-content">
+        <div class="card-body">
+          <small class="form-text text-muted">Overtredingen</small>
+          <h3>{{ driverOffends['trips'].length }}</h3>
+          <h5 class="text-uppercase">In de laatste 8 weken</h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4 float-left float-xl-none">
+      <div class="card trip-info-content">
+        <div class="card-body">
+          <small class="form-text text-muted">Voertuig</small>
+          <h3>{{ driverCarName }}</h3>
+          <h5>{{ driverCarModel }}</h5>
         </div>
       </div>
     </div>
