@@ -53,6 +53,10 @@ export class AuditModalComponent implements OnInit, OnDestroy {
     this.isLoading = false;
   }
 
+  isExportLog(log: AuditLog): boolean {
+    return 'exported' in log.attributes_changed ? true : false;
+  }
+
   ngOnDestroy(): void {
     this.auditLogging = [];
   }

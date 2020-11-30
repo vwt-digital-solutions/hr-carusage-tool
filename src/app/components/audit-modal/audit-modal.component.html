@@ -14,7 +14,7 @@
           <strong><samp>{{ log.user || 'Onbekende gebruiker' }}</samp></strong>
         </div>
         <div class="card-body px-3 py-2">
-          <table class="table table-sm m-0">
+          <table *ngIf="!this.isExportLog(log); else exportlog" class="table table-sm m-0">
             <thead>
               <tr>
               <th scope="col"></th>
@@ -43,6 +43,10 @@
     </ng-container>
   </div>
 </div>
+
+<ng-template #exportlog>
+  <p><i class="fas fa-file-export mr-2"></i> Geëxporteerd</p>
+</ng-template>
 
 <ng-template #nologs>
   <div *ngIf="!isLoading" class="alert alert-info" role="alert">
