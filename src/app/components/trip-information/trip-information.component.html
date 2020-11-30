@@ -23,7 +23,7 @@
           </label>
         </div>
 
-        <div *ngIf="!isChecked" class="btn-group btn-group-toggle ml-4" role="group">
+        <div *ngIf="!isChecked && isManager" class="btn-group btn-group-toggle ml-4" role="group">
           <button
             class="btn btn-success btn-sm m-0 px-3"
             type="button"
@@ -56,7 +56,7 @@
               {{ this.tripInfo.checking_info.trip_kind === 'work' ? 'Zakelijke rit' : 'Privérit' }}
               <i *ngIf="this.tripInfo.checking_info.description" class="fas fa-comment ml-2"></i>
             </button>
-            <div *ngIf="!isExported" class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
+            <div *ngIf="!isExported && isManager" class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
               <button
                 type="button"
                 class="btn btn-sm dropdown-toggle-split"
