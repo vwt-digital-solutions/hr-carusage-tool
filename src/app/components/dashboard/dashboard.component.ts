@@ -44,7 +44,7 @@ export class DashboardComponent {
 
   public now = moment().subtract(1, 'weeks');
   public dynamicMoment = moment().subtract(1, 'weeks');
-  public weekHasNext = this.isDevelopment ? true : false;
+  public weekHasNext = this.canSeeFuture;
   public weekHasPrev = true;
 
   public activeFilter = null;
@@ -60,6 +60,9 @@ export class DashboardComponent {
     private licensePlatePipe: LicensePlatePipe
   ) {
     this.isManager = route.snapshot.data['isManager'];
+    if (!this.isManager) {
+      this.weekHasNext = this.canSeeFuture;
+    }
 
     this.gridOptions = {
       defaultColDef: {
@@ -257,6 +260,10 @@ export class DashboardComponent {
     return this.activeIndexInfo.total === 0 ? true : false;
   }
 
+  get canSeeFuture(): boolean {
+    return ((this.env.environment === 'development' ? true : false) || !this.isManager) ? true : false;
+  }
+
   retrieveTripData(): void {
     this.activeFilter = null;
     this.isError = false;
@@ -330,7 +337,7 @@ export class DashboardComponent {
       }
 
       this.weekHasNext = this.isActiveWeek ?
-        (this.isDevelopment ? true : false) : true;
+        (this.canSeeFuture) : true;
 
       this.retrieveTripData();
     }
@@ -450,9 +457,5 @@ export class DashboardComponent {
 
     this.gridApi.deselectAll();
     this.gridApi.setFilterModel(model);
-  }
-
-  get isDevelopment(): boolean {
-    return this.env.environment === 'development' ? true : false;
   }
 }
