@@ -116,6 +116,7 @@ export class DashboardComponent {
               headerName: 'Tijd',
               field: 'started_at',
               sort: 'asc',
+              filter: null,
               valueGetter: (params: ValueGetterParams): string => {
                 return !isNaN(Date.parse(params.data.started_at)) ?
                   this.datePipe.transform(params.data.started_at, 'HH:mm') :
@@ -152,6 +153,7 @@ export class DashboardComponent {
               headerName: 'Tijd',
               field: 'ended_at',
               sort: 'asc',
+              filter: null,
               valueGetter: (params: ValueGetterParams): string => {
                 return !isNaN(Date.parse(params.data.ended_at)) ?
                   this.datePipe.transform(params.data.ended_at, 'HH:mm') :
@@ -347,24 +349,26 @@ export class DashboardComponent {
   }
 
   changeWeek(action: number): void {
-    if (action > 0 && !this.weekHasNext) {
-      return;
-    } else {
-      this.gridApi.deselectAll();
-      this.activeTrip = null;
-
-      if (action < 0) {
-        this.dynamicMoment = this.dynamicMoment.subtract(1, 'weeks');
-      } else if (action > 0) {
-        this.dynamicMoment = this.dynamicMoment.add(1, 'weeks');
+    if (!this.isLoading) {
+      if (action > 0 && !this.weekHasNext) {
+        return;
       } else {
-        this.dynamicMoment = moment().subtract(1, 'weeks');
-      }
+        this.gridApi.deselectAll();
+        this.activeTrip = null;
 
-      this.weekHasNext = this.isActiveWeek ?
+        if (action < 0) {
+          this.dynamicMoment = this.dynamicMoment.subtract(1, 'weeks');
+        } else if (action > 0) {
+          this.dynamicMoment = this.dynamicMoment.add(1, 'weeks');
+        } else {
+          this.dynamicMoment = moment().subtract(1, 'weeks');
+        }
+
+        this.weekHasNext = this.isActiveWeek ?
         (this.canSeeFuture) : true;
 
-      this.retrieveTripData();
+        this.retrieveTripData();
+      }
     }
   }
 
