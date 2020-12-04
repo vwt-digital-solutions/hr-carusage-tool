@@ -96,24 +96,31 @@ export class DashboardComponent {
               field: 'started_at',
               sort: 'asc',
               filter: 'agDateColumnFilter',
+              filterParams: {
+                filterOptions: ['equals', 'notEqual', 'lessThan', 'lessThanOrEqual', 'greaterThan', 'greaterThanOrEqual', 'inRange'],
+                inRangeInclusive: true,
+                comparator: this.dateComparator
+              },
               valueGetter: (params: ValueGetterParams): string => {
-                if (!isNaN(Date.parse(params.data.started_at))) {
-                  return this.datePipe.transform(params.data.started_at, 'dd-MM-yyyy');
-                } else {
-                  return 'N/B';
-                }
+                return !isNaN(Date.parse(params.data.started_at)) ?
+                  this.datePipe.transform(params.data.started_at, 'MM/dd/yyyy') :
+                  null;
+              },
+              cellRenderer: (params: ValueFormatterParams): string => {
+                return params.value != null ?
+                  this.datePipe.transform(params.value, 'dd-MM-yyyy') :
+                  'N/B';
               }
             },
             {
               headerName: 'Tijd',
               field: 'started_at',
               sort: 'asc',
+              filter: null,
               valueGetter: (params: ValueGetterParams): string => {
-                if (!isNaN(Date.parse(params.data.started_at))) {
-                  return this.datePipe.transform(params.data.started_at, 'HH:mm');
-                } else {
-                  return 'N/B';
-                }
+                return !isNaN(Date.parse(params.data.started_at)) ?
+                  this.datePipe.transform(params.data.started_at, 'HH:mm') :
+                  'N/B';
               }
             }
           ]
@@ -126,24 +133,31 @@ export class DashboardComponent {
               field: 'ended_at',
               sort: 'asc',
               filter: 'agDateColumnFilter',
+              filterParams: {
+                filterOptions: ['equals', 'notEqual', 'lessThan', 'lessThanOrEqual', 'greaterThan', 'greaterThanOrEqual', 'inRange'],
+                inRangeInclusive: true,
+                comparator: this.dateComparator
+              },
               valueGetter: (params: ValueGetterParams): string => {
-                if (!isNaN(Date.parse(params.data.ended_at))) {
-                  return this.datePipe.transform(params.data.ended_at, 'dd-MM-yyyy');
-                } else {
-                  return 'N/B';
-                }
+                return !isNaN(Date.parse(params.data.ended_at)) ?
+                  this.datePipe.transform(params.data.ended_at, 'MM/dd/yyyy') :
+                  null;
+              },
+              cellRenderer: (params: ValueFormatterParams): string => {
+                return params.value != null ?
+                  this.datePipe.transform(params.value, 'dd-MM-yyyy') :
+                  'N/B';
               }
             },
             {
               headerName: 'Tijd',
               field: 'ended_at',
               sort: 'asc',
+              filter: null,
               valueGetter: (params: ValueGetterParams): string => {
-                if (!isNaN(Date.parse(params.data.ended_at))) {
-                  return this.datePipe.transform(params.data.ended_at, 'HH:mm');
-                } else {
-                  return 'N/B';
-                }
+                return !isNaN(Date.parse(params.data.ended_at)) ?
+                  this.datePipe.transform(params.data.ended_at, 'HH:mm') :
+                  'N/B';
               }
             }
           ]
@@ -180,6 +194,19 @@ export class DashboardComponent {
     };
 
     this.overlayNoRowsTemplate = '<span class="alert alert-primary" role="alert"><i class="fas fa-magic mr-2"></i> Geen ritten gevonden</span>';
+  }
+
+  dateComparator(filterLocalDateAtMidnight: string, cellValue: string): number {
+    const filterDate = new Date(filterLocalDateAtMidnight);
+    const cellDate = new Date(cellValue);
+
+    if (filterDate.getTime() === cellDate.getTime()) {
+      return 0;
+    } else if (cellDate < filterDate) {
+      return -1;
+    } else if (cellDate > filterDate) {
+      return 1;
+    }
   }
 
   onSelectionChanged(event: AgGridEvent): void | boolean {
@@ -322,24 +349,26 @@ export class DashboardComponent {
   }
 
   changeWeek(action: number): void {
-    if (action > 0 && !this.weekHasNext) {
-      return;
-    } else {
-      this.gridApi.deselectAll();
-      this.activeTrip = null;
-
-      if (action < 0) {
-        this.dynamicMoment = this.dynamicMoment.subtract(1, 'weeks');
-      } else if (action > 0) {
-        this.dynamicMoment = this.dynamicMoment.add(1, 'weeks');
+    if (!this.isLoading) {
+      if (action > 0 && !this.weekHasNext) {
+        return;
       } else {
-        this.dynamicMoment = moment().subtract(1, 'weeks');
-      }
+        this.gridApi.deselectAll();
+        this.activeTrip = null;
 
-      this.weekHasNext = this.isActiveWeek ?
+        if (action < 0) {
+          this.dynamicMoment = this.dynamicMoment.subtract(1, 'weeks');
+        } else if (action > 0) {
+          this.dynamicMoment = this.dynamicMoment.add(1, 'weeks');
+        } else {
+          this.dynamicMoment = moment().subtract(1, 'weeks');
+        }
+
+        this.weekHasNext = this.isActiveWeek ?
         (this.canSeeFuture) : true;
 
-      this.retrieveTripData();
+        this.retrieveTripData();
+      }
     }
   }
 
