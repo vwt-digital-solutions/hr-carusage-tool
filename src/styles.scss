@@ -140,6 +140,22 @@ h1, h2, h3, h4, h5, h6, p, i, small {
   padding: 0;
 }
 
+.leaflet-top, .leaflet-bottom {
+  z-index: 600 !important;
+}
+
+#odh-logo {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+
+
+  height: 40px;
+  width: auto;
+  opacity: .3;
+}
+
+
 .license-plate {
   display: flex;
   align-items: center;
