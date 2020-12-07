@@ -451,9 +451,9 @@ export class DashboardComponent {
       this.toastService.show(
         'Niet elke rit is gecontroleerd', title, { classname: 'toast-warning'});
     } else if ('detail' in error.error) {
-      this.toastService.show(error.error['detail'], title, { classname: 'toast-danger'});
+      this.toastService.show(error.error['detail'], title, { classname: 'toast-danger', delay: 10000});
     } else {
-      this.toastService.show(error.error, title, { classname: 'toast-danger'});
+      this.toastService.show(error.error, title, { classname: 'toast-danger', delay: 10000});
     }
 
     this.isLoading = false;

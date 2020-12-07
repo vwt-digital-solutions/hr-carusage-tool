@@ -48,7 +48,7 @@ export class AuditModalComponent implements OnInit, OnDestroy {
   handleError(error: HttpErrorResponse): void {
     this.toastService.show(
       'detail' in error.error ? error.error['detail'] : null, 'Audit logging',
-      { classname: 'toast-danger'});
+      { classname: 'toast-danger', delay: 10000});
 
     this.isLoading = false;
   }
