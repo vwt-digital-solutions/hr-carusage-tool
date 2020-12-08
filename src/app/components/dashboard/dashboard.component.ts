@@ -391,7 +391,7 @@ export class DashboardComponent {
       };
 
       this.httpClient.get<Blob>(
-        `${this.env.apiUrl}/export/trips`,
+        `${this.env.apiUrl}/exports/trips`,
         { headers, params, observe: 'response', responseType: 'blob' as 'json'}).subscribe(
           response => {
             if (response.status === 200) {
@@ -427,7 +427,7 @@ export class DashboardComponent {
     };
 
     this.httpClient.get<Blob>(
-      `${this.env.apiUrl}/check/open-trips`,
+      `${this.env.apiUrl}/checks/open-trips`,
       { headers, params, observe: 'response', responseType: 'blob' as 'json'}).subscribe(
         response => {
           if (response.status === 200) {
