@@ -391,7 +391,7 @@ export class DashboardComponent {
       };
 
       this.httpClient.get<Blob>(
-        `${this.env.apiUrl}/export/trips`,
+        `${this.env.apiUrl}/exports/trips`,
         { headers, params, observe: 'response', responseType: 'blob' as 'json'}).subscribe(
           response => {
             if (response.status === 200) {
@@ -427,7 +427,7 @@ export class DashboardComponent {
     };
 
     this.httpClient.get<Blob>(
-      `${this.env.apiUrl}/check/open-trips`,
+      `${this.env.apiUrl}/checks/open-trips`,
       { headers, params, observe: 'response', responseType: 'blob' as 'json'}).subscribe(
         response => {
           if (response.status === 200) {
@@ -451,9 +451,9 @@ export class DashboardComponent {
       this.toastService.show(
         'Niet elke rit is gecontroleerd', title, { classname: 'toast-warning'});
     } else if ('detail' in error.error) {
-      this.toastService.show(error.error['detail'], title, { classname: 'toast-danger'});
+      this.toastService.show(error.error['detail'], title, { classname: 'toast-danger', delay: 10000});
     } else {
-      this.toastService.show(error.error, title, { classname: 'toast-danger'});
+      this.toastService.show(error.error, title, { classname: 'toast-danger', delay: 10000});
     }
 
     this.isLoading = false;

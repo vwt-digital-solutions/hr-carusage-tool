@@ -2,7 +2,7 @@
   *ngFor="let toast of toastService.toasts"
   [class]="toast.classname"
   [autohide]="true"
-  [delay]="toast.delay || 15000">
+  [delay]="toast.delay || 5000">
   <ng-template ngbToastHeader>
     <strong class="mr-auto">{{ toast.title || 'Foutmelding' }}</strong>
   </ng-template>

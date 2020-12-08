@@ -36,7 +36,7 @@ export class FrequentOffendersService {
   handleError(error: HttpErrorResponse): void {
     this.toastService.show(
       'detail' in error.error ? error.error['detail'] : null, 'Veelplegers',
-      { classname: 'toast-danger'});
+      { classname: 'toast-danger', delay: 10000});
     this.offenders$.next([]);
   }
 }
