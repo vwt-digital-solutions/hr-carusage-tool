@@ -315,11 +315,8 @@ export class DashboardComponent {
           this.gridApi.hideOverlay();
           this.isLoading = false;
         }, error => {
-          console.log(error);
-          this.gridApi.hideOverlay();
+          this.handleError(error, 'Ophalen ritten');
           this.gridApi.showNoRowsOverlay();
-          this.isLoading = false;
-          this.isError = true;
         }
       );
   }
@@ -447,7 +444,7 @@ export class DashboardComponent {
   }
 
   handleError(error: HttpErrorResponse, title: string): void {
-    if (error.status === 405) {
+    if (error.status === 406) {
       this.toastService.show(
         'Niet elke rit is gecontroleerd', title, { classname: 'toast-warning'});
     } else if ('detail' in error.error) {
