@@ -316,6 +316,7 @@ export class DashboardComponent {
           this.isLoading = false;
         }, error => {
           this.handleError(error, 'Ophalen ritten');
+          this.gridApi.setRowData([]);
           this.gridApi.showNoRowsOverlay();
         }
       );
