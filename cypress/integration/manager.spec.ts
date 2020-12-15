@@ -1,4 +1,8 @@
 context('Manager - Trips overview', () => {
+  beforeEach(() => {
+    cy.visit('/auth/' + Cypress.env('authBody'));
+  });
+
   it('Should show more than 0 trips', () => {
     cy.visit('/');
     cy.wait(5000);
