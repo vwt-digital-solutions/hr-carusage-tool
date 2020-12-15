@@ -4,6 +4,7 @@
       <div class="btn-toolbar" role="toolbar">
         <div class="btn-group btn-group-toggle" role="group">
           <label
+            id="move-trip-prev"
             class="btn btn-secondary btn-sm"
             title="Vorige rit"
             placement="auto"
@@ -13,6 +14,7 @@
             <i class="fas fa-chevron-left"></i>
           </label>
           <label
+            id="move-trip-next"
             class="btn btn-secondary btn-sm"
             title="Volgende rit"
             placement="auto"
@@ -23,8 +25,9 @@
           </label>
         </div>
 
-        <div *ngIf="!isChecked && isManager" class="btn-group btn-group-toggle ml-4" role="group">
+        <div *ngIf="!isChecked && isManager" class="btn-group btn-group-check not-checked btn-group-toggle ml-4" role="group">
           <button
+            id="mark-trip-correct"
             class="btn btn-success btn-sm m-0 px-3"
             type="button"
             title="Markeren als zakelijke rit"
@@ -34,6 +37,7 @@
             <i class="fas fa-briefcase"></i>
           </button>
           <button
+            id="mark-trip-incorrect"
             class="btn btn-danger btn-sm m-0 px-3"
             type="button"
             title="Markeren als privérit"
@@ -45,7 +49,7 @@
         </div>
 
         <ng-container *ngIf="isChecked">
-          <div class="btn-group ml-4">
+          <div class="btn-group btn-group-check checked ml-4">
             <button
               type="button" class="btn btn-sm description"
               [class.btn-success]="(this.tripInfo.checking_info.trip_kind | tripKind:'boolean':'work')"
@@ -58,6 +62,7 @@
             </button>
             <div *ngIf="!isExported && isManager" class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
               <button
+                id="mark-trip-change"
                 type="button"
                 class="btn btn-sm dropdown-toggle-split"
                 title="Bewerken"
@@ -71,14 +76,14 @@
               <div class="dropdown-menu" ngbDropdownMenu>
                 <button
                   type="button"
-                  class="btn-sm"
+                  class="btn-sm mark-change-description"
                   (click)="openModalApprove(this.tripInfo.checking_info.trip_kind, false)"
                   ngbDropdownItem >
                   Opmerking wijzigen
                 </button>
                 <button
                   type="button"
-                  class="btn-sm"
+                  class="btn-sm mark-change-type"
                   (click)="openModalApprove((this.tripInfo.checking_info.trip_kind === 'work' ? 'personal' : 'work'), true)"
                   ngbDropdownItem >
                   Markeren als {{ this.tripInfo.checking_info.trip_kind === 'work' ? 'privérit' : 'zakelijke rit' }}
@@ -89,6 +94,7 @@
         </ng-container>
 
         <button
+          id="audit-trip"
           class="btn btn-outline-info btn-sm ml-auto"
           type="button"
           title="Bekijk eerdere wijzigingen"
