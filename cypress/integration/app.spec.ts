@@ -13,7 +13,7 @@ context('App', () => {
   it('Should connect to the API', () => {
     const requestOptions = {
       method: 'GET',
-      url: `${Cypress.env('apiUrl')}/data/trips/managers`,
+      url: Cypress.env('apiUrl'),
       headers: {
         Authorization: `Bearer ${Cypress.env('accessToken')}`
       }
