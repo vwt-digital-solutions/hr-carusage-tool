@@ -54,4 +54,15 @@ context('Manager - Trip', () => {
       }
     });
   });
+
+  it('Should have audit logging', () => {
+    cy.get('#move-trip-prev').click({force: true}).then(() => {
+      cy.get('#audit-trip', {timeout: 5000}).click({force: true}).then(() => {
+        cy.wait(5000);
+        cy.get('.modal-body .card').should((rows) => {
+          expect(rows).to.have.length.of.at.least(1);
+        });
+      });
+    });
+  });
 });
